@@ -1,0 +1,20 @@
+NAME = minishell
+CC = cc
+CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include
+LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
+
+SRCS = main.c
+OBJS = $(SRCS:.c=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
+
+clean:
+	rm -rf $(OBJS)
+
+fclean: clean
+	rm -rf $(NAME)
+
+re: fclean all

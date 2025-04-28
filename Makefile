@@ -3,7 +3,7 @@ CC = cc
 CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include
 LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
 
-SRCS = main.c
+SRCS = main.c init_data.c garbage_collector/garbage.c lexer/lexer.c lexer/utils.c lexer/lexer_handle.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

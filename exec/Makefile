@@ -1,0 +1,41 @@
+NAME = minishell
+
+CC = cc
+
+CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include
+
+#CFLAGS = -I/usr/local/opt/readline/include
+
+LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
+
+HEADER = minishell.h
+
+HEADER2 = libft/libft.h
+
+LIBFT = libft/libft.a
+
+SRCS = exec.c builtins.c utils.c utils_1.c 
+
+OBJS = $(SRCS:.c=.o)
+
+all : $(NAME)
+
+$(NAME) : $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
+
+$(LIBFT) :
+	make all -C libft/
+
+%.o : %.c $(HEADER) $(HEADER2)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean :
+	make clean -C libft/
+	$(RM) $(OBJS)
+
+fclean :
+	make fclean -C libft/
+	$(RM) $(NAME)
+	$(RM) $(OBJS)
+
+re : fclean all

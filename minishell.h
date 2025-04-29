@@ -41,11 +41,18 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+typedef struct s_cmd {
+    char **cmd;
+    int n_cmd;
+    struct s_cmd *next;
+} t_cmd;
+
 typedef struct s_data
 {
 	char			working_dir[1024];
 	char			*prompt;
 	t_token			*token_list;
+	t_cmd			*command_list;
 	struct termios	original_term;
 	struct termios	shell_term;
 	int				exit_status;
@@ -75,5 +82,8 @@ int					handle_pipe(int i, int *index_pair, t_token_type *type);
 
 void				print_tokens(t_data *data);
 char				*get_token_type_string(t_token_type type);
+
+void	print_commands(t_cmd *cmd_list);
+void parse_command_list(t_data *data);
 
 #endif

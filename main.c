@@ -26,8 +26,8 @@ static int	main_loop(t_data *data)
 			break;
 		// Here you would add parsing, execution
         lexer(data);
-        print_tokens(data);
-        
+        parse_command_list(data);
+		print_commands(data->command_list);	
 	}
 	return (0);
 }

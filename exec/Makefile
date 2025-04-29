@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include
+CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include -g3 -fsanitize=address
 
 #CFLAGS = -I/usr/local/opt/readline/include
 
@@ -14,7 +14,9 @@ HEADER2 = libft/libft.h
 
 LIBFT = libft/libft.a
 
-SRCS = exec.c builtins.c utils.c utils_1.c 
+SRCS = exec.c ft_echo.c ft_env.c ft_unset.c ft_pwd.c ft_cd.c \
+		ft_export.c ft_exit.c utils.c utils_1.c \
+		
 
 OBJS = $(SRCS:.c=.o)
 

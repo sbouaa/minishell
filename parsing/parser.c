@@ -24,7 +24,6 @@ static t_cmd	*build_command(t_data *data, t_token **curr)
 	word_count = count_words(*curr);
 	cmd_arr = gc_malloc(&data->gc, sizeof(char *) * (word_count + 1));
 	i = 0;
-	// Join tokens while considering the quotes
 	while (*curr && (*curr)->type != PIPE)
 	{
 		if ((*curr)->type == WORD)

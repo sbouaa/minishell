@@ -31,34 +31,33 @@ char	*ft_strdup(const char *s1, t_data *data)
 	copy[i] = '\0';
 	return (copy);
 }
-char	*ft_substr(t_data *data, const char *s, int start, int len)
-{
-	char	*substr;
-	int		i;
-	int		slen;
 
-	if (!s)
-		return (NULL);
-	slen = ft_strlen(s);
-	if ((size_t)start >= (size_t)slen)
-	{
-		substr = gc_malloc(&data->gc, 1);
-		if (!substr)
-			return (NULL);
-		substr[0] = '\0';
-		return (substr);
-	}
-	if ((size_t)(start + len) > (size_t)slen)
-		len = slen - start;
-	substr = gc_malloc(&data->gc, len + 1);
-	if (!substr)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		substr[i] = s[start + i];
-	substr[i] = '\0';
-	return (substr);
+char *ft_strjoin(const char *s1, const char *s2, t_data *data)
+{
+    char *str;
+    size_t i = 0;
+    size_t j = 0;
+
+    if (!s1)
+        return ft_strdup(s2, data);
+    if (!s2)
+        return ft_strdup(s1, data);
+    str = gc_malloc(&data->gc, ft_strlen(s1) + ft_strlen(s2) + 1); 
+    while (i < ft_strlen(s1))
+    {
+        str[i] = s1[i];
+        i++;
+    }
+    while (j < ft_strlen(s2))
+    {
+        str[i] = s2[j];
+        i++;
+        j++;
+    }
+    str[i] = '\0';
+    return str;
 }
+
 
 t_token	*create_token(t_data *data, t_token_type type, const char *value)
 {

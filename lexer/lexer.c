@@ -2,69 +2,54 @@
 
 int	is_token(char c)
 {
-	if (c == '\'' || c == '"' || c == '|' || c == '<' || c == '>')
-		return (1);
-	return (0);
+	return (c == '\'' || c == '"' || c == '|' || c == '<' || c == '>');
 }
 
-int	bunny_ears(char *line, int stop, int to_match)
+int	is_space(int c)
 {
-	int	start;
-
-	start = stop;
-	while (line[start] && line[start] != to_match)
-		start++;
-	if (line[start] == to_match)
-		return (start);
-	return (-1);
+	return (c == ' ' || c == '\t');
 }
 
-int	find_token_pos(char *line, int *index_pair, t_token_type *type)
+char	*ft_extract_fline(t_data *data, char *line, int start, int end)
 {
-	int	i;
-	int	start;
+	int		i;
+	int		len;
+	char	*str;
 
 	i = 0;
-	while (line[i] && (line[i] == ' ' || line[i] == '\t' || line[i] == '\n'))
-		i++;
-	if (!line[i])
-		return (-1);
-	start = i;
-	if (is_token(line[i]))
-	{
-		if (line[i] == '\'' || line[i] == '\"')
-			return (handle_quotes(line, i, index_pair, type));
-		if (line[i] == '<' || line[i] == '>')
-			return (handle_redirection(line, i, index_pair, type));
-		if (line[i] == '|')
-			return (handle_pipe(i, index_pair, type));
-	}
-	while (line[i] && !is_token(line[i]) && line[i] != ' ' && line[i] != '\t'
-		&& line[i] != '\n')
-		i++;
-	index_pair[0] = start;
-	index_pair[1] = i;
-	*type = WORD;
-	return (0);
+	len = end - start + 1;
+	str = gc_malloc(&data->gc, len + 1);
+	if (!str)
+		return (NULL);
+	while (start <= end)
+		str[i++] = line[start++];
+	str[i] = '\0';
+	return (str);
 }
+
 
 int	lexer(t_data *data)
 {
-	int				index_pair[2];
-	t_token_type	type;
-	char			*line;
-	int				offset;
-	char			*token_value;
+	int		i;
+	int		start;
+	char	*line;
 
+	i = 0;
 	line = data->prompt;
-	offset = 0;
 	data->token_list = NULL;
-	while (find_token_pos(line + offset, index_pair, &type) != -1)
+	while (is_space(line[i]))
+		i++;
+	while (line[i])
 	{
-		token_value = ft_substr(data, line + offset, index_pair[0],
-				index_pair[1] - index_pair[0]);
-		add_node_to_back(data, type, token_value);
-		offset += index_pair[1];
+		start = i;
+		if (line[i] == '\'' || line[i] == '"')
+			handle_quotes(data, line, &i, line[i]);
+		else if (is_token(line[i]))
+			handle_redirection(data, line, &i);
+		else
+			handle_word(data, line, &i, start);
+		while (is_space(line[i]))
+			i++;
 	}
 	return (0);
 }

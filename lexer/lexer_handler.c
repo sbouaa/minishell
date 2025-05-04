@@ -8,12 +8,15 @@ void	handle_quotes(t_data *data, char *line, int *i, char quote)
 	(*i)++;
 	while (line[*i] && line[*i] != quote)
 		(*i)++;
-	add_node_to_back(data, QUOTE, ft_extract_fline(data, line, start + 1, *i
-			- 1));
-	(*i)++;
+	if(quote == '"')
+		add_node_to_back(data, DBQUOTE, ft_extract_fline(data, line, start, *i));
+	else 
+		add_node_to_back(data, SIQUOTE, ft_extract_fline(data, line, start, *i));
+	if (line[*i] == quote)
+		(*i)++;
 }
 
-void	handle_redirection(t_data *data, char *line, int *i)
+void	handle_tokens(t_data *data, char *line, int *i)
 {
 	if ((line[*i] == '<' || line[*i] == '>') && line[*i + 1] == line[*i])
 	{

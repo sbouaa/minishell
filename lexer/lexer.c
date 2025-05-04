@@ -45,7 +45,7 @@ int	lexer(t_data *data)
 		if (line[i] == '\'' || line[i] == '"')
 			handle_quotes(data, line, &i, line[i]);
 		else if (is_token(line[i]))
-			handle_redirection(data, line, &i);
+			handle_tokens(data, line, &i);
 		else
 			handle_word(data, line, &i, start);
 		while (is_space(line[i]))

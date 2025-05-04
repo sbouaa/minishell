@@ -38,17 +38,19 @@ char *ft_strjoin(const char *s1, const char *s2, t_data *data)
     size_t i = 0;
     size_t j = 0;
 
+	if (!s1 && !s2)
+        return NULL;
     if (!s1)
         return ft_strdup(s2, data);
     if (!s2)
         return ft_strdup(s1, data);
     str = gc_malloc(&data->gc, ft_strlen(s1) + ft_strlen(s2) + 1); 
-    while (i < ft_strlen(s1))
+    while (s1[i])
     {
         str[i] = s1[i];
         i++;
     }
-    while (j < ft_strlen(s2))
+    while (s2[j])
     {
         str[i] = s2[j];
         i++;
@@ -106,10 +108,12 @@ char *get_token_type_string(t_token_type type)
         return ("HEREDOC");
     else if (type == APPEND)
         return ("APPEND");
-    else if (type == QUOTE)
-        return ("QUOTE");
     else if (type == WORD)
         return ("WORD");
+	else if (type == DBQUOTE)
+        return ("DBQUOTE");
+	else if (type == SIQUOTE)
+        return ("SIQUOTE");
     else
         return ("UNKNOWN");
 }

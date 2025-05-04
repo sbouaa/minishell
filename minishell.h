@@ -30,7 +30,8 @@ typedef enum e_token_type
 	OUT_REDIRECT,
 	HEREDOC,
 	APPEND,
-	QUOTE,
+	DBQUOTE,
+	SIQUOTE,
 	WORD
 }					t_token_type;
 
@@ -60,6 +61,7 @@ typedef struct s_data
 	char			*prompt;
 	t_token			*token_list;
 	t_cmd			*cmd;
+	int 			syntax_error;
 	t_gc			gc;
 }					t_data;
 
@@ -76,9 +78,9 @@ t_token				*create_token(t_data *data, t_token_type type,
 						const char *value);
 void				add_node_to_back(t_data *data, t_token_type type,
 						const char *value);
-void				handle_quotes(t_data *data, char *line, int *i, char quote);
-void				handle_redirection(t_data *data, char *line, int *i);
-void				handle_word(t_data *data, char *line, int *i, int start);
+void				handle_tokens(t_data *data, char *line, int *i);
+void				handle_word(t_data *data, char *line, int *i,  int start);
+void	handle_quotes(t_data *data, char *line, int *i, char quote);
 char				*ft_extract_fline(t_data *data, char *line, int start,
 						int end);
 void				print_tokens(t_data *data);

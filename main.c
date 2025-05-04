@@ -25,8 +25,8 @@ static int	main_loop(t_data *data)
 		if (handle_line(data) == -1)
 			break;
 		// Here you would add parsing, execution
-        //lexer(data);
-		// print_tokens(data);
+        lexer(data);
+		print_tokens(data);
 	}
 	return (0);
 }

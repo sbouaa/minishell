@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:41:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 04:51:23 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 06:09:38 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@ t_dd	*init_data(t_dd	*data, char	**envp)
 	if (!data)
 		return (NULL);
 	data->exit_status = 0;
-	data->env = init_env(envp);
+	// to_do init env with pwd and path and shlvl
+	if (!envp[0])
+		data->env = def_env();
+	else
+		data->env = init_env(envp);
 	return (data);
 }
 
@@ -27,7 +31,7 @@ int	is_builtins(t_dd	*data)
 	if (ft_strcmp(data->mmd[0], "echo") == 0)
 		return (echo(data->line), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "env") == 0)
-		return (env(data), data->exit_status);
+		return (env(data->env), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "pwd") == 0)
 		return (pwd(), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "cd") == 0)

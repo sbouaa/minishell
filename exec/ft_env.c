@@ -6,13 +6,33 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 02:48:52 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 06:22:02 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_getenv(char	*name, t_env	*env)
+t_env *sec_env(void)
+{
+    t_env	*env;
+    char	*pwd;
+
+	env = NULL;
+	pwd = getcwd(NULL, 0);
+    if (pwd)
+    {
+        if (!add_env_var("PWD", pwd, &env))
+            return (free(pwd), NULL);
+        free(pwd); 
+    }
+    if (!create_env_var("SHLVL", "1", &env))
+        return (NULL);
+    if (!create_env_var("_", "/usr/bin/env", &env))
+        return (NULL);
+    return (env);
+}
+
+char	*ft_getenv(char *name, t_env *env)
 {
 	int	i;
 
@@ -26,42 +46,50 @@ char	*ft_getenv(char	*name, t_env	*env)
 	return (NULL);
 }
 
-t_env	*init_env(char	**envp)
+static t_env	*env_node(char *envp)
 {
-	t_env	*env;
-	t_env	*node;
 	char	*key;
 	char	*value;
 	char	*del;
+	t_env	*node;
+
+	del = ft_strchr(envp, '=');
+	if (!del)
+		return (NULL);
+	key = ft_substr(envp, 0, del - envp);
+	value = ft_strdup(del + 1);
+	if (!key || !value)
+		return (free(key), free(value), NULL);
+	node = ft_lstnew(key, value);
+	if (!node)
+		(free(key), free(value));
+	return (node);
+}
+
+t_env	*init_env(char **envp)
+{
 	int		i;
+	t_env	*env;
+	t_env	*node;
 
 	i = 0;
 	env = NULL;
 	while (envp[i])
 	{
-		del = ft_strchr(envp[i], '=');
-		if (del)
-		{
-			key = ft_substr(envp[i], 0, del - envp[i]);
-			value = ft_strdup(del + 1);
-			node = ft_lstnew(key, value);
-			ft_lstadd_back(&env, node);
-		}
+		node = env_node(envp[i]);
+		if (!node)
+			return (ft_clear(&env), NULL);
+		ft_lstadd_back(&env, node);
 		i++;
 	}
 	return (env);
 }
 
-static void	print_env(t_env	*env)
+void	env(t_env *env)
 {
 	while (env)
 	{
 		printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}
-}
-
-void	env(t_dd	*data)
-{
-	print_env(data->env);
 }

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:06:42 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 05:12:02 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 05:25:06 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@ void	pwd(void)
 		free(dir);
 	}
 	else
-		perror("minishell : ");
+	{
+		printf("%s\n", getenv("PWD"));
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:12 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 05:09:57 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 05:55:11 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	env_del(char *name, t_env **env)
 				prev->next = current->next;
 			else
 				*env = current->next;
-			(free(current->key), free(current->value), free(current));
+			free(current);
 			return (0);
 		}
 		prev = current;
@@ -41,8 +41,6 @@ static int	env_del(char *name, t_env **env)
 int	ft_unset(char **args, t_env **env)
 {
 	int		i;
-	t_env	*prev;
-	t_env	*current;
 
 	if (!args || !env || !*env)
 		return (1);

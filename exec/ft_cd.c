@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 04:51:54 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 06:00:49 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static int	up_pwd_env(char *o_cwd, t_env	*env)
 {
 	char	*cwd;
 
+	(void)o_cwd;
+	(void)env;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		perror("minishell: cd: error retrieving current directory: "

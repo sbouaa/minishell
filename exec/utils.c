@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:55:25 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/04/29 19:47:18 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 05:33:57 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	ft_lstadd_back(t_env **lst, t_env *new)
 		temp = temp->next;
 	temp->next = new;
 }
+
 void	ft_clear(t_env **all)
 {
 	t_env	*root;

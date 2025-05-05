@@ -6,11 +6,25 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/04/29 20:08:02 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 02:48:52 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*ft_getenv(char	*name, t_env	*env)
+{
+	int	i;
+
+	i = ft_strlen(name);
+	while (env)
+	{
+		if (ft_strncmp(env->key, name, i) == 0)
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
+}
 
 t_env	*init_env(char	**envp)
 {
@@ -30,8 +44,8 @@ t_env	*init_env(char	**envp)
 		{
 			key = ft_substr(envp[i], 0, del - envp[i]);
 			value = ft_strdup(del + 1);
-			node = mn_lstnew(key, value);
-			mn_lstadd_back(&env, node);
+			node = ft_lstnew(key, value);
+			ft_lstadd_back(&env, node);
 		}
 		i++;
 	}

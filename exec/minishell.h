@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:43:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/04/29 19:46:46 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 04:48:30 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct s_dd
 	char	**mmd;
 	int		in_file;
 	int		out_file;
-	char	*old_pwd;
 	char	*line;
 	int		exit_status;
 	t_env	*env;
@@ -46,17 +45,24 @@ typedef struct s_dd
 void	echo(char *line);
 void	ft_putstr_fd(char *s, int fd);
 void	env(t_dd	*data);
-void	pwd(t_dd	*data);
+void	pwd(void);
 int		cd(char	*dir, t_dd	*data);
-void	ft_exit(char	**cmd);
+void	ft_exit(char	*nb);
+int ft_unset(char   **args, t_env   **env);
 
 //
 t_env	*init_env(char	**envp);
+char	*ft_getenv(char	*name, t_env	*env);
 
 // 
-void	mn_lstadd_back(t_env **lst, t_env *new);
-t_env	*mn_lstnew(char *key, char *value);
+void	ft_lstadd_back(t_env **lst, t_env *new);
+t_env	*ft_lstnew(char *key, char *value);
 void	ft_clear(t_env	**all);
 void	ft_clean(char **p);
+int		ft_strcmp(char *s1, char *s2);
+
+
+//
+
 
 #endif

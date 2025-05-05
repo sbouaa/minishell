@@ -6,27 +6,28 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/04/29 19:05:25 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 03:45:20 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(char	**cmd)
+void	ft_exit(char	*nb)
 {
 	int	i;
 	int	code;
 
-	if (!cmd[1])
+	ft_putendl_fd("exit", 1);
+	if (!nb || !*nb)
 		exit(0);
 	i = 0;
-	code = ft_atoi(cmd[1]);
-	while (cmd[1][i])
+	code = ft_atoi(nb);
+	while (nb[i])
 	{
-		if (!ft_isdigit(cmd[1][i]))
+		if (!ft_isdigit(nb[i]))
 		{
 			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(cmd[1], 2);
+			ft_putstr_fd(nb, 2);
 			(ft_putendl_fd(": numeric argument required", 2), exit(2));
 		}
 		i++;

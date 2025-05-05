@@ -12,7 +12,21 @@
 
 #include "minishell.h"
 
-t_env	*mn_lstnew(char *key, char *value)
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
+
+t_env	*ft_lstnew(char *key, char *value)
 {
 	t_env	*node;
 
@@ -28,7 +42,7 @@ t_env	*mn_lstnew(char *key, char *value)
 	return (node);
 }
 
-void	mn_lstadd_back(t_env **lst, t_env *new)
+void	ft_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*temp;
 

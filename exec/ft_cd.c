@@ -23,7 +23,8 @@ static int	up_pwd_env(char *o_cwd, t_env	*env)
 		perror("minishell: cd: error retrieving current directory: "
 			"getcwd: cannot access parent directories");
 	else
-		printf("");
+			printf("%s\n", cwd);
+	free(cwd);
 	//ft_unset("PWD");
 	//ft_export("PWD=cwd");
 	//ft_unset("OLDPWD");

@@ -55,6 +55,11 @@ int	main(int ac, char	**av, char	**env)
 	while (1)
 	{
 		data->line = readline("\033[1;32m minishell > \033[0m");
+		if (!*data->line)
+		{
+			printf("%s", data->line);
+			continue;
+		}
 		add_history(data->line);
 		data->mmd = ft_split(data->line, 32);
 		is_builtins(data);

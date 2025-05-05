@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_env *sec_env(void)
+t_env	*def_env(void)
 {
     t_env	*env;
     char	*pwd;
@@ -25,9 +25,9 @@ t_env *sec_env(void)
             return (free(pwd), NULL);
         free(pwd); 
     }
-    if (!create_env_var("SHLVL", "1", &env))
+    if (!add_env_var("SHLVL", "1", &env))
         return (NULL);
-    if (!create_env_var("_", "/usr/bin/env", &env))
+    if (!add_env_var("_", "/usr/bin/env", &env))
         return (NULL);
     return (env);
 }

@@ -51,7 +51,9 @@ int					ft_unset(char **args, t_env **env);
 
 //
 t_env				*init_env(char **envp);
+t_env				*def_env(void);
 char				*ft_getenv(char *name, t_env *env);
+t_env				*add_env_var(char *key, char *value, t_env **env);
 
 //
 void				ft_lstadd_back(t_env **lst, t_env *new);

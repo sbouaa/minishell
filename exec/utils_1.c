@@ -12,14 +12,17 @@
 
 #include "minishell.h"
 
-t_env *add_env_var(const char *key, const char *value, t_env **env)
+t_env   *add_env_var(char *key, char *value, t_env **env)
 {
-    t_env *node = ft_lstnew(ft_strdup(key), ft_strdup(value));
+    t_env   *node;
+
+    key = ft_strdup(key);
+    value = ft_strdup(value);
+    if (!key || !value)
+        return (ft_clear(env), NULL);
+    node = ft_lstnew(value, key);
     if (!node)
-    {
-        ft_lstclear(env);
-        return NULL;
-    }
+        return (ft_clear(env), NULL);
     ft_lstadd_back(env, node);
     return node;
 }

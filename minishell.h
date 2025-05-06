@@ -1,9 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <termios.h>
 # include <unistd.h>
@@ -42,15 +42,10 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-typedef struct s_arg
-{
-	char			*value;
-	struct s_arg	*next;
-}					t_arg;
 
 typedef struct s_cmd
 {
-	t_arg			*args;
+	char			*args;
 	char			*input_file;
 	char			*output_file;
 	struct s_cmd	*next;
@@ -79,7 +74,7 @@ t_token				*create_token(t_data *data, t_token_type type,
 void				add_node_to_back(t_data *data, t_token_type type,
 						const char *value);
 void				handle_tokens(t_data *data, char *line, int *i);
-void				handle_word(t_data *data, char *line, int *i,  int start);
+void				handle_word(t_data *data, char *line, int *i);
 void	handle_quotes(t_data *data, char *line, int *i, char quote);
 char				*ft_extract_fline(t_data *data, char *line, int start,
 						int end);

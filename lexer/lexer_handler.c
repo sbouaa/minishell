@@ -13,34 +13,6 @@ int check_unclosed_quote(t_data *data, char quote, int *i, char *line)
 	return (0);
 }
 
-void handle_quotes(t_data *data, char *line, int *i, char quote)
-{
-	int start;
-	char *token;
-	char *tmp;
-
-	token = NULL;
-	while (line[*i] == quote)
-	{
-		start = ++(*i);
-		while (line[*i] && line[*i] != quote)
-			(*i)++;
-		tmp = ft_extract_fline(data, line, start, *i - 1);
-		if (!token)
-			token = ft_strdup(tmp, data);
-		else
-			token = ft_strjoin(token, tmp, data);
-		if (line[*i] == quote)
-			(*i)++;
-		else
-			break;
-	}
-	if (quote == '"')
-		add_node_to_back(data, DBQUOTE, token);
-	else
-		add_node_to_back(data, SIQUOTE, token);
-}
-
 void handle_tokens(t_data *data, char *line, int *i)
 {
 	if ((line[*i] == '<' || line[*i] == '>') && line[*i + 1] == line[*i])

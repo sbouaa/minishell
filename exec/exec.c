@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:41:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 18:32:45 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 05:15:55 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	is_builtins(t_dd	*data)
 	else if (ft_strcmp(data->mmd[0], "env") == 0)
 		return (env(data->env), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "pwd") == 0)
-		return (pwd(), data->exit_status);
+		return (pwd(data->env), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "cd") == 0)
 		return (cd(data->mmd[1], data), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "exit") == 0)

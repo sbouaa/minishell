@@ -6,55 +6,69 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 04:59:16 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 06:37:19 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	up_pwd_env(char *o_cwd, t_env	*env)
+static int	getcwd_fail(char *o_cwd, char *dir, t_env **env)
+{
+	char	*n_pwd;
+	char	*temp;
+
+	perror("minishell: cd: error retrieving current directory: "
+		"getcwd: cannot access parent directories");
+	if (o_cwd[ft_strlen(o_cwd) - 1] == '/')
+		n_pwd = ft_strjoin(o_cwd, dir);
+	else
+	{
+		temp = ft_strjoin(o_cwd, "/");
+		if (!temp)
+			return (1);
+		n_pwd = ft_strjoin(temp, dir);
+		free(temp);
+	}
+	if (!n_pwd)
+		return (1);
+	(env_del("OLD_PWD", env), env_del("PWD", env));
+	add_env_var("OLD_PWD", o_cwd, env);
+	add_env_var("PWD", n_pwd, env);
+	return (free(n_pwd), 0);
+}
+
+static int	up_pwd_env(char *o_cwd, char *dir, t_env **env)
 {
 	char	*cwd;
 
-	(void)o_cwd;
-	(void)env;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-	{
-		perror("minishell: cd: error retrieving current directory: "
-			"getcwd: cannot access parent directories");
-		env_del("PWD", &env);
-		env_del("OLD_PWD", &env);
-		add_env_var("PWD", o_cwd, &env);
-		add_env_var("OLD_PWD", o_cwd, &env);
-		return ( 0);
-	}
-	env_del("PWD", &env);
-	env_del("OLD_PWD", &env);
-	add_env_var("PWD", cwd, &env);
-	add_env_var("OLD_PWD", o_cwd, &env);
-
-	return (0);
+		return (getcwd_fail(o_cwd, dir, env));
+	env_del("OLD_PWD", env);
+	env_del("PWD", env);
+	add_env_var("OLD_PWD", o_cwd, env);
+	add_env_var("PWD", cwd, env);
+	return (free(cwd), 0);
 }
 
-static int	cd_home(char	*o_cwd, t_env	*env)
+static int	cd_home(char *o_cwd, t_env *env)
 {
 	char	*home;
 
 	home = ft_getenv("HOME", env);
 	if (!home)
-		return (ft_putendl_fd("cd : HOME not set", 2), 1);
+		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
 	if (chdir(home) == -1)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		return (perror(home), 1);
 	}
-	if (!up_pwd_env(o_cwd, env))
+	if (!up_pwd_env(o_cwd, NULL, &env))
 		return (1);
 	return (0);
 }
 
-int	cd(char	*dir, t_dd	*data)
+int	cd(char *dir, t_dd *data)
 {
 	char	*cwd;
 
@@ -69,7 +83,7 @@ int	cd(char	*dir, t_dd	*data)
 		ft_putstr_fd("minishell: cd: ", 2);
 		return (perror(dir), 1);
 	}
-	if (!up_pwd_env(cwd, data->env))
+	if (up_pwd_env(cwd, dir, &data->env) == 1)
 		return (1);
 	free(cwd);
 	return (0);

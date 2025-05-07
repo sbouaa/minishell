@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:43:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 02:56:23 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 06:35:59 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_dd
 void				echo(char *line);
 void				ft_putstr_fd(char *s, int fd);
 void				env(t_env *env);
-void				pwd(void);
+void				pwd(t_env	*env);
 int					cd(char *dir, t_dd *data);
 void				ft_exit(char *nb);
 int					ft_unset(char **args, t_env **env);
@@ -64,6 +64,6 @@ void				ft_clean(char **p);
 int					ft_strcmp(char *s1, char *s2);
 
 //
-int	env_del(char *name, t_env **env);
+int					env_del(char *name, t_env **env);
 
 #endif

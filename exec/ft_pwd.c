@@ -6,24 +6,28 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:06:42 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 05:25:06 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 06:35:43 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(void)
+void	pwd(t_env	*env)
 {
 	char	*dir;
 
 	dir = getcwd(NULL, 0);
-	if (dir != NULL)
+	if (dir)
 	{
 		ft_putendl_fd(dir, 1);
 		free(dir);
 	}
 	else
 	{
-		printf("%s\n", getenv("PWD"));
+		dir = ft_getenv("PWD", env);
+		if (dir)
+			ft_putendl_fd(dir, 1);
+		else
+			ft_putendl_fd("minishell: pwd: ", 2);
 	}
 }

@@ -2,9 +2,9 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include -g -fsanitize=address
+#CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include -g -fsanitize=address
 
-#CFLAGS = -I/usr/local/opt/readline/include
+CFLAGS = -I/usr/local/opt/readline/include -g
 
 LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
 

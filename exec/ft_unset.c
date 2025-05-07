@@ -6,13 +6,13 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:12 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 05:55:11 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 02:45:13 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	env_del(char *name, t_env **env)
+int	env_del(char *name, t_env **env)
 {
 	t_env	*prev;
 	t_env	*current;

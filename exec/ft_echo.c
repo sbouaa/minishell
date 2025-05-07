@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:54 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/04/29 19:06:23 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 18:30:58 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	echo(char *line)
 {
-	int	i;
 	int	nl;
 	int	j;
+	int	i;
 
-	i = 5;
+	i = ft_strnstr(line, "echo", ft_strlen(line)) - line + 4;
 	nl = 1;
 	while (line[i] == ' ')
 		i++;

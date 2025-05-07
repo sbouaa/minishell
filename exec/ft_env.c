@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 06:22:02 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 03:24:30 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,30 @@
 
 t_env	*def_env(void)
 {
-    t_env	*env;
-    char	*pwd;
+	t_env	*env;
+	char	*pwd;
 
 	env = NULL;
 	pwd = getcwd(NULL, 0);
-    if (pwd)
-    {
-        if (!add_env_var("PWD", pwd, &env))
-            return (free(pwd), NULL);
-        free(pwd); 
-    }
-    if (!add_env_var("SHLVL", "1", &env))
-        return (NULL);
-    if (!add_env_var("_", "/usr/bin/env", &env))
-        return (NULL);
-    return (env);
+	if (pwd)
+	{
+		if (!add_env_var("PWD", pwd, &env))
+			return (free(pwd), NULL);
+		free(pwd);
+	}
+	if (!add_env_var("SHLVL", "1", &env))
+		return (NULL);
+	if (!add_env_var("_", "/usr/bin/env", &env))
+		return (NULL);
+	return (env);
 }
 
 char	*ft_getenv(char *name, t_env *env)
 {
 	int	i;
 
+	if (!name || !env)
+		return (NULL);
 	i = ft_strlen(name);
 	while (env)
 	{

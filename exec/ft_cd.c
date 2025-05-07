@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 06:00:49 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/07 04:59:16 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,20 @@ static int	up_pwd_env(char *o_cwd, t_env	*env)
 	(void)env;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
+	{
 		perror("minishell: cd: error retrieving current directory: "
 			"getcwd: cannot access parent directories");
-	else
-			printf("%s\n", cwd);
-	free(cwd);
-	//ft_unset("PWD");
-	//ft_export("PWD=cwd");
-	//ft_unset("OLDPWD");
-	//ft_export("OLDPWD=o_cwd");
+		env_del("PWD", &env);
+		env_del("OLD_PWD", &env);
+		add_env_var("PWD", o_cwd, &env);
+		add_env_var("OLD_PWD", o_cwd, &env);
+		return ( 0);
+	}
+	env_del("PWD", &env);
+	env_del("OLD_PWD", &env);
+	add_env_var("PWD", cwd, &env);
+	add_env_var("OLD_PWD", o_cwd, &env);
+
 	return (0);
 }
 
@@ -66,6 +71,6 @@ int	cd(char	*dir, t_dd	*data)
 	}
 	if (!up_pwd_env(cwd, data->env))
 		return (1);
+	free(cwd);
 	return (0);
-	//to_do : free cwd
 }

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:41:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 06:09:38 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/05 18:32:45 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ t_dd	*init_data(t_dd	*data, char	**envp)
 	if (!data)
 		return (NULL);
 	data->exit_status = 0;
-	// to_do init env with pwd and path and shlvl
 	if (!envp[0])
 		data->env = def_env();
 	else

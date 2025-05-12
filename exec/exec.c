@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:41:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 05:15:55 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/12 17:55:24 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	is_builtins(t_dd	*data)
 		return (ft_exit(data->mmd[1]), data->exit_status);
 	else if (ft_strcmp(data->mmd[0], "unset") == 0)
 		return (ft_unset(data->mmd, &data->env));
+	else if (ft_strcmp(data->mmd[0], "export") == 0)
+		return (ft_export(data->mmd, data), data->exit_status);
 	else
 		return (ft_putstr_fd("minishell : Syntax Error\n", 2), 1);
 }

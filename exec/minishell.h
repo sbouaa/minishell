@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:43:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 06:35:59 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/12 17:52:09 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ t_env				*init_env(char **envp);
 t_env				*def_env(void);
 char				*ft_getenv(char *name, t_env *env);
 t_env				*add_env_var(char *key, char *value, t_env **env);
+t_env				*ft_search_env(char	*key, t_env	*env);
 
 //
 void				ft_lstadd_back(t_env **lst, t_env *new);
@@ -65,5 +66,8 @@ int					ft_strcmp(char *s1, char *s2);
 
 //
 int					env_del(char *name, t_env **env);
+
+//
+int					ft_export(char  **args, t_dd    *data);
 
 #endif

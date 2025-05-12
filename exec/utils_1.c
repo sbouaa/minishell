@@ -6,18 +6,39 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 03:02:52 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/12 16:01:57 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_env	*ft_search_env(char	*key, t_env	*env)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0)
+			return (env);
+		env = env->next;
+	}
+	return (NULL);
+}
+
 t_env	*add_env_var(char *key, char *value, t_env **env)
 {
 	t_env	*node;
+	t_env	*ex_node;
 
 	if (!key || !value)
 		return (ft_putendl_fd("error lah w3lam!!!!!!!", 2), NULL);
+	ex_node = ft_search_env(key, *env);
+	if (ex_node)
+	{
+		free(ex_node->value);
+		ex_node->value = ft_strdup(value);
+		if (!ex_node->value)
+			return (ft_clear(env), NULL);
+		return (ex_node);
+	}
 	key = ft_strdup(key);
 	value = ft_strdup(value);
 	if (!key || !value)

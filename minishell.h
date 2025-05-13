@@ -32,7 +32,7 @@ typedef enum e_token_type
 	APPEND,
 	DBQUOTE,
 	SIQUOTE,
-	WORD
+	WORD,
 }					t_token_type;
 
 typedef struct s_token
@@ -42,20 +42,22 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-
-typedef struct s_cmd
-{
-	char			*args;
-	char			*input_file;
-	char			*output_file;
-	struct s_cmd	*next;
-}					t_cmd;
+typedef struct s_cmd {
+    char    **args;         // Command and its arguments
+    int     arg_count;      // Number of arguments
+    int     arg_capacity;   // Capacity of the args array
+    char    *infile;        // Input redirection file
+    char    *outfile;       // Output redirection file
+    int     in_type;        // 0 = none, 1 = <, 2 = <<
+    int     out_type;       // 0 = none, 1 = >, 2 = >>
+    struct s_cmd *next;     // Next command in pipeline
+} t_cmd;
 
 typedef struct s_data
 {
 	char			*prompt;
 	t_token			*token_list;
-	t_cmd			*cmd;
+	t_cmd			*cmd_list;
 	int 			syntax_error;
 	t_gc			gc;
 }					t_data;
@@ -73,9 +75,6 @@ t_token				*create_token(t_data *data, t_token_type type,
 						const char *value);
 void				add_node_to_back(t_data *data, t_token_type type,
 						const char *value);
-void				handle_tokens(t_data *data, char *line, int *i);
-void				handle_word(t_data *data, char *line, int *i);
-void	handle_quotes(t_data *data, char *line, int *i, char quote);
 char				*ft_extract_fline(t_data *data, char *line, int start,
 						int end);
 void				print_tokens(t_data *data);

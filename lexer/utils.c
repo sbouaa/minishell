@@ -114,8 +114,7 @@ char *get_token_type_string(t_token_type type)
         return ("DBQUOTE");
 	else if (type == SIQUOTE)
         return ("SIQUOTE");
-    else
-        return ("UNKNOWN");
+	return "";	
 }
 
 void print_tokens(t_data *data)
@@ -125,7 +124,7 @@ void print_tokens(t_data *data)
     current = data->token_list;
     while (current)
     {
-        printf("Token type: %s | value: %s\n",
+        printf("Token type: %s | value: |%s|\n",
                get_token_type_string(current->type),
                current->value ? current->value : "NULL");
         current = current->next;

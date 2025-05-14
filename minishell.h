@@ -68,6 +68,7 @@ int					lexer(t_data *data);
 int					is_token(char c);
 int					is_space(int c);
 int					is_token(char c);
+int	is_quote(int c);
 char				*ft_substr(t_data *data, const char *s, int start, int len);
 char				*ft_strdup(const char *s1, t_data *data);
 size_t				ft_strlen(const char *str);
@@ -77,6 +78,11 @@ t_token				*create_token(t_data *data, t_token_type type,
 void				add_node_to_back(t_data *data, t_token_type type,
 						const char *value);
 char *ft_extract_fline(t_data *data, char *line, int start, int end, int add_space);
+int	handle_tokens(t_data *data, char *line, int *i);
+int	handle_redirection(t_data *data, char *line, int *i);
+int	handle_word_part(t_data *data, char *line, int *i);
+int	handle_quote_part(t_data *data, char *line, int *i);
+int	handle_word_segments(t_data *data, char *line, int *i);
 void				print_tokens(t_data *data);
 char				*get_token_type_string(t_token_type type);
 #endif

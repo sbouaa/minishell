@@ -85,4 +85,5 @@ int	handle_quote_part(t_data *data, char *line, int *i);
 int	handle_word_segments(t_data *data, char *line, int *i);
 void				print_tokens(t_data *data);
 char				*get_token_type_string(t_token_type type);
+int	check_syntax_errors(t_data *data);
 #endif

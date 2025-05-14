@@ -69,10 +69,7 @@ int	handle_quote_part(t_data *data, char *line, int *i)
 	while (line[*i] && line[*i] != quote)
 		(*i)++;
 	if (line[*i] != quote)
-	{
-		printf("Error: Unclosed quote\n");
-		return (1);
-	}
+		return (printf("Syntax error: unclosed quote\n"),1);
 	tmp = ft_extract_fline(data, line, start, *i - 1, 0);
 	if (quote == '\'')
 		add_node_to_back(data, SIQUOTE, tmp);

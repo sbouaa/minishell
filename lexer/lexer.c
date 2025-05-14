@@ -1,19 +1,37 @@
 #include "../minishell.h"
 
-int	is_token(char c) { return (c == '|' || c == '<' || c == '>'); }
-int	is_space(int c) { return (c == ' ' || c == '\t'); }
-int	is_quote(int c) { return (c == '\'' || c == '"'); }
+int	is_token(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}
 
-char	*ft_extract_fline(t_data *data, char *line, int start, int end)
+int	is_space(int c)
+{
+	return (c == ' ' || c == '\t');
+}
+
+int	is_quote(int c)
+{
+	return (c == '\'' || c == '"');
+}
+
+char	*ft_extract_fline(t_data *data, char *line, int start, int end, int add_space)
 {
 	char	*str;
-	int		i = 0;
+	int		i;
+	int		len;
 
-	str = gc_malloc(&data->gc, end - start + 2);
+	i = 0;
+	len = end - start + 1;
+	if (add_space)
+		len++;
+	str = gc_malloc(&data->gc, len + 1);
 	if (!str)
 		return (NULL);
 	while (start <= end)
 		str[i++] = line[start++];
+	if (add_space)
+		str[i++] = ' ';
 	str[i] = '\0';
 	return (str);
 }
@@ -24,7 +42,10 @@ int	handle_redirection(t_data *data, char *line, int *i)
 	{
 		(*i)++;
 		if (line[*i] == '<')
-			add_node_to_back(data, HEREDOC, "<<"), (*i)++;
+		{
+			add_node_to_back(data, HEREDOC, "<<");
+			(*i)++;
+		}
 		else
 			add_node_to_back(data, IN_REDIRECT, "<");
 	}
@@ -32,7 +53,10 @@ int	handle_redirection(t_data *data, char *line, int *i)
 	{
 		(*i)++;
 		if (line[*i] == '>')
-			add_node_to_back(data, APPEND, ">>"), (*i)++;
+		{
+			add_node_to_back(data, APPEND, ">>");
+			(*i)++;
+		}
 		else
 			add_node_to_back(data, OUT_REDIRECT, ">");
 	}
@@ -42,7 +66,10 @@ int	handle_redirection(t_data *data, char *line, int *i)
 int	handle_tokens(t_data *data, char *line, int *i)
 {
 	if (line[*i] == '|')
-		add_node_to_back(data, PIPE, "|"), (*i)++;
+	{
+		add_node_to_back(data, PIPE, "|");
+		(*i)++;
+	}
 	else
 		handle_redirection(data, line, i);
 	return (0);
@@ -50,33 +77,46 @@ int	handle_tokens(t_data *data, char *line, int *i)
 
 int	handle_word_part(t_data *data, char *line, int *i)
 {
-	int		start = *i;
+	int		start;
 	char	*tmp;
+	int		add_space;
 
+	start = *i;
 	while (line[*i] && !is_space(line[*i])
 		&& !is_token(line[*i]) && !is_quote(line[*i]))
 		(*i)++;
-	tmp = ft_extract_fline(data, line, start, *i - 1);
+	add_space = 0;
+	if (line[*i] && is_space(line[*i]))
+		add_space = 1;
+	tmp = ft_extract_fline(data, line, start, *i - 1, add_space);
 	add_node_to_back(data, WORD, tmp);
 	return (0);
 }
 
 int	handle_quote_part(t_data *data, char *line, int *i)
 {
-	char	quote = line[(*i)++];
-	int		start = *i;
+	char	quote;
+	int		start;
 	char	*tmp;
 
+	quote = line[*i];
+	(*i)++;
+	start = *i;
 	while (line[*i] && line[*i] != quote)
 		(*i)++;
 	if (line[*i] != quote)
-		return (printf("Error: Unclosed quote\n"), 1);
-	tmp = ft_extract_fline(data, line, start, *i - 1);
+		return (1);
+	tmp = ft_extract_fline(data, line, start, *i - 1, 0);
 	if (quote == '\'')
 		add_node_to_back(data, SIQUOTE, tmp);
 	else
 		add_node_to_back(data, DBQUOTE, tmp);
 	(*i)++;
+	if (line[*i] && is_space(line[*i]))
+	{
+		add_node_to_back(data, SPACEE, " ");
+		(*i)++;
+	}
 	return (0);
 }
 
@@ -97,18 +137,19 @@ int	handle_word_segments(t_data *data, char *line, int *i)
 
 int	lexer(t_data *data)
 {
-	int		i = 0;
-	char	*line = data->prompt;
+	int		i;
+	char	*line;
 
+	i = 0;
+	line = data->prompt;
 	data->token_list = NULL;
 	while (line[i])
 	{
-		if (is_space(line[i]))
-			i++;
-		else if (is_token(line[i]))
+		if (is_token(line[i]))
 			handle_tokens(data, line, &i);
 		else if (handle_word_segments(data, line, &i))
 			return (1);
+		i++;
 	}
 	return (0);
 }

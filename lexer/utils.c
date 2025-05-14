@@ -114,6 +114,8 @@ char *get_token_type_string(t_token_type type)
         return ("DBQUOTE");
 	else if (type == SIQUOTE)
         return ("SIQUOTE");
+	else if (type == SPACEE)
+        return ("SPACEE");
 	return "";	
 }
 

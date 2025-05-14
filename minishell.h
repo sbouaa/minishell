@@ -33,6 +33,7 @@ typedef enum e_token_type
 	DBQUOTE,
 	SIQUOTE,
 	WORD,
+	SPACEE
 }					t_token_type;
 
 typedef struct s_token
@@ -75,8 +76,7 @@ t_token				*create_token(t_data *data, t_token_type type,
 						const char *value);
 void				add_node_to_back(t_data *data, t_token_type type,
 						const char *value);
-char				*ft_extract_fline(t_data *data, char *line, int start,
-						int end);
+char *ft_extract_fline(t_data *data, char *line, int start, int end, int add_space);
 void				print_tokens(t_data *data);
 char				*get_token_type_string(t_token_type type);
 #endif

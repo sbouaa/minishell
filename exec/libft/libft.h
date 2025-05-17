@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:55:27 by sbouaa            #+#    #+#             */
-/*   Updated: 2024/11/18 22:43:53 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/17 00:54:49 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
+int		ft_strcmp(char *s1, char *s2);
 void	ft_bzero(void	*s, size_t n);
 int		ft_memcmp(const void	*s1, const void	*s2, size_t n);
 void	*ft_calloc(size_t count, size_t n);

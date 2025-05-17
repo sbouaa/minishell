@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:41:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/12 17:55:24 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/17 00:51:20 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	main(int ac, char	**av, char	**env)
 		if (!*data->line)
 		{
 			printf("%s", data->line);
-			continue;
+			continue ;
 		}
 		add_history(data->line);
 		data->mmd = ft_split(data->line, 32);

@@ -6,27 +6,109 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/13 00:30:04 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/17 00:52:37 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_export_no_args(t_env *env)
+int	to_env(char *key, char *var, int type, t_env *env)
 {
-    while (env)
-    {
-        //sort before print
-        if (ft_strcmp(env->key, "_") != 0)
-            printf("declare -x %s=%s\n", env->key, env->value);
-        env = env->next;
-    }
-    return (0);
+	char	*value;
+
+	if (type == 3)
+	{
+		add_env_var(key, "", &env);
+		return (free(key), 0);
+	}
+	else
+	{
+		value = get_key_and_value(var, 1);
+		if (!value)
+			return (free(key), 1);
+		else
+		{
+			add_env_var(key, value, &env);
+			return (free(key), free(value), 1);
+		}
+	}
+	return (0);
 }
 
-int ft_export(char  **args, t_dd    *data)
+int	var_in_env(char *key, char *var, int type, t_env *env)
 {
-    if (!args[1])
-        ft_export_no_args(data->env);
-    return (0);
+	char	*value;
+	char	*n_value;
+	t_env	*ex_var;
+
+	if (type == 3)
+		return (free(key), 0);
+	value = get_key_and_value(var, type);
+	if (!value)
+		return (free(key), 1);
+	ex_var = ft_search_env(key, env);
+	if (type == 1)
+	{
+		(free(ex_var->value), free(key));
+		ex_var->value = value;
+		return (0);
+	}
+	if (type == 2)
+	{
+		n_value = ft_strjoin(ex_var->value, value);
+		if (!n_value)
+			return (1);
+		(free(key), free(value));
+		free(ex_var->value);
+		ex_var->value = n_value;
+		return (0);
+	}
+	return (0);
+}
+
+int	export_var(char *var, t_env *env)
+{
+	int		type;
+	char	*key;
+	t_env	*ex_env;
+
+	key = get_key_and_value(var, 0);
+	if (!key)
+		return (1);
+	if (is_valid(key))
+		return (pr_error(var), 1);
+	type = get_type(var);
+	ex_env = ft_search_env(key, env);
+	if (ex_env)
+		var_in_env(key, var, type, env);
+	else
+		to_env(key, var, type, env);
+	return (0);
+}
+
+int	ft_export_no_args(t_env *env)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->key, "_") != 0)
+			printf("declare -x %s=%s\n", env->key, env->value);
+		env = env->next;
+	}
+	return (0);
+}
+
+int	ft_export(char **args, t_dd *data)
+{
+	int	i;
+
+	i = 1;
+	if (!args[1])
+		return (ft_export_no_args(data->env), 0);
+	while (args[i])
+	{
+		if (export_var(args[i], data->env) != 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }

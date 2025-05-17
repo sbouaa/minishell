@@ -6,25 +6,11 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:55:25 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/05 18:35:30 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/17 00:54:14 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i])
-	{
-		if (s1[i] != s2[i])
-			return (s1[i] - s2[i]);
-		i++;
-	}
-	return (s1[i] - s2[i]);
-}
 
 t_env	*ft_lstnew(char *key, char *value)
 {

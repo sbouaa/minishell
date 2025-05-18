@@ -41,6 +41,7 @@ int	main(int argc, char **argv, char **envp)
     (void)envp;
 	if (init_data(&data) != 0)
 		return (EXIT_FAILURE);
+	envp_init(&data, envp);
 	main_loop(&data);
 	gc_free_all(&data.gc);
 	return (EXIT_SUCCESS);

@@ -34,6 +34,11 @@ int	handle_tokens(t_data *data, char *line, int *i)
 		add_node_to_back(data, PIPE, "|");
 		(*i)++;
 	}
+	if (line[*i] == '$')
+	{
+		add_node_to_back(data, EXPAND, "$");
+		(*i)++;
+	}
 	else
 		handle_redirection(data, line, i);
 	return (0);

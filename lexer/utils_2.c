@@ -2,7 +2,7 @@
 
 int	is_token(char c)
 {
-	return (c == '|' || c == '<' || c == '>');
+	return (c == '|' || c == '<' || c == '>' || c == '$');
 }
 
 int	is_space(int c)
@@ -55,5 +55,7 @@ char *get_token_type_string(t_token_type type)
         return ("SIQUOTE");
 	else if (type == SPACEE)
         return ("SPACEE");
+	else if (type == EXPAND)
+        return ("EXPAND");
 	return "";	
 }

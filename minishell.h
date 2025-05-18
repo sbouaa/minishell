@@ -33,7 +33,8 @@ typedef enum e_token_type
 	DBQUOTE,
 	SIQUOTE,
 	WORD,
-	SPACEE
+	SPACEE,
+	EXPAND
 }					t_token_type;
 
 typedef struct s_token
@@ -43,27 +44,25 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-typedef struct s_cmd {
-    char    **args;         // Command and its arguments
-    int     arg_count;      // Number of arguments
-    int     arg_capacity;   // Capacity of the args array
-    char    *infile;        // Input redirection file
-    char    *outfile;       // Output redirection file
-    int     in_type;        // 0 = none, 1 = <, 2 = <<
-    int     out_type;       // 0 = none, 1 = >, 2 = >>
-    struct s_cmd *next;     // Next command in pipeline
-} t_cmd;
+
+typedef struct s_env
+{
+	char *key;
+	char *value;
+	struct s_env *next;
+}					t_env;
 
 typedef struct s_data
 {
 	char			*prompt;
 	t_token			*token_list;
-	t_cmd			*cmd_list;
+	t_env			*env;
 	int 			syntax_error;
 	t_gc			gc;
 }					t_data;
 
 int					init_data(t_data *data);
+void	envp_init(t_data *data, char **envp);
 int					lexer(t_data *data);
 int					is_token(char c);
 int					is_space(int c);

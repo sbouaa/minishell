@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/12 16:01:57 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/19 17:28:42 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_env	*add_env_var(char *key, char *value, t_env **env)
 	t_env	*ex_node;
 
 	if (!key || !value)
-		return (ft_putendl_fd("error lah w3lam!!!!!!!", 2), NULL);
+		return (NULL);
 	ex_node = ft_search_env(key, *env);
 	if (ex_node)
 	{

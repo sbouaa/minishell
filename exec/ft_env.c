@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 03:24:30 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/19 18:14:58 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,19 @@ t_env	*def_env(void)
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
-		if (!add_env_var("PWD", pwd, &env))
+		if (!add_env_var("PWD", pwd, &env)) 
 			return (free(pwd), NULL);
 		free(pwd);
 	}
-	if (!add_env_var("SHLVL", "1", &env))
+	export_var("SHLVL=1", env);
+	export_var("_=/usr/bin/env", env);
+	export_var("OLDPWD", env);
+	/*if (!add_env_var("SHLVL", "1", &env))
 		return (NULL);
 	if (!add_env_var("_", "/usr/bin/env", &env))
 		return (NULL);
+	if (!add_env_var("OLDPWD", "", &env))
+		return (NULL);*/
 	return (env);
 }
 
@@ -64,7 +69,7 @@ static t_env	*env_node(char *envp)
 		return (free(key), free(value), NULL);
 	node = ft_lstnew(key, value);
 	if (!node)
-		(free(key), free(value));
+		return (free(key), free(value), NULL);
 	return (node);
 }
 
@@ -91,7 +96,8 @@ void	env(t_env *env)
 {
 	while (env)
 	{
-		printf("%s=%s\n", env->key, env->value);
+		if (env->value[0])
+			printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}
 }

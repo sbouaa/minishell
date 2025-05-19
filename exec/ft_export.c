@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/17 00:52:37 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/19 17:41:51 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,12 @@ int	ft_export_no_args(t_env *env)
 	while (env)
 	{
 		if (ft_strcmp(env->key, "_") != 0)
-			printf("declare -x %s=%s\n", env->key, env->value);
+		{
+			if (!env->value[0])
+				printf("declare -x %s\n", env->key);
+			else
+				printf("declare -x %s=\"%s\"\n", env->key, env->value);
+		}
 		env = env->next;
 	}
 	return (0);

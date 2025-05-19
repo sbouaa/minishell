@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/12 16:04:27 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/05/19 19:33:33 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int	getcwd_fail(char *o_cwd, char *dir, t_env **env)
 	}
 	if (!n_pwd)
 		return (1);
-	//(env_del("OLD_PWD", env), env_del("PWD", env));
 	add_env_var("OLD_PWD", o_cwd, env);
 	add_env_var("PWD", n_pwd, env);
 	return (free(n_pwd), 0);
@@ -49,10 +48,7 @@ static int	up_pwd_env(char *o_cwd, char *dir, t_env **env)
 	else
 		env_del("OLD_PWD", env);
 	if (ft_getenv("PWD", *env))
-	{
-		//env_del("PWD", env);
 		add_env_var("PWD", cwd, env);
-	}
 	return (free(cwd), 0);
 }
 

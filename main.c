@@ -24,9 +24,10 @@ static int	main_loop(t_data *data)
 	{
 		if (handle_line(data) == -1)
 			break;
-        if(lexer(data) == 0 && check_syntax_errors(data) == 0){
-			print_tokens(data);
-		}
+        lexer(data);
+		check_syntax_errors(data);
+		expand(data);
+		print_tokens(data);
 		continue;
 	}
 	return (0);

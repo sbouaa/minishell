@@ -16,7 +16,8 @@ static int	is_word_token(t_token *token)
 		return (0);
 	return (token->type == WORD
 		|| token->type == SIQUOTE
-		|| token->type == DBQUOTE);
+		|| token->type == DBQUOTE
+        || token->type == EXPAND);
 }
 
 static int	check_pipe_errors(t_token *token)

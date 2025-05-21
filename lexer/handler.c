@@ -36,7 +36,10 @@ int	handle_tokens(t_data *data, char *line, int *i)
 	}
 	if (line[*i] == '$')
 	{
-		add_node_to_back(data, EXPAND, "$");
+		if(is_space(line[*i + 1]))
+			add_node_to_back(data, EXPAND, "$ ");
+		else
+			add_node_to_back(data, EXPAND, "$");
 		(*i)++;
 	}
 	else

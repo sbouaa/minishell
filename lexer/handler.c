@@ -36,7 +36,7 @@ int	handle_tokens(t_data *data, char *line, int *i)
 	}
 	if (line[*i] == '$')
 	{
-		if(is_space(line[*i + 1]))
+		if (is_space(line[*i + 1]))
 			add_node_to_back(data, EXPAND, "$ ");
 		else
 			add_node_to_back(data, EXPAND, "$");
@@ -54,8 +54,8 @@ int	handle_word_part(t_data *data, char *line, int *i)
 	int		add_space;
 
 	start = *i;
-	while (line[*i] && !is_space(line[*i])
-		&& !is_token(line[*i]) && !is_quote(line[*i]))
+	while (line[*i] && !is_space(line[*i]) && !is_token(line[*i])
+		&& !is_quote(line[*i]))
 		(*i)++;
 	add_space = 0;
 	if (line[*i] && is_space(line[*i]))
@@ -77,7 +77,7 @@ int	handle_quote_part(t_data *data, char *line, int *i)
 	while (line[*i] && line[*i] != quote)
 		(*i)++;
 	if (line[*i] != quote)
-		return (printf("Syntax error: unclosed quote\n"),1);
+		return (printf("Syntax error: unclosed quote\n"), 1);
 	tmp = ft_extract_fline(data, line, start, *i - 1, 0);
 	if (quote == '\'')
 		add_node_to_back(data, SIQUOTE, tmp);
@@ -97,7 +97,7 @@ int	handle_word_segments(t_data *data, char *line, int *i)
 	while (line[*i])
 	{
 		if (is_space(line[*i]) || is_token(line[*i]))
-			break;
+			break ;
 		if (is_quote(line[*i]))
 		{
 			if (handle_quote_part(data, line, i))

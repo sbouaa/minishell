@@ -4,20 +4,16 @@ static int	is_redirection(t_token *token)
 {
 	if (!token)
 		return (0);
-	return (token->type == IN_REDIRECT
-		|| token->type == OUT_REDIRECT
-		|| token->type == HEREDOC
-		|| token->type == APPEND);
+	return (token->type == IN_REDIRECT || token->type == OUT_REDIRECT
+		|| token->type == HEREDOC || token->type == APPEND);
 }
 
 static int	is_word_token(t_token *token)
 {
 	if (!token)
 		return (0);
-	return (token->type == WORD
-		|| token->type == SIQUOTE
-		|| token->type == DBQUOTE
-        || token->type == EXPAND);
+	return (token->type == WORD || token->type == SIQUOTE
+		|| token->type == DBQUOTE || token->type == EXPAND);
 }
 
 static int	check_pipe_errors(t_token *token)

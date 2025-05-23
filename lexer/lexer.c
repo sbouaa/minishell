@@ -2,9 +2,11 @@
 
 int	lexer(t_data *data)
 {
-	int		i = 0;
-	char	*line = data->prompt;
+	int		i;
+	char	*line;
 
+	i = 0;
+	line = data->prompt;
 	data->token_list = NULL;
 	while (line[i])
 	{
@@ -22,4 +24,3 @@ int	lexer(t_data *data)
 	}
 	return (0);
 }
-

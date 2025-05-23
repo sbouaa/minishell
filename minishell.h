@@ -1,9 +1,9 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <termios.h>
 # include <unistd.h>
@@ -44,12 +44,11 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-
 typedef struct s_env
 {
-	char *key;
-	char *value;
-	struct s_env *next;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
 }					t_env;
 
 typedef struct s_data
@@ -57,17 +56,17 @@ typedef struct s_data
 	char			*prompt;
 	t_token			*token_list;
 	t_env			*env;
-	int 			syntax_error;
+	int				syntax_error;
 	t_gc			gc;
 }					t_data;
 
 int					init_data(t_data *data);
-void	envp_init(t_data *data, char **envp);
+void				envp_init(t_data *data, char **envp);
 int					lexer(t_data *data);
 int					is_token(char c);
 int					is_space(int c);
 int					is_token(char c);
-int	is_quote(int c);
+int					is_quote(int c);
 char				*ft_substr(t_data *data, const char *s, int start, int len);
 char				*ft_strdup(const char *s1, t_data *data);
 size_t				ft_strlen(const char *str);
@@ -76,14 +75,20 @@ t_token				*create_token(t_data *data, t_token_type type,
 						const char *value);
 void				add_node_to_back(t_data *data, t_token_type type,
 						const char *value);
-char *ft_extract_fline(t_data *data, char *line, int start, int end, int add_space);
-int	handle_tokens(t_data *data, char *line, int *i);
-int	handle_redirection(t_data *data, char *line, int *i);
-int	handle_word_part(t_data *data, char *line, int *i);
-int	handle_quote_part(t_data *data, char *line, int *i);
-int	handle_word_segments(t_data *data, char *line, int *i);
+char				*ft_extract_fline(t_data *data, char *line, int start,
+						int end, int add_space);
+int					handle_tokens(t_data *data, char *line, int *i);
+int					handle_redirection(t_data *data, char *line, int *i);
+int					handle_word_part(t_data *data, char *line, int *i);
+int					handle_quote_part(t_data *data, char *line, int *i);
+int					handle_word_segments(t_data *data, char *line, int *i);
 void				print_tokens(t_data *data);
 char				*get_token_type_string(t_token_type type);
-int	check_syntax_errors(t_data *data);
-void expand(t_data *data);
+int					check_syntax_errors(t_data *data);
+void				expand(t_data *data);
+char				*join_expanded(t_data *data, char *new_val, char *first,
+						char *exp);
+int					ft_find_dollar(const char *str);
+int					ft_find_first_non_alnum(const char *str);
+int					ft_isalnum(int c);
 #endif

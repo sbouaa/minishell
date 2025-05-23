@@ -15,7 +15,8 @@ int	is_quote(int c)
 	return (c == '\'' || c == '"');
 }
 
-char	*ft_extract_fline(t_data *data, char *line, int start, int end, int add_space)
+char	*ft_extract_fline(t_data *data, char *line, int start, int end,
+		int add_space)
 {
 	char	*str;
 	int		i;
@@ -35,27 +36,27 @@ char	*ft_extract_fline(t_data *data, char *line, int start, int end, int add_spa
 	str[i] = '\0';
 	return (str);
 }
-char *get_token_type_string(t_token_type type)
+char	*get_token_type_string(t_token_type type)
 {
-    if (type == PIPE)
-        return ("PIPE");
-    else if (type == IN_REDIRECT)
-        return ("IN_REDIRECT");
-    else if (type == OUT_REDIRECT)
-        return ("OUT_REDIRECT");
-    else if (type == HEREDOC)
-        return ("HEREDOC");
-    else if (type == APPEND)
-        return ("APPEND");
-    else if (type == WORD)
-        return ("WORD");
+	if (type == PIPE)
+		return ("PIPE");
+	else if (type == IN_REDIRECT)
+		return ("IN_REDIRECT");
+	else if (type == OUT_REDIRECT)
+		return ("OUT_REDIRECT");
+	else if (type == HEREDOC)
+		return ("HEREDOC");
+	else if (type == APPEND)
+		return ("APPEND");
+	else if (type == WORD)
+		return ("WORD");
 	else if (type == DBQUOTE)
-        return ("DBQUOTE");
+		return ("DBQUOTE");
 	else if (type == SIQUOTE)
-        return ("SIQUOTE");
+		return ("SIQUOTE");
 	else if (type == SPACEE)
-        return ("SPACEE");
+		return ("SPACEE");
 	else if (type == EXPAND)
-        return ("EXPAND");
-	return "";	
+		return ("EXPAND");
+	return ("");
 }

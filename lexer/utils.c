@@ -32,34 +32,35 @@ char	*ft_strdup(const char *s1, t_data *data)
 	return (copy);
 }
 
-char *ft_strjoin(const char *s1, const char *s2, t_data *data)
+char	*ft_strjoin(const char *s1, const char *s2, t_data *data)
 {
-    char *str;
-    size_t i = 0;
-    size_t j = 0;
+	char	*str;
+	size_t	i;
+	size_t	j;
 
+	i = 0;
+	j = 0;
 	if (!s1 && !s2)
-        return NULL;
-    if (!s1)
-        return ft_strdup(s2, data);
-    if (!s2)
-        return ft_strdup(s1, data);
-    str = gc_malloc(&data->gc, ft_strlen(s1) + ft_strlen(s2) + 1); 
-    while (s1[i])
-    {
-        str[i] = s1[i];
-        i++;
-    }
-    while (s2[j])
-    {
-        str[i] = s2[j];
-        i++;
-        j++;
-    }
-    str[i] = '\0';
-    return str;
+		return (NULL);
+	if (!s1)
+		return (ft_strdup(s2, data));
+	if (!s2)
+		return (ft_strdup(s1, data));
+	str = gc_malloc(&data->gc, ft_strlen(s1) + ft_strlen(s2) + 1);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i] = s2[j];
+		i++;
+		j++;
+	}
+	str[i] = '\0';
+	return (str);
 }
-
 
 t_token	*create_token(t_data *data, t_token_type type, const char *value)
 {
@@ -96,16 +97,16 @@ void	add_node_to_back(t_data *data, t_token_type type, const char *value)
 	}
 }
 
-void print_tokens(t_data *data)
+void	print_tokens(t_data *data)
 {
-    t_token *current;
+	t_token	*current;
 
-    current = data->token_list;
-    while (current)
-    {
-        printf("Token type: %s | value: |%s|\n",
-               get_token_type_string(current->type),
-               current->value ? current->value : "NULL");
-        current = current->next;
-    }
+	current = data->token_list;
+	while (current)
+	{
+		printf("Token type: %s | value: |%s|\n",
+			get_token_type_string(current->type),
+			current->value ? current->value : "NULL");
+		current = current->next;
+	}
 }

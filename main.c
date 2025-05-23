@@ -23,23 +23,23 @@ static int	main_loop(t_data *data)
 	while (1)
 	{
 		if (handle_line(data) == -1)
-			break;
-        lexer(data);
+			break ;
+		lexer(data);
 		check_syntax_errors(data);
 		expand(data);
 		print_tokens(data);
-		continue;
+		continue ;
 	}
 	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	data;
+	t_data data;
 
 	(void)argc;
 	(void)argv;
-    (void)envp;
+	(void)envp;
 	if (init_data(&data) != 0)
 		return (EXIT_FAILURE);
 	envp_init(&data, envp);

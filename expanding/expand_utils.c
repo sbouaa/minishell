@@ -48,8 +48,8 @@ char	*join_expanded(t_data *data, char *new_val, char *first, char *exp)
 	if (!new_val)
 		return (ft_strjoin(first, exp, data));
 	tmp = ft_strjoin(new_val, first, data);
-	free(new_val);
+	// free(new_val);
 	joined = ft_strjoin(tmp, exp, data);
-	free(tmp);
+	// free(tmp);
 	return (joined);
 }

@@ -17,10 +17,10 @@ void	expand_normal(t_data *data, t_token *current)
 	end = ft_extract_fline(data, current->value, non_alnum_index,
 			ft_strlen(current->value) - 1, 0);
 	new_value = ft_strjoin(expanded_value, end, data);
-	free(current->value);
+	// free(current->value);
 	current->value = new_value;
-	free(holder);
-	free(end);
+	// free(holder);
+	// free(end);
 }
 
 static void	handle_dollar(t_data *data, t_token *cur, char **new_val)
@@ -44,11 +44,11 @@ static void	handle_dollar(t_data *data, t_token *cur, char **new_val)
 	if (!expanded)
 		expanded = "";
 	*new_val = join_expanded(data, *new_val, first, expanded);
-	free(first);
-	free(holder);
+	// free(first);
+	// free(holder);
 	end = ft_extract_fline(data, cur->value, start, ft_strlen(cur->value) - 1,
 			0);
-	free(cur->value);
+	// free(cur->value);
 	cur->value = end;
 }
 static void	expand_var(t_data *d, t_token *cur, int i, char **new_val)
@@ -65,10 +65,10 @@ static void	expand_var(t_data *d, t_token *cur, int i, char **new_val)
 			&& cur->value[start] != '_'))
 	{
 		*new_val = join_expanded(d, *new_val, first, "$");
-		free(first);
+		// free(first);
 		end = ft_extract_fline(d, cur->value, start, ft_strlen(cur->value) - 1,
 				0);
-		free(cur->value);
+		// free(cur->value);
 		cur->value = end;
 		return ;
 	}
@@ -79,10 +79,10 @@ static void	expand_var(t_data *d, t_token *cur, int i, char **new_val)
 	if (!expanded)
 		expanded = "";
 	*new_val = join_expanded(d, *new_val, first, expanded);
-	free(first);
-	free(holder);
+	// free(first);
+	// free(holder);
 	end = ft_extract_fline(d, cur->value, start, ft_strlen(cur->value) - 1, 0);
-	free(cur->value);
+	// free(cur->value);
 	cur->value = end;
 }
 
@@ -97,10 +97,10 @@ void	expand_dbquote(t_data *d, t_token *cur)
 	if (cur->value && *cur->value)
 	{
 		tmp = ft_strjoin(new_val, cur->value, d);
-		free(new_val);
+		// free(new_val);
 		new_val = tmp;
 	}
-	free(cur->value);
+	// free(cur->value);
 	cur->value = new_val;
 }
 

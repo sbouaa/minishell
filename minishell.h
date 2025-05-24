@@ -37,6 +37,19 @@ typedef enum e_token_type
 	EXPAND
 }					t_token_type;
 
+
+typedef struct s_arg
+{
+    char *value;
+    struct s_arg *next;
+} t_arg;
+
+typedef struct s_args
+{
+    t_arg *args;
+    struct s_args *next;
+} t_args;
+
 typedef struct s_token
 {
 	t_token_type	type;
@@ -91,4 +104,9 @@ char				*join_expanded(t_data *data, char *new_val, char *first,
 int					ft_find_dollar(const char *str);
 int					ft_find_first_non_alnum(const char *str);
 int					ft_isalnum(int c);
+
+t_arg	*create_arg_node(t_data *data, const char *value);
+t_args	*create_args_node(t_data *data);
+void	add_arg(t_data *data, t_args *cmd, const char *value);
+void	add_args(t_data *data, t_args **head);
 #endif

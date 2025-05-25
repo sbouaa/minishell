@@ -1,51 +1,28 @@
 #include "minishell.h"
 
-static int	handle_line(t_data *data)
+int	main(void)
 {
-	if (data->prompt)
-	{
-		free(data->prompt);
-		data->prompt = NULL;
-	}
-	data->prompt = readline("minishell$ ");
-	if (!data->prompt)
-	{
-		printf("exit\n");
-		return (-1);
-	}
-	if (*data->prompt)
-		add_history(data->prompt);
-	return (0);
-}
+	t_data	data;
 
-static int	main_loop(t_data *data)
-{
+	if (init_data(&data) != 0)
+		return (1);
+
 	while (1)
 	{
-		if (handle_line(data) == -1)
+		data.prompt = readline("minishell$ ");
+		if (!data.prompt)
 			break ;
-		lexer(data);
-		expand(data);
-		if(check_syntax_errors(data) == 0){
-			data->token_list = NULL;
-			print_token_list(data);
+		if (data.prompt[0] != '\0')
+		{
+			add_history(data.prompt);
+			if (lexer(&data) == 0 && check_syntax_errors(&data) == 0)
+			{
+				expand(&data);
+				print_token_list(&data);
+			}
 		}
-		continue ;
+		free(data.prompt);
 	}
-	return (0);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_data data;
-
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	if (init_data(&data) != 0)
-		return (EXIT_FAILURE);
-	envp_init(&data, envp);
-	main_loop(&data);
 	gc_free_all(&data.gc);
-	return (EXIT_SUCCESS);
+	return (0);
 }

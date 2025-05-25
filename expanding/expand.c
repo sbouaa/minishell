@@ -20,14 +20,12 @@ static char *process_dollar(t_data *data, char *str, int *i)
 	char *var_name;
 	char *value;
 
-	(*i)++;  // Skip the $
+	(*i)++;
 	start = *i;
 	
-	// If $ is the last character or followed by non-valid char
 	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
 		return (ft_strdup("$", data));
 
-	// Find end of variable name
 	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		(*i)++;
 

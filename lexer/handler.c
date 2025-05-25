@@ -107,24 +107,14 @@ static int should_concatenate(t_token *last, char *line, int i)
 static int add_or_concat_content(t_data *data, char *content, char *line, int pos, t_token_type type)
 {
 	t_token *last;
-	char *temp;
-	int len;
 
 	if (!content)
 		return (1);
 	last = get_last_token(data);
 	if (should_concatenate(last, line, pos))
 	{
-		// Remove any quotes from the content before concatenating
-		len = ft_strlen(content);
-		if (len >= 2 && (content[0] == '\'' || content[0] == '"') && 
-			content[len - 1] == content[0])
-		{
-			temp = ft_substr(data, content, 1, len - 2);
-			last->value = ft_strjoin(last->value, temp, data);
-		}
-		else
-			last->value = ft_strjoin(last->value, content, data);
+		// Just concatenate without removing quotes
+		last->value = ft_strjoin(last->value, content, data);
 		if (!last->value)
 			return (1);
 	}
@@ -138,28 +128,31 @@ int	handle_quote_part(t_data *data, char *line, int *i)
 	char	quote;
 	int		start;
 	char	*content;
-	int		in_nested_quote;
-	char	nested_quote;
 
 	quote = line[*i];
 	start = *i;
 	(*i)++;
-	in_nested_quote = 0;
+
 	while (line[*i])
 	{
-		if (!in_nested_quote && line[*i] == quote)
-			break;
-		if (!in_nested_quote && (line[*i] == '\'' || line[*i] == '"'))
+		// If we're in double quotes, preserve single quotes and keep going
+		if (quote == '"' && line[*i] == '\'')
 		{
-			in_nested_quote = 1;
-			nested_quote = line[*i];
+			(*i)++;
+			continue;
 		}
-		else if (in_nested_quote && line[*i] == nested_quote)
-			in_nested_quote = 0;
+		// Only stop if we find matching quote
+		if (line[*i] == quote)
+			break;
 		(*i)++;
 	}
+
 	if (!line[*i])
-		return (1);
+	{
+		data->syntax_error = 1;
+		return (1);  // Unclosed quote error
+	}
+
 	(*i)++;
 	content = ft_substr(data, line, start, *i - start);
 	if (!content)
@@ -171,45 +164,57 @@ int	handle_word_part(t_data *data, char *line, int *i)
 {
 	int		start;
 	char	*content;
-	char    quote_char;
-	int     in_quotes;
 
 	start = *i;
-	in_quotes = 0;
-	while (line[*i] && !is_space(line[*i]) 
-		&& line[*i] != '|' && line[*i] != '<' && line[*i] != '>')
+	while (line[*i])
 	{
-		if (line[*i] == '$' && line[*i + 1] && (line[*i + 1] == '\'' || line[*i + 1] == '"'))
+		// Handle $" case specially
+		if (*i == start && line[*i] == '$' && line[*i + 1] == '"')
 		{
-			quote_char = line[*i + 1];
-			(*i) += 2;  // Skip $ and quote
-			// Keep going until we find the matching quote
-			while (line[*i] && line[*i] != quote_char)
+			(*i) += 2;  // Skip $"
+			// Keep going until we find the closing quote
+			while (line[*i] && line[*i] != '"')
 				(*i)++;
-			if (line[*i])
-				(*i)++;  // Skip closing quote
-			break;
+			// Check for unclosed quote
+			if (!line[*i] || line[*i] != '"')
+			{
+				data->syntax_error = 1;
+				return (1);  // Syntax error: unclosed quote
+			}
+			(*i)++;  // Skip closing quote
+			content = ft_substr(data, line, start, *i - start);
+			return (add_or_concat_content(data, content, line, start, WORD));
 		}
-		else if (line[*i] == '\'' || line[*i] == '"')
+
+		// Handle $' case specially
+		if (*i == start && line[*i] == '$' && line[*i + 1] == '\'')
 		{
-			// Handle empty quotes
-			if (line[*i + 1] && line[*i] == line[*i + 1])
+			(*i) += 2;  // Skip $'
+			// Keep going until we find the closing quote
+			while (line[*i] && line[*i] != '\'')
+				(*i)++;
+			// Check for unclosed quote
+			if (!line[*i] || line[*i] != '\'')
 			{
-				(*i) += 2;  // Skip empty quotes
-				continue;
+				data->syntax_error = 1;
+				return (1);  // Syntax error: unclosed quote
 			}
-			if (!in_quotes)
-			{
-				quote_char = line[*i];
-				in_quotes = 1;
-			}
-			else if (line[*i] == quote_char)
-				in_quotes = 0;
-			(*i)++;
+			(*i)++;  // Skip closing quote
+			content = ft_substr(data, line, start, *i - start);
+			return (add_or_concat_content(data, content, line, start, WORD));
 		}
-		else
-			(*i)++;
+
+		// Stop at pipe or redirections if not in quotes
+		if (line[*i] == '|' || line[*i] == '<' || line[*i] == '>')
+			break;
+
+		// Stop at spaces
+		if (is_space(line[*i]))
+			break;
+
+		(*i)++;
 	}
+
 	content = ft_substr(data, line, start, *i - start);
 	return (add_or_concat_content(data, content, line, start, WORD));
 }

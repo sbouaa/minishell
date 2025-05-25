@@ -3,7 +3,10 @@ CC = cc
 CFLAGS = -I/usr/local/opt/readline/include
 LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
 
-SRCS = main.c init_data.c garbage_collector/garbage.c lexer/lexer.c lexer/utils.c lexer/handler.c lexer/utils_2.c lexer/syntax_error.c expanding/expand.c expanding/expand_utils.c
+SRCS = main.c init_data.c garbage_collector/garbage.c lexer/lexer.c lexer/utils.c \
+       lexer/handler.c lexer/utils_2.c lexer/syntax_error.c \
+       expanding/expand.c expanding/expand_utils.c expanding/expand_quotes.c
+
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

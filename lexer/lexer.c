@@ -44,7 +44,7 @@ int	lexer(t_data *data)
 		else
 		{
 			if (handle_word_segments(data, line, &i))
-				return (handle_error(data, "invalid word segment"));
+				return (handle_error(data, "syntax error: unexpected end of input"));
 		}
 	}
 	return (0);

@@ -37,14 +37,14 @@ void	add_to_back(t_data *data, const char *key, const char *value)
 	if (!new_node)
 		return ;
 	if (data->env == NULL)
-		data->env = new_node;
-	else
 	{
-		current = data->env;
-		while (current->next != NULL)
-			current = current->next;
-		current->next = new_node;
+		data->env = new_node;
+		return ;
 	}
+	current = data->env;
+	while (current->next != NULL)
+		current = current->next;
+	current->next = new_node;
 }
 
 void	print_nodes(t_data *data)
@@ -66,33 +66,46 @@ char	*search_node(t_data *data, const char *key)
 	current = data->env;
 	while (current)
 	{
-		if (strcmp(current->key, key) == 0)
+		if (ft_strcmp(current->key, key) == 0)
 			return (current->value);
 		current = current->next;
 	}
 	return (NULL);
 }
 
+static void	get_key(t_data *data, char *env, char **key, int *i)
+{
+	int	start;
+
+	start = 0;
+	while (env[*i] && env[*i] != '=')
+		(*i)++;
+	*key = ft_substr(data, env, start, *i - start);
+}
+
+static void	get_value(t_data *data, char *env, char **value, int *i)
+{
+	int	start;
+
+	if (env[*i] != '=')
+	{
+		*value = NULL;
+		return ;
+	}
+	(*i)++;
+	start = *i;
+	while (env[*i])
+		(*i)++;
+	*value = ft_substr(data, env, start, *i - start);
+}
+
 void	split_key_value(t_data *data, char *env, char **key, char **value)
 {
 	int	i;
-	int	start;
 
 	i = 0;
-	start = 0;
-	while (env[i] && env[i] != '=')
-		i++;
-	*key = ft_extract_fline(data, env, start, i - 1, 0);
-	if (env[i] == '=')
-	{
-		i++;
-		start = i;
-		while (env[i])
-			i++;
-		*value = ft_extract_fline(data, env, start, i, 0);
-	}
-	else
-		*value = NULL;
+	get_key(data, env, key, &i);
+	get_value(data, env, value, &i);
 }
 
 void	envp_init(t_data *data, char **envp)
@@ -100,7 +113,6 @@ void	envp_init(t_data *data, char **envp)
 	int		i;
 	char	*key;
 	char	*value;
-	char	*path;
 
 	i = 0;
 	while (envp[i])

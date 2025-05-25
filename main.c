@@ -25,9 +25,11 @@ static int	main_loop(t_data *data)
 		if (handle_line(data) == -1)
 			break ;
 		lexer(data);
-		check_syntax_errors(data);
 		expand(data);
-		print_tokens(data);
+		if(check_syntax_errors(data) == 0){
+			data->token_list = NULL;
+			print_token_list(data);
+		}
 		continue ;
 	}
 	return (0);

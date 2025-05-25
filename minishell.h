@@ -1,112 +1,130 @@
 #ifndef MINISHELL_H
-# define MINISHELL_H
+#define MINISHELL_H
 
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <termios.h>
-# include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <termios.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <string.h>
 
-typedef struct s_node
-{
-	void			*ptr;
-	struct s_node	*next;
-}					t_node;
+typedef struct s_node {
+  void *ptr;
+  struct s_node *next;
+} t_node;
 
-typedef struct s_gc
-{
-	t_node			*head;
-}					t_gc;
+typedef struct s_gc {
+  t_node *head;
+} t_gc;
 
-void				*gc_malloc(t_gc *gc, unsigned int size);
-void				gc_add(t_gc *gc, void *ptr);
-void				gc_free_all(t_gc *gc);
+void *gc_malloc(t_gc *gc, unsigned int size);
+void gc_add(t_gc *gc, void *ptr);
+void gc_free_all(t_gc *gc);
 
-typedef enum e_token_type
-{
-	PIPE,
-	IN_REDIRECT,
-	OUT_REDIRECT,
-	HEREDOC,
-	APPEND,
-	DBQUOTE,
-	SIQUOTE,
-	WORD,
-	SPACEE,
-	EXPAND
-}					t_token_type;
+typedef enum e_token_type {
+  PIPE,
+  IN_REDIRECT,
+  OUT_REDIRECT,
+  HEREDOC,
+  APPEND,
+  DBQUOTE,
+  SIQUOTE,
+  WORD,
+  SPACEE,
+  EXPAND
+} t_token_type;
 
-
-typedef struct s_arg
-{
-    char *value;
-    struct s_arg *next;
+typedef struct s_arg {
+  char *value;
+  struct s_arg *next;
 } t_arg;
 
-typedef struct s_args
-{
-    t_arg *args;
-    struct s_args *next;
+typedef struct s_redirect {
+  t_token_type type;
+  char *file;
+  struct s_redirect *next;
+} t_redirect;
+
+typedef struct s_args {
+  t_arg *args;
+  t_redirect *redirects;
+  struct s_args *next;
 } t_args;
 
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*value;
-	struct s_token	*next;
-}					t_token;
+typedef struct s_token {
+  t_token_type type;
+  char *value;
+  struct s_token *next;
+  struct s_token *prev;
+} t_token;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
+typedef struct s_env {
+  char *key;
+  char *value;
+  struct s_env *next;
+} t_env;
 
-typedef struct s_data
-{
-	char			*prompt;
-	t_token			*token_list;
-	t_env			*env;
-	int				syntax_error;
-	t_gc			gc;
-}					t_data;
+typedef struct s_data {
+  char *prompt;
+  t_token *token_list;
+  t_env *env;
+  int syntax_error;
+  t_gc gc;
+  t_args *parsed_commands;
+  int stdin_backup;
+  int stdout_backup;
+} t_data;
 
-int					init_data(t_data *data);
-void				envp_init(t_data *data, char **envp);
-int					lexer(t_data *data);
-int					is_token(char c);
-int					is_space(int c);
-int					is_token(char c);
-int					is_quote(int c);
-char				*ft_substr(t_data *data, const char *s, int start, int len);
-char				*ft_strdup(const char *s1, t_data *data);
-size_t				ft_strlen(const char *str);
-char				*ft_strjoin(const char *s1, const char *s2, t_data *data);
-t_token				*create_token(t_data *data, t_token_type type,
-						const char *value);
-void				add_node_to_back(t_data *data, t_token_type type,
-						const char *value);
-char				*ft_extract_fline(t_data *data, char *line, int start,
-						int end, int add_space);
-int					handle_tokens(t_data *data, char *line, int *i);
-int					handle_redirection(t_data *data, char *line, int *i);
-int					handle_word_part(t_data *data, char *line, int *i);
-int					handle_quote_part(t_data *data, char *line, int *i);
-int					handle_word_segments(t_data *data, char *line, int *i);
-void				print_tokens(t_data *data);
-char				*get_token_type_string(t_token_type type);
-int					check_syntax_errors(t_data *data);
-void				expand(t_data *data);
-char				*join_expanded(t_data *data, char *new_val, char *first,
-						char *exp);
-int					ft_find_dollar(const char *str);
-int					ft_find_first_non_alnum(const char *str);
-int					ft_isalnum(int c);
+/* Core Functions */
+int init_data(t_data *data);
+void envp_init(t_data *data, char **envp);
+int lexer(t_data *data);
 
-t_arg	*create_arg_node(t_data *data, const char *value);
-t_args	*create_args_node(t_data *data);
-void	add_arg(t_data *data, t_args *cmd, const char *value);
-void	add_args(t_data *data, t_args **head);
+/* Lexer Functions */
+int handle_tokens(t_data *data, char *line, int *i);
+int handle_quote_part(t_data *data, char *line, int *i);
+int handle_word_segments(t_data *data, char *line, int *i);
+
+/* Token Management */
+t_token *create_token(t_data *data, t_token_type type, const char *value);
+void add_node_to_back(t_data *data, t_token_type type, const char *value);
+void print_token_list(t_data *data);
+char *get_token_type_string(t_token_type type);
+
+/* Character Checking Functions */
+int is_token(char c);
+int is_space(int c);
+int is_quote(int c);
+int ft_isalnum(int c);
+
+/* String Manipulation */
+char *ft_substr(t_data *data, const char *s, int start, int len);
+char *ft_strdup(const char *s1, t_data *data);
+size_t ft_strlen(const char *str);
+char *ft_strjoin(const char *s1, const char *s2, t_data *data);
+int ft_strcmp(const char *s1, const char *s2);
+
+/* Parsing Functions */
+void parsing(t_data *data);
+t_arg *create_arg_node(t_data *data, const char *value);
+t_args *create_args_node(t_data *data);
+void add_arg(t_data *data, t_args *cmd, const char *value);
+void add_args(t_data *data, t_args **head);
+
+/* Expansion Functions */
+void expand(t_data *data);
+int ft_find_dollar(const char *str);
+
+/* Redirection Functions */
+int apply_redirections(t_data *data);
+void restore_std_fds(t_data *data);
+void backup_std_fds(t_data *data);
+
+/* Error Handling */
+int check_syntax_errors(t_data *data);
+
 #endif

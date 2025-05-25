@@ -1,123 +1,143 @@
 #include "../minishell.h"
 
-void	expand_normal(t_data *data, t_token *current)
+static char *expand_env_var(t_data *data, char *var_name)
 {
-	char	*holder;
-	char	*end;
-	char	*expanded_value;
-	char	*new_value;
-	int		non_alnum_index;
+	char *value;
 
-	new_value = NULL;
-	non_alnum_index = ft_find_first_non_alnum(current->value);
-	holder = ft_extract_fline(data, current->value, 0, non_alnum_index - 1, 0);
-	expanded_value = getenv(holder);
-	if (!expanded_value)
-		expanded_value = "";
-	end = ft_extract_fline(data, current->value, non_alnum_index,
-			ft_strlen(current->value) - 1, 0);
-	new_value = ft_strjoin(expanded_value, end, data);
-	// free(current->value);
-	current->value = new_value;
-	// free(holder);
-	// free(end);
+	if (!var_name || !*var_name)
+		return (ft_strdup("$", data));
+	
+	value = getenv(var_name);
+	if (!value)
+		return (ft_strdup("", data));
+	
+	return (ft_strdup(value, data));
 }
 
-static void	handle_dollar(t_data *data, t_token *cur, char **new_val)
+static char *process_dollar(t_data *data, char *str, int *i)
 {
-	int		start;
-	int		index;
-	char	*first;
-	char	*holder;
-	char	*expanded;
-	char	*end;
+	int start;
+	char *var_name;
+	char *value;
 
-	start = 0;
-	index = ft_find_dollar(cur->value);
-	first = ft_extract_fline(data, cur->value, start, index - 1, 0);
-	start = index + 1;
-	while (cur->value[start] && (ft_isalnum(cur->value[start])
-			|| cur->value[start] == '_'))
-		start++;
-	holder = ft_extract_fline(data, cur->value, index + 1, start - 1, 0);
-	expanded = getenv(holder);
-	if (!expanded)
-		expanded = "";
-	*new_val = join_expanded(data, *new_val, first, expanded);
-	// free(first);
-	// free(holder);
-	end = ft_extract_fline(data, cur->value, start, ft_strlen(cur->value) - 1,
-			0);
-	// free(cur->value);
-	cur->value = end;
+	(*i)++;  // Skip the $
+	start = *i;
+	
+	// If $ is the last character or followed by non-valid char
+	if (!str[*i] || (!ft_isalnum(str[*i]) && str[*i] != '_'))
+		return (ft_strdup("$", data));
+
+	// Find end of variable name
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+		(*i)++;
+
+	var_name = ft_substr(data, str, start, *i - start);
+	value = expand_env_var(data, var_name);
+	
+	return value;
 }
-static void	expand_var(t_data *d, t_token *cur, int i, char **new_val)
-{
-	char	*first;
-	char	*holder;
-	char	*expanded;
-	char	*end;
-	int		start;
 
-	first = ft_extract_fline(d, cur->value, 0, i - 1, 0);
-	start = i + 1;
-	if (!cur->value[start] || (!ft_isalnum(cur->value[start])
-			&& cur->value[start] != '_'))
+static char *handle_export_var(t_data *data, char *str, int *i)
+{
+	int start;
+	char *var_name;
+	char *value;
+
+	start = *i;
+	while (str[*i] && str[*i] != '=' && str[*i] != ' ' && str[*i] != '$')
+		(*i)++;
+	if (*i > start)
 	{
-		*new_val = join_expanded(d, *new_val, first, "$");
-		// free(first);
-		end = ft_extract_fline(d, cur->value, start, ft_strlen(cur->value) - 1,
-				0);
-		// free(cur->value);
-		cur->value = end;
-		return ;
+		var_name = ft_substr(data, str, start, *i - start);
+		value = getenv(var_name);
+		if (value)
+			return (ft_strdup(value, data));
 	}
-	while (ft_isalnum(cur->value[start]) || cur->value[start] == '_')
-		start++;
-	holder = ft_extract_fline(d, cur->value, i + 1, start - 1, 0);
-	expanded = getenv(holder);
-	if (!expanded)
-		expanded = "";
-	*new_val = join_expanded(d, *new_val, first, expanded);
-	// free(first);
-	// free(holder);
-	end = ft_extract_fline(d, cur->value, start, ft_strlen(cur->value) - 1, 0);
-	// free(cur->value);
-	cur->value = end;
+	return (NULL);
 }
 
-void	expand_dbquote(t_data *d, t_token *cur)
+static char *handle_before_dollar(t_data *data, char *str, int i, char *result)
 {
-	char	*new_val;
-	char	*tmp;
+	char *temp;
 
-	new_val = NULL;
-	while (ft_find_dollar(cur->value) != -1)
-		expand_var(d, cur, ft_find_dollar(cur->value), &new_val);
-	if (cur->value && *cur->value)
+	if (i > 0)
 	{
-		tmp = ft_strjoin(new_val, cur->value, d);
-		// free(new_val);
-		new_val = tmp;
+		temp = ft_substr(data, str, 0, i);
+		result = ft_strjoin(result, temp, data);
 	}
-	// free(cur->value);
-	cur->value = new_val;
+	return (result);
 }
 
-void	expand(t_data *data)
+static char *handle_remaining(t_data *data, char *str, int i, char *result)
 {
-	t_token	*current;
+	char *temp;
+
+	if (str && *str && i > 0)
+	{
+		temp = ft_substr(data, str, 0, i);
+		result = ft_strjoin(result, temp, data);
+	}
+	return (result);
+}
+
+static char *expand_string(t_data *data, char *str, int is_export)
+{
+	int i;
+	char *result;
+	char *expanded;
+
+	i = 0;
+	result = ft_strdup("", data);
+	
+	while (str && str[i])
+	{
+		if (str[i] == '$')
+		{
+			result = handle_before_dollar(data, str, i, result);
+			expanded = process_dollar(data, str, &i);
+			result = ft_strjoin(result, expanded, data);
+			str = str + i;
+			i = 0;
+		}
+		else if (is_export && ft_isalnum(str[i]))
+		{
+			expanded = handle_export_var(data, str, &i);
+			if (expanded)
+			{
+				result = ft_strjoin(result, expanded, data);
+				str = str + i;
+				i = 0;
+			}
+			else
+				i++;
+		}
+		else
+			i++;
+	}
+	return (handle_remaining(data, str, i, result));
+}
+
+void expand(t_data *data)
+{
+	t_token *current;
+	char *expanded;
+	int is_export;
 
 	current = data->token_list;
 	while (current)
 	{
-		if (current->type == EXPAND && current->next != NULL)
+		is_export = 0;
+		if (current->prev && current->prev->type == WORD 
+			&& ft_strcmp(current->prev->value, "export") == 0)
+			is_export = 1;
+		if ((current->type == WORD || current->type == DBQUOTE) 
+			&& ft_find_dollar(current->value) != -1)
 		{
-			if (current->next->type == WORD && !is_space(current->value[1]))
-				expand_normal(data, current->next);
+			expanded = expand_string(data, current->value, is_export);
+			if (expanded)
+				current->value = expanded;
 		}
-		if (current->type == DBQUOTE)
-			expand_dbquote(data, current);
 		current = current->next;
 	}
 }
+

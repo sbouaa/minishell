@@ -69,4 +69,4 @@ int	check_syntax_errors(t_data *data)
 		return (1);
 	}
 	return (0);
-}
+} 

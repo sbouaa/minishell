@@ -75,4 +75,26 @@ int					get_type(char *var);
 int					is_valid(char *key);
 int					var_in_env(char *key, char *var, int type, t_env *env);
 
+
+//
+typedef struct s_col
+{
+	void			*ptr;
+	struct s_col	*next;
+}t_col;
+
+typedef enum e_call
+{
+	FREE,
+	MALLOC
+}t_call;
+
+
+t_col	*new_node(void	*ptr);
+t_col	*last_node(t_col **head);
+void	add_back(t_col	**head, t_col *new);
+void	clear_all(t_col **head);
+void	*g_malloc(size_t size, t_call call);
+//
+
 #endif

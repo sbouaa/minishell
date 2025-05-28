@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	to_env(char *key, char *var, int type, t_env *env)
 {
@@ -19,17 +19,17 @@ int	to_env(char *key, char *var, int type, t_env *env)
 	if (type == 3)
 	{
 		add_env_var(key, "", &env);
-		return (free(key), 0);
+		return (0);
 	}
 	else
 	{
 		value = get_key_and_value(var, 1);
 		if (!value)
-			return (free(key), 1);
+			return (1);
 		else
 		{
 			add_env_var(key, value, &env);
-			return (free(key), free(value), 1);
+			return (1);
 		}
 	}
 	return (0);
@@ -42,14 +42,13 @@ int	var_in_env(char *key, char *var, int type, t_env *env)
 	t_env	*ex_var;
 
 	if (type == 3)
-		return (free(key), 0);
+		return (0);
 	value = get_key_and_value(var, type);
 	if (!value)
-		return (free(key), 1);
+		return (1);
 	ex_var = ft_search_env(key, env);
 	if (type == 1)
 	{
-		(free(ex_var->value), free(key));
 		ex_var->value = value;
 		return (0);
 	}
@@ -58,8 +57,6 @@ int	var_in_env(char *key, char *var, int type, t_env *env)
 		n_value = ft_strjoin(ex_var->value, value);
 		if (!n_value)
 			return (1);
-		(free(key), free(value));
-		free(ex_var->value);
 		ex_var->value = n_value;
 		return (0);
 	}

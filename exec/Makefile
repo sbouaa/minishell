@@ -2,21 +2,22 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include -g -fsanitize=address
+#CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include -g -fsanitize=address
 
-#CFLAGS = -I/usr/local/opt/readline/include -g
+CFLAGS = -I/usr/local/opt/readline/include -g
 
 LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
 
-HEADER = minishell.h
+HEADER = builtins/minishell.h
 
 HEADER2 = libft/libft.h
 
 LIBFT = libft/libft.a
 
-SRCS = exec.c ft_echo.c ft_env.c ft_unset.c ft_pwd.c ft_cd.c \
-		ft_export.c ft_exit.c utils.c utils_1.c ft_export_utils.c \
-		
+SRCS = builtins/exec.c builtins/ft_echo.c builtins/ft_env.c builtins/ft_unset.c builtins/ft_pwd.c builtins/ft_cd.c \
+		builtins/ft_export.c builtins/ft_exit.c builtins/utils.c builtins/utils_1.c builtins/ft_export_utils.c \
+		gc/g_collector.c \
+
 
 OBJS = $(SRCS:.c=.o)
 

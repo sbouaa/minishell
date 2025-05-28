@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static int	getcwd_fail(char *o_cwd, char *dir, t_env **env)
 {

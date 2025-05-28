@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ft_exit(char	*nb)
 {
@@ -26,11 +26,13 @@ void	ft_exit(char	*nb)
 	{
 		if (!ft_isdigit(nb[i]))
 		{
+			g_malloc(0, FREE);
 			ft_putstr_fd("exit: ", 2);
 			ft_putstr_fd(nb, 2);
 			(ft_putendl_fd(": numeric argument required", 2), exit(2));
 		}
 		i++;
 	}
+	g_malloc(0, FREE);
 	exit(code);
 }

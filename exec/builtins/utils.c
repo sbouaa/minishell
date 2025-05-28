@@ -10,17 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*ft_lstnew(char *key, char *value)
 {
 	t_env	*node;
 
-	node = malloc(sizeof(t_env));
+	node = g_malloc(sizeof(t_env), MALLOC);
 	if (!node)
 	{
 		perror("malloc");
-		exit(EXIT_FAILURE);
+		exit(1);
 	}
 	node->key = key;
 	node->value = value;

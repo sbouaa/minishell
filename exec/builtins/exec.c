@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_dd	*init_data(t_dd	*data, char	**envp)
 {
-	data = malloc(sizeof(t_dd));
+	data = g_malloc(sizeof(t_dd), MALLOC);
 	if (!data)
 		return (NULL);
 	data->exit_status = 0;
@@ -64,8 +64,6 @@ int	main(int ac, char	**av, char	**env)
 		add_history(data->line);
 		data->mmd = ft_split(data->line, 32);
 		is_builtins(data);
-		ft_clean(data->mmd);
 	}
-	ft_clear(&data->env);
 	return (0);
 }

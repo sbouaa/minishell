@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	env_del(char *name, t_env **env)
 {
@@ -29,7 +29,6 @@ int	env_del(char *name, t_env **env)
 				prev->next = current->next;
 			else
 				*env = current->next;
-			free(current);
 			return (0);
 		}
 		prev = current;

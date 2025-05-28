@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*def_env(void)
 {
@@ -28,12 +28,6 @@ t_env	*def_env(void)
 	export_var("SHLVL=1", env);
 	export_var("_=/usr/bin/env", env);
 	export_var("OLDPWD", env);
-	/*if (!add_env_var("SHLVL", "1", &env))
-		return (NULL);
-	if (!add_env_var("_", "/usr/bin/env", &env))
-		return (NULL);
-	if (!add_env_var("OLDPWD", "", &env))
-		return (NULL);*/
 	return (env);
 }
 
@@ -66,10 +60,10 @@ static t_env	*env_node(char *envp)
 	key = ft_substr(envp, 0, del - envp);
 	value = ft_strdup(del + 1);
 	if (!key || !value)
-		return (free(key), free(value), NULL);
+		return (NULL);
 	node = ft_lstnew(key, value);
 	if (!node)
-		return (free(key), free(value), NULL);
+		return (NULL);
 	return (node);
 }
 
@@ -85,7 +79,7 @@ t_env	*init_env(char **envp)
 	{
 		node = env_node(envp[i]);
 		if (!node)
-			return (ft_clear(&env), NULL);
+			return (NULL);
 		ft_lstadd_back(&env, node);
 		i++;
 	}

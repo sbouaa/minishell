@@ -47,7 +47,7 @@ static char	*ft_add_word(const char *s, char c)
 	{
 		len++;
 	}
-	word = malloc((len +1) * sizeof(char));
+	word = g_malloc((len +1) * sizeof(char), MALLOC);
 	if (word == NULL)
 		return (NULL);
 	len = 0;
@@ -84,7 +84,7 @@ char	**ft_split(const char *s, char c)
 	if (!s)
 		return (NULL);
 	word_count = count_words(s, c);
-	p = malloc((word_count + 1) * sizeof(char *));
+	p = g_malloc((word_count + 1) * sizeof(char *), MALLOC);
 	if (p == NULL)
 		return (NULL);
 	i = 0;

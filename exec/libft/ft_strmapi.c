@@ -19,7 +19,7 @@ char	*ft_strmapi(char const	*s, char (*f)(unsigned int, char))
 
 	if (!s || !f)
 		return (NULL);
-	p = malloc((ft_strlen(s) + 1) * sizeof(char));
+	p = g_malloc((ft_strlen(s) + 1) * sizeof(char), MALLOC);
 	if (p == NULL)
 		return (NULL);
 	i = 0;

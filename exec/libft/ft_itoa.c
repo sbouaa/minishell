@@ -44,7 +44,7 @@ char	*ft_itoa(int n)
 	digits = ft_count_digits(number);
 	if (number < 0 || number == 0)
 		digits++;
-	p = malloc((digits + 1) * sizeof(char));
+	p = g_malloc((digits + 1) * sizeof(char), MALLOC);
 	if (p == NULL)
 		return (NULL);
 	if (number < 0)

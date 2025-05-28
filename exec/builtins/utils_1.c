@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_env	*ft_search_env(char	*key, t_env	*env)
 {
@@ -33,19 +33,18 @@ t_env	*add_env_var(char *key, char *value, t_env **env)
 	ex_node = ft_search_env(key, *env);
 	if (ex_node)
 	{
-		free(ex_node->value);
 		ex_node->value = ft_strdup(value);
 		if (!ex_node->value)
-			return (ft_clear(env), NULL);
+			return (NULL);
 		return (ex_node);
 	}
 	key = ft_strdup(key);
 	value = ft_strdup(value);
 	if (!key || !value)
-		return (ft_clear(env), NULL);
+		return (NULL);
 	node = ft_lstnew(key, value);
 	if (!node)
-		return (ft_clear(env), NULL);
+		return (NULL);
 	ft_lstadd_back(env, node);
 	return (node);
 }

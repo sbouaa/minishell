@@ -1,61 +1,41 @@
 #include "../minishell.h"
 
-int	ft_strchr_dollar(char *str)
+int	ft_check_expand(char *str, bool *in_double_quote, bool *in_single_quote)
 {
-	int	i;
+	int i = 0;
 
-	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
-		if (str[i] == '$')
-			return (1);
+		if (!(*in_single_quote) && !(*in_double_quote) && str[i] == '"')
+			*in_double_quote = true;
+		else if (!(*in_double_quote) && !(*in_single_quote) && str[i] == '\'')
+			*in_single_quote = true;
+		else if (*in_double_quote && str[i] == '"')
+			*in_double_quote = false;
+		else if (*in_single_quote && str[i] == '\'')
+			*in_single_quote = false;
+
+		// Uncomment for debugging:
+		if (str[i] == '$' && !(*in_single_quote))
+		    printf("Found expandable $ at position: %d\n", i);
+		printf("char: %c, dbl: %d, sgl: %d\n", str[i], *in_double_quote, *in_single_quote);
+
 		i++;
 	}
-	return (0);
+	return (!(*in_double_quote));
 }
 
-int	ft_check_expand(char *current, bool *flag_dbquote, bool *flag_sgquote)
+int expand(t_data *data)
 {
-	int	i;
-	i = 0;
-    printf("%s\n",current);
-	while (current && current[i])
-	{
-		if (!(*flag_sgquote) && !(*flag_dbquote) && current[i] == '"')
-			*flag_dbquote = 1;
-		else if (!(*flag_dbquote) && !(*flag_sgquote) &&current[i] == '\'')
-			*flag_sgquote = 1;
-        else if ((*flag_dbquote) && !(*flag_sgquote) && current[i] == '"')
-            *flag_dbquote = 0;
-        else if ((*flag_sgquote) && !(*flag_dbquote) && current[i] == '\'')
-            *flag_sgquote = 0;
-        if((current[i] == '$' && !(*flag_sgquote))){
-            printf("position if expand or not :%d\n", i);
-        }
-        // printf("%c\n",current[i]);
-        // printf("dblquote: %d\n", *flag_dbquote);
-        // printf("sglquote: %d\n", *flag_sgquote);
-		i++;
-	}
-    if (*flag_dbquote)
-        return (0);
-    else
-        return (1);
-}
-int	expand(t_data *data)
-{
-	int i;
-	i = 0;
-	char *quote;
-    int count = 0;
-	bool flag_dbquote = 0;
-	bool flag_sgquote = 0;
-
 	t_token *current = data->token_list;
+	bool in_double_quote = false;
+	bool in_single_quote = false;
+
 	while (current)
 	{
-		ft_check_expand(current->value, &flag_dbquote, &flag_sgquote);
+		ft_check_expand(current->value, &in_double_quote, &in_single_quote);
 		current = current->next;
 	}
+
 	return (0);
 }

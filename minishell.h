@@ -8,6 +8,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_node
 {
@@ -83,4 +84,6 @@ void	handle_redirections(t_data *data, char *line, int *i);
 void	handle_token(t_data *data, char *line, int *i);
 int	check_quote_syntax(char *line, int start, int end);
 int	handle_word(t_data *data, char *line, int *i);
+int	expand(t_data *data);
+
 #endif

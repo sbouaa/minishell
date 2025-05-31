@@ -18,6 +18,7 @@ int	main(void)
 			if (!lexer(&data))
 			{
 				print_token_list(&data);
+				expand(&data);
 			}
 		}
 		free(data.prompt);

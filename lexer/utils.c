@@ -128,7 +128,7 @@ char	*ft_substr(t_data *data, const char *s, int start, int len)
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	if (!s1 || !s2)

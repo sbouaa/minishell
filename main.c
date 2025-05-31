@@ -2,7 +2,7 @@
 
 int	main(void)
 {
-	t_data	data;
+	t_data data;
 
 	if (init_data(&data) != 0)
 		return (1);
@@ -15,9 +15,8 @@ int	main(void)
 		if (data.prompt[0] != '\0')
 		{
 			add_history(data.prompt);
-			if (lexer(&data) == 0 && check_syntax_errors(&data) == 0)
+			if (!lexer(&data))
 			{
-				expand(&data);
 				print_token_list(&data);
 			}
 		}

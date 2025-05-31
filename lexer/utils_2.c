@@ -7,8 +7,8 @@ int	is_token(char c)
 
 int	is_space(int c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || 
-			c == '\v' || c == '\f' || c == '\r');
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r');
 }
 
 int	is_quote(int c)
@@ -16,35 +16,32 @@ int	is_quote(int c)
 	return (c == '\'' || c == '\"');
 }
 
+int	skip_spaces(char *line, int *i)
+{
+	while (line[*i] && is_space(line[*i]))
+		(*i)++;
+	return (0);
+}
+
 char	*get_token_type_string(t_token_type type)
 {
-	static char *type_strings[] = {
-		"PIPE",
-		"IN_REDIRECT",
-		"OUT_REDIRECT",
-		"HEREDOC",
-		"APPEND",
-		"DBQUOTE",
-		"SIQUOTE",
-		"WORD",
-		"SPACE",
-		"EXPAND"
-	};
+	static char	*type_strings[] = {"PIPE", "IN_REDIRECT", "OUT_REDIRECT",
+			"HEREDOC", "APPEND", "WORD"};
 
-	if (type >= 0 && type <= EXPAND)
+	if (type >= 0)
 		return (type_strings[type]);
 	return ("UNKNOWN");
 }
 
 void	print_token_list(t_data *data)
 {
-	t_token	*current;
-	int		i;
+	t_token *current;
+	int i;
 
 	if (!data || !data->token_list)
 	{
 		printf("No tokens to display\n");
-		return;
+		return ;
 	}
 
 	i = 0;

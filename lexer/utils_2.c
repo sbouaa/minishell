@@ -53,6 +53,7 @@ void	print_token_list(t_data *data)
 		printf("Token %d:\n", i++);
 		printf("  Type: %s\n", get_token_type_string(current->type));
 		printf("  Value: |%s|\n", current->value ? current->value : "NULL");
+		printf("  Ambiguos %d:\n", current->ambiguous);
 		printf("----------------------------------------\n");
 		current = current->next;
 	}

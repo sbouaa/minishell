@@ -1,0 +1,103 @@
+# Basic Variable Expansion
+$PATH
+$NOTEXIST
+$
+
+# Double Dollar (Process ID)
+$$
+$$PATH
+
+# Single Quotes (No Expansion)
+'$PATH'
+'$$'
+'$NOTEXIST'
+'hello world'
+
+# Double Quotes (With Expansion)
+"$PATH"
+"$$"
+"$NOTEXIST"
+"hello world"
+
+# Mixed Quotes
+"'$PATH'"
+'"$PATH"'
+"hello'world'"
+'hello"world"'
+
+# $' Syntax
+$'$PATH'
+$'hello world'
+$'$USER'
+"$'$PATH'"
+'$'$PATH''
+
+# $" Syntax
+$"$PATH"
+$"hello world"
+$"$USER"
+"$"$PATH""
+'$"$PATH"'
+
+# Nested Quotes
+"'hello'world"
+'hello"world"'
+"hello'$PATH'world"
+'hello"$PATH"world'
+
+# Complex Cases
+"$'$PATH'"
+'$"$PATH"'
+$"'$PATH'"
+$'"$PATH"'
+"$$'$PATH'"
+'$$"$PATH"'
+
+# Multiple Variables
+$USER$PATH
+"$USER$PATH"
+'$USER$PATH'
+$"$USER$PATH"
+$'$USER$PATH'
+
+# Edge Cases
+""
+''
+"'"
+'"'
+$""
+$''
+$"'"
+$"'"
+$'$'
+$"$"
+
+# Special Characters
+$'hello\nworld'
+$"hello\nworld"
+"hello\nworld"
+'hello\nworld'
+
+# Mixed with Spaces
+  $PATH  
+  "$PATH"  
+  '$PATH'  
+  $"$PATH"  
+  $'$PATH'  
+
+# Multiple Dollars
+$$$PATH
+$$$$
+"$$$PATH"
+'$$$PATH'
+
+# Invalid Syntax (Should Handle Gracefully)
+$'unclosed
+$"unclosed
+'unclosed
+"unclosed
+$@
+$?
+${PATH}
+$(echo hello)
+`echo hello` 

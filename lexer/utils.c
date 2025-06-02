@@ -128,7 +128,7 @@ char	*ft_substr(t_data *data, const char *s, int start, int len)
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (!s1 || !s2)
@@ -136,4 +136,33 @@ int	ft_strcmp(const char *s1, const char *s2)
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+char	*ft_strtrim(char *s1, char *set, t_data *data)
+{
+	size_t start;
+	size_t end;
+	size_t len;
+	char *trimmed;
+
+	if (!s1 || !set)
+		return (NULL);
+	start = 0;
+	len = strlen(s1);
+	if (len == 0)
+		return (ft_strdup("", data));
+	end = len - 1;
+	while (start < len && strchr(set, s1[start]))
+		start++;
+	while (end > start && strchr(set, s1[end]))
+		end--;
+	trimmed = ft_substr(data, s1, start, end - start + 1);
+	return (trimmed);
+}
+int	ft_isalnum(int c)
+{
+	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a'
+			&& c <= 'z') || c == '_')
+		return (1);
+	return (0);
 }

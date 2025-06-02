@@ -15,7 +15,7 @@ int	main(void)
 		if (data.prompt[0] != '\0')
 		{
 			add_history(data.prompt);
-			if (!lexer(&data))
+			if (!lexer(&data) && !check_syntax_errors(&data))
 			{
 				print_token_list(&data);
 				expand(&data);

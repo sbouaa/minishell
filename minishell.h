@@ -4,11 +4,11 @@
 # include <ctype.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 typedef struct s_node
 {
@@ -62,7 +62,8 @@ char				*ft_strdup(const char *s1, t_data *data);
 char				*ft_substr(t_data *data, const char *s, int start, int len);
 char				*ft_strjoin(const char *s1, const char *s2, t_data *data);
 int					ft_strcmp(const char *s1, const char *s2);
-
+char				*ft_strtrim(char *s1, char *set, t_data *data);
+int					ft_isalnum(int c);
 /* Character Checking */
 int					is_token(char c);
 int					is_space(int c);
@@ -80,10 +81,11 @@ char				*get_token_type_string(t_token_type type);
 int					lexer(t_data *data);
 
 /* Handler Lexer Functions */
-void	handle_redirections(t_data *data, char *line, int *i);
-void	handle_token(t_data *data, char *line, int *i);
-int	check_quote_syntax(char *line, int start, int end);
-int	handle_word(t_data *data, char *line, int *i);
-int	expand(t_data *data);
+void				handle_redirections(t_data *data, char *line, int *i);
+void				handle_token(t_data *data, char *line, int *i);
+int					check_quote_syntax(char *line, int start, int end);
+int					handle_word(t_data *data, char *line, int *i);
+int					expand(t_data *data);
+int					check_syntax_errors(t_data *data);
 
 #endif

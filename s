@@ -1,0 +1,12 @@
+expanding
+garbage_collector
+init_data.c
+init_data.o
+lexer
+main.c
+main.o
+Makefile
+minishell
+minishell.h
+s
+syntax_error

@@ -37,7 +37,7 @@ typedef struct s_token
 	char			*value;
 	struct s_token	*next;
 	struct s_token	*prev;
-	bool ambiguous;
+	bool			ambiguous;
 }					t_token;
 
 typedef struct s_data
@@ -48,6 +48,18 @@ typedef struct s_data
 	int				exit_status;
 	t_gc			gc;
 }					t_data;
+
+
+typedef struct s_quote_ctx
+{
+	int		i;
+	int		start;
+	int		was_quoted;
+	int		in_single;
+	int		in_double;
+	char	*result;
+}	t_quote_ctx;
+
 
 /* Core Functions */
 int					init_data(t_data *data);
@@ -86,7 +98,7 @@ void				handle_redirections(t_data *data, char *line, int *i);
 void				handle_token(t_data *data, char *line, int *i);
 int					check_quote_syntax(char *line, int start, int end);
 int					handle_word(t_data *data, char *line, int *i);
-int					expand(t_data *data);
+void					expand(t_data *data);
 int					check_syntax_errors(t_data *data);
-
+char	*quote_remove(t_data *data, char *str);
 #endif

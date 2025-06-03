@@ -29,14 +29,22 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 			(*i)++;
 		var_name = ft_substr(data, str, start, *i - start);
 		value = getenv(var_name);
-		if (!value){
-			token->ambiguous = 1;
+		if (!value)
+		{
+			if (token->prev->type == IN_REDIRECT
+				|| token->prev->type == OUT_REDIRECT
+				|| token->prev->type == APPEND)
+			{
+				token->ambiguous = true;
+				printf("Ambiguous redirect");
+			}
 			value = "";
 		}
 		return (ft_strdup(value, data));
 	}
 	return (NULL);
 }
+
 char	*ft_strchr(const char *str, int c)
 {
 	int				i;
@@ -60,66 +68,66 @@ char	*ft_strchr(const char *str, int c)
 	return (NULL);
 }
 
-void ft_check_expand(t_data *data, t_token *token)
+void	ft_check_expand(t_data *data, t_token *token)
 {
-    int     i;
-    int     in_single_quote;
-    int     in_double_quote;
-    char    *str;
-    char    *result;
-    char    *expand;
-    char    *temp;
+	int		i;
+	int		in_single_quote;
+	int		in_double_quote;
+	char	*str;
+	char	*result;
+	char	*expand;
+	char	*temp;
 
-    i = 0;
-    in_single_quote = 0;
-    in_double_quote = 0;
-    str = token->value;
-    result = ft_strdup("", data);
-    
-    while (str && str[i])
-    {
-        update_quote_states(str[i], &in_single_quote, &in_double_quote);
-        
-        if (str[i] == '$' && !in_single_quote)
-        {
-            if (str[i + 1] && ft_strchr("\'\"", str[i + 1]) && !in_double_quote)
-            {
-                i++;
-                continue;
-            }
-            else if (str[i + 1] && ft_isalnum(str[i + 1]))
-            {
-                expand = handle_variable_expansion(data, str, &i, in_single_quote, in_double_quote, token);
-                if (expand)
-                {
-                    temp = ft_strjoin(result, expand, data);
-                    result = temp;
-                    continue;
-                }
-            }
-            else if (str[i + 1] && !ft_isalnum(str[i + 1]))
-            {
-                temp = ft_strjoin(result, ft_substr(data, &str[i], 0, 1), data);
-                result = temp;
-            }
-        }
-        else
-        {
-            temp = ft_strjoin(result, ft_substr(data, &str[i], 0, 1), data);
-            result = temp;
-        }
-        i++;
-    }
-    token->value = result;
+	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	str = token->value;
+	result = ft_strdup("", data);
+	while (str && str[i])
+	{
+		update_quote_states(str[i], &in_single_quote, &in_double_quote);
+		if (str[i] == '$' && !in_single_quote)
+		{
+			if (str[i + 1] && ft_strchr("\'\"", str[i + 1]) && !in_double_quote)
+			{
+				i++;
+				continue ;
+			}
+			else if (str[i + 1] && ft_isalnum(str[i + 1]))
+			{
+				expand = handle_variable_expansion(data, str, &i,
+						in_single_quote, in_double_quote, token);
+				if (expand)
+				{
+					temp = ft_strjoin(result, expand, data);
+					result = temp;
+					continue ;
+				}
+			}
+			else if (str[i + 1] && !ft_isalnum(str[i + 1]))
+			{
+				temp = ft_strjoin(result, ft_substr(data, &str[i], 0, 1), data);
+				result = temp;
+			}
+		}
+		else
+		{
+			temp = ft_strjoin(result, ft_substr(data, &str[i], 0, 1), data);
+			result = temp;
+		}
+		i++;
+	}
+	token->value = result;
 }
 
 int	expand(t_data *data)
 {
 	t_token	*current;
+
 	current = data->token_list;
 	while (current)
 	{
-		current->ambiguous = 0;
+		current->ambiguous = false;
 		ft_check_expand(data, current);
 		current = current->next;
 	}

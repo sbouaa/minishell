@@ -5,7 +5,7 @@ static int	is_redirection(t_token *token)
 	if (!token)
 		return (0);
 	return (token->type == IN_REDIRECT || token->type == OUT_REDIRECT
-		|| token->type == HEREDOC || token->type == APPEND || token->type == PIPE);
+		|| token->type == HEREDOC || token->type == APPEND);
 }
 
 static int	is_word_token(t_token *token)

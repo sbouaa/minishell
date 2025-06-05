@@ -1,66 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/03 15:26:17 by amsaq             #+#    #+#             */
+/*   Updated: 2025/06/03 15:29:05 by amsaq            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	len;
-
-	len = 0;
-	if (!str)
-		return (0);
-	while (str[len])
-		len++;
-	return (len);
-}
-
-char	*ft_strdup(const char *s1, t_data *data)
-{
-	size_t	i;
-	char	*copy;
-
-	i = 0;
-	if (!s1 || !data)
-		return (NULL);
-	copy = (char *)gc_malloc(&data->gc, ft_strlen(s1) + 1);
-	if (!copy)
-		return (NULL);
-	while (s1[i])
-	{
-		copy[i] = s1[i];
-		i++;
-	}
-	copy[i] = '\0';
-	return (copy);
-}
-
-char	*ft_strjoin(const char *s1, const char *s2, t_data *data)
-{
-	char	*str;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2, data));
-	if (!s2)
-		return (ft_strdup(s1, data));
-	str = gc_malloc(&data->gc, ft_strlen(s1) + ft_strlen(s2) + 1);
-	while (s1[i])
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	while (s2[j])
-	{
-		str[i] = s2[j];
-		i++;
-		j++;
-	}
-	str[i] = '\0';
-	return (str);
-}
 
 t_token	*create_token(t_data *data, t_token_type type, const char *value)
 {
@@ -136,33 +86,4 @@ int	ft_strcmp(const char *s1, const char *s2)
 	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-char	*ft_strtrim(char *s1, char *set, t_data *data)
-{
-	size_t start;
-	size_t end;
-	size_t len;
-	char *trimmed;
-
-	if (!s1 || !set)
-		return (NULL);
-	start = 0;
-	len = strlen(s1);
-	if (len == 0)
-		return (ft_strdup("", data));
-	end = len - 1;
-	while (start < len && strchr(set, s1[start]))
-		start++;
-	while (end > start && strchr(set, s1[end]))
-		end--;
-	trimmed = ft_substr(data, s1, start, end - start + 1);
-	return (trimmed);
-}
-int	ft_isalnum(int c)
-{
-	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a'
-			&& c <= 'z') || c == '_')
-		return (1);
-	return (0);
 }

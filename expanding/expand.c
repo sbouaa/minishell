@@ -19,9 +19,7 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 	char	*value;
 	int		start;
 
-	if (in_single)
-		return (NULL);
-	if (str[*i] == '$')
+	if (!in_single && str[*i] == '$')
 	{
 		(*i)++;
 		start = *i;

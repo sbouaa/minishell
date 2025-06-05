@@ -49,17 +49,15 @@ typedef struct s_data
 	t_gc			gc;
 }					t_data;
 
-
 typedef struct s_quote_ctx
 {
-	int		i;
-	int		start;
-	int		was_quoted;
-	int		in_single;
-	int		in_double;
-	char	*result;
-}	t_quote_ctx;
-
+	int				i;
+	int				start;
+	int				was_quoted;
+	int				in_single;
+	int				in_double;
+	char			*result;
+}					t_quote_ctx;
 
 /* Core Functions */
 int					init_data(t_data *data);
@@ -75,7 +73,6 @@ char				*ft_strdup(const char *s1, t_data *data);
 char				*ft_substr(t_data *data, const char *s, int start, int len);
 char				*ft_strjoin(const char *s1, const char *s2, t_data *data);
 int					ft_strcmp(const char *s1, const char *s2);
-char				*ft_strtrim(char *s1, char *set, t_data *data);
 int					ft_isalnum(int c);
 /* Character Checking */
 int					is_token(char c);
@@ -98,7 +95,7 @@ void				handle_redirections(t_data *data, char *line, int *i);
 void				handle_token(t_data *data, char *line, int *i);
 int					check_quote_syntax(char *line, int start, int end);
 int					handle_word(t_data *data, char *line, int *i);
-void					expand(t_data *data);
+void				expand(t_data *data);
 int					check_syntax_errors(t_data *data);
-char	*quote_remove(t_data *data, char *str);
+char				*quote_remove(t_data *data, char *str);
 #endif

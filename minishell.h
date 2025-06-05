@@ -1,11 +1,11 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include <ctype.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
@@ -40,10 +40,28 @@ typedef struct s_token
 	bool			ambiguous;
 }					t_token;
 
+typedef struct s_redirection {
+    t_token_type type;
+    char *file;
+    int fd;
+    struct s_redirection *next;
+} t_redirection;
+
+// Command structure
+typedef struct s_command {
+    char **args;
+    t_redirection *redirects;
+    int fd_in;
+    int fd_out;
+    struct s_command *next;
+} t_command;
+
+
 typedef struct s_data
 {
 	char			*prompt;
 	t_token			*token_list;
+	t_command	 	*commands;
 	int				syntax_error;
 	int				exit_status;
 	t_gc			gc;
@@ -98,4 +116,15 @@ int					handle_word(t_data *data, char *line, int *i);
 void				expand(t_data *data);
 int					check_syntax_errors(t_data *data);
 char				*quote_remove(t_data *data, char *str);
+t_command	*parse_tokens(t_data *data);
+t_command *parse_tokens(t_data *data);
+t_command *parse_command(t_data *data, t_command **head, t_command *current_command);
+void parse_redirection(t_data *data, t_command *cmd, t_token *current);
+t_command *parse_pipe(t_data *data, t_command *current_command);
+void *gc_malloc(struct s_gc *gc, unsigned int size);
+void *gc_realloc(struct s_gc *gc, void *ptr, size_t size);
+void ft_bzero(void *s, size_t n);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	add_argument(t_data *data, t_command *cmd, char *value);
 #endif

@@ -130,5 +130,5 @@ void	expand(t_data *data)
 		current->value = quote_remove(data, current->value);
 		current = current->next;
 	}
-	print_token_list(data);
+	// print_token_list(data);
 }

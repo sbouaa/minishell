@@ -4,7 +4,7 @@ CFLAGS = -I/usr/local/opt/readline/include
 LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
 
 SRCS = main.c init_data.c garbage_collector/garbage.c lexer/lexer.c lexer/utils.c \
-	lexer/utils_2.c lexer/utils_3.c lexer/handler_lexer.c expanding/expand.c expanding/remove_quotes.c syntax_error/syntax_error.c  
+	lexer/utils_2.c lexer/utils_3.c lexer/handler_lexer.c expanding/expand.c expanding/remove_quotes.c syntax_error/syntax_error.c parsing/parsing.c  
 
 OBJS = $(SRCS:.c=.o)
 

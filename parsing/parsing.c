@@ -267,11 +267,6 @@ static int	check_redirection_errors(t_token *current)
 		printf("minishell: syntax error near unexpected token `newline'\n");
 		return (1);
 	}
-	if (!current->next->value)
-	{
-		printf("Error: Missing file name after redirection\n");
-		return (1);
-	}
 	if (current->next->ambiguous)
 	{
 		printf("minishell: %s: ambiguous redirect\n", current->next->value);
@@ -287,12 +282,12 @@ int	parse_redirection(t_data *data, t_command *cmd, t_token *current)
 	if (!cmd)
 		return (0);
 	if (check_redirection_errors(current))
-		return (1); // Return error flag
+		return (1);
 	new_redir = create_redirection(data, current);
 	if (!new_redir)
 		return (0);
 	add_redirection_to_list(cmd, new_redir);
-	return (0); // Success
+	return (0);
 }
 
 t_command	*parse_pipe(t_data *data, t_command *current_command)

@@ -32,10 +32,7 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 			if (token->prev != NULL && (token->prev->type == IN_REDIRECT
 					|| token->prev->type == OUT_REDIRECT
 					|| token->prev->type == APPEND))
-			{
 				token->ambiguous = true;
-				printf("Ambiguous redirect");
-			}
 			value = "";
 		}
 		return (ft_strdup(value, data));
@@ -130,5 +127,4 @@ void	expand(t_data *data)
 		current->value = quote_remove(data, current->value);
 		current = current->next;
 	}
-	// print_token_list(data);
 }

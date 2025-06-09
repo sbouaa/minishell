@@ -1,169 +1,321 @@
 #include "../minishell.h"
-#include <fcntl.h>
-#include <unistd.h>
 
-// Function to parse tokens into commands
+static void	init_command_args(t_data *data, t_command *cmd, char *value)
+{
+	char	**args;
+
+	if (!cmd || !value)
+		return ;
+	args = gc_malloc(&data->gc, sizeof(char *) * 2);
+	if (!args)
+		return ;
+	args[0] = ft_strdup(value, data);
+	args[1] = NULL;
+	cmd->args = args;
+}
+
+static int	handle_word_token(t_data *data, t_command **current_cmd, t_command **head, t_token *current)
+{
+	if (current->ambiguous)
+	{
+		printf("minishell: : ambiguous redirect\n");
+		return (1);
+	}
+	if (!*current_cmd)
+	{
+		*current_cmd = parse_command(data, head, *current_cmd);
+		if (*current_cmd && current->value)
+			init_command_args(data, *current_cmd, current->value);
+	}
+	else
+		add_argument(data, *current_cmd, current->value);
+	return (0);
+}
+
+static int	handle_redirection_token(t_data *data, t_command **current_cmd, t_command **head, t_token *current)
+{
+	if (!*current_cmd)
+		*current_cmd = parse_command(data, head, *current_cmd);
+	if (*current_cmd)
+		return (parse_redirection(data, *current_cmd, current));
+	return (0);
+}
+
+static int	is_redirection_token(int type)
+{
+	return (type == IN_REDIRECT || type == OUT_REDIRECT
+		|| type == APPEND || type == HEREDOC);
+}
+
+static t_token	*handle_redirection_parsing(t_data *data, t_command **current_cmd, t_command **head, t_token *current, int *error_flag)
+{
+	*error_flag = handle_redirection_token(data, current_cmd, head, current);
+	if (current->next && current->next->next)
+		return (current->next->next);
+	return (NULL);
+}
+
+static void	remove_current_command(t_command **head, t_command **current_cmd)
+{
+	t_command	*prev;
+	t_command	*to_remove;
+
+	if (!*current_cmd)
+		return;
+	to_remove = *current_cmd;
+	if (*head == *current_cmd)
+	{
+		*head = (*current_cmd)->next;
+		*current_cmd = NULL;
+		return;
+	}
+	prev = *head;
+	while (prev && prev->next != *current_cmd)
+		prev = prev->next;
+	if (prev)
+	{
+		prev->next = (*current_cmd)->next;
+		*current_cmd = NULL;
+	}
+}
+
+static t_token	*process_single_token(t_data *data, t_command **current_cmd, t_command **head, t_token *current, int *error_flag)
+{
+	if (current->type == WORD)
+	{
+		*error_flag = handle_word_token(data, current_cmd, head, current);
+		if (*error_flag)
+		{
+			remove_current_command(head, current_cmd);
+			while (current && current->type != PIPE)
+				current = current->next;
+			return (current);
+		}
+		return (current->next);
+	}
+	else if (is_redirection_token(current->type))
+	{
+		t_token *next = handle_redirection_parsing(data, current_cmd, head, current, error_flag);
+		if (*error_flag)
+		{
+			remove_current_command(head, current_cmd);
+			while (current && current->type != PIPE)
+				current = current->next;
+			return (current);
+		}
+		return (next);
+	}
+	else if (current->type == PIPE)
+	{
+		*current_cmd = parse_pipe(data, *current_cmd);
+		return (current->next);
+	}
+	else
+		return (current->next);
+}
+
 t_command	*parse_tokens(t_data *data)
 {
-    t_token		*current;
-    t_command	*head;
-    t_command	*current_command;
+	t_token		*current;
+	t_command	*head;
+	t_command	*current_command;
+	int			error_flag;
 
-    head = NULL;
-    current_command = NULL;
-    current = data->token_list;
-    while (current)
-    {
-        if (current->type == WORD)
-        {
-            // Parse the command and add arguments
-            if (!current_command)
-                current_command = parse_command(data, &head, current_command);
-            else
-                add_argument(data, current_command, current->value);
-            current = current->next;
-        }
-        else if (current->type == IN_REDIRECT || current->type == OUT_REDIRECT
-            || current->type == APPEND || current->type == HEREDOC)
-        {
-            // Parse redirections
-            parse_redirection(data, current_command, current);
-            current = current->next->next; // Skip the filename token
-        }
-        else if (current->type == PIPE)
-        {
-            // Handle pipes by creating a new command
-            current_command = parse_pipe(data, current_command);
-            current = current->next;
-        }
-    }
-    return (head);
+	head = NULL;
+	current_command = NULL;
+	current = data->token_list;
+	while (current)
+	{
+		error_flag = 0;
+		current = process_single_token(data, &current_command, &head, current, &error_flag);
+	}
+	return (head);
 }
 
-// Function to parse a command and allocate memory
+static void	link_command_to_list(t_command **head, t_command *new_cmd)
+{
+	t_command	*last_cmd;
+
+	if (!*head)
+		*head = new_cmd;
+	else
+	{
+		last_cmd = *head;
+		while (last_cmd->next)
+			last_cmd = last_cmd->next;
+		last_cmd->next = new_cmd;
+	}
+}
+
 t_command	*parse_command(t_data *data, t_command **head, t_command *current_command)
 {
-    if (!current_command)
-    {
-        // Allocate memory for the new command using gc_malloc
-        current_command = gc_malloc(&data->gc, sizeof(t_command));
-        if (!current_command)
-            return (NULL);
-        ft_bzero(current_command, sizeof(t_command)); // Initialize memory to zero
-        if (!*head)
-            *head = current_command; // Set the head of the command list
-        else
-            current_command->next = NULL;
-    }
-
-    // Allocate memory for the arguments array (initial size 2: command + NULL)
-    current_command->args = gc_malloc(&data->gc, sizeof(char *) * 2);
-    if (!current_command->args)
-        return (NULL);
-
-    // Add the command name
-    if (data->token_list->value)
-        current_command->args[0] = ft_strdup(data->token_list->value, data);
-    current_command->args[1] = NULL;
-
-    return (current_command);
+	if (!current_command)
+	{
+		current_command = gc_malloc(&data->gc, sizeof(t_command));
+		if (!current_command)
+			return (NULL);
+		ft_bzero(current_command, sizeof(t_command));
+		link_command_to_list(head, current_command);
+	}
+	return (current_command);
 }
 
-// Function to add an argument to a command
+static size_t	count_arguments(char **args)
+{
+	size_t	count;
+
+	count = 0;
+	if (args)
+	{
+		while (args[count])
+			count++;
+	}
+	return (count);
+}
+
+static void	copy_arguments(char **new_args, char **old_args, size_t count)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < count)
+	{
+		new_args[i] = old_args[i];
+		i++;
+	}
+}
+
 void	add_argument(t_data *data, t_command *cmd, char *value)
 {
-    size_t	arg_count;
-    char	**new_args;
+	size_t	arg_count;
+	char	**new_args;
 
-    // Count existing arguments
-    arg_count = 0;
-    if (cmd->args)
-    {
-        while (cmd->args[arg_count])
-            arg_count++;
-    }
-
-    // Allocate memory for the new arguments array
-    new_args = gc_malloc(&data->gc, sizeof(char *) * (arg_count + 2));
-    if (!new_args)
-        return;
-
-    // Copy existing arguments to the new array
-    for (size_t i = 0; i < arg_count; i++)
-        new_args[i] = cmd->args[i];
-
-    // Add the new argument and NULL-terminate the array
-    if (value)
-        new_args[arg_count] = ft_strdup(value, data);
-    new_args[arg_count + 1] = NULL;
-
-    // Update the args pointer
-    cmd->args = new_args;
+	if (!cmd || !value)
+		return ;
+	arg_count = count_arguments(cmd->args);
+	new_args = gc_malloc(&data->gc, sizeof(char *) * (arg_count + 2));
+	if (!new_args)
+		return ;
+	if (arg_count > 0)
+		copy_arguments(new_args, cmd->args, arg_count);
+	new_args[arg_count] = ft_strdup(value, data);
+	new_args[arg_count + 1] = NULL;
+	cmd->args = new_args;
 }
 
-// Function to parse redirections
-void	parse_redirection(t_data *data, t_command *cmd, t_token *current)
+static int	open_input_file(char *file)
 {
-    t_redirection	*new_redir;
-    t_redirection	*last_redir;
-
-    // Allocate memory for the new redirection using gc_malloc
-    new_redir = gc_malloc(&data->gc, sizeof(t_redirection));
-    if (!new_redir)
-        return;
-    ft_bzero(new_redir, sizeof(t_redirection)); // Initialize memory to zero
-
-    // Set redirection type and file
-    new_redir->type = current->type;
-    new_redir->file = ft_strdup(current->next->value, data);
-    new_redir->fd = -1;
-
-    // Open the file based on the redirection type
-    if (new_redir->type == IN_REDIRECT)
-        new_redir->fd = open(new_redir->file, O_RDONLY);
-    else if (new_redir->type == OUT_REDIRECT)
-        new_redir->fd = open(new_redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    else if (new_redir->type == APPEND)
-        new_redir->fd = open(new_redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    else if (new_redir->type == HEREDOC)
-        new_redir->fd = -1; // Handle HEREDOC separately if needed
-
-    // Handle file open errors
-    if (new_redir->fd == -1 && new_redir->type != HEREDOC)
-        perror("open");
-
-    // Add the new redirection to the command's redirection list
-    if (!cmd->redirects)
-        cmd->redirects = new_redir;
-    else
-    {
-        last_redir = cmd->redirects;
-        while (last_redir->next)
-            last_redir = last_redir->next;
-        last_redir->next = new_redir;
-    }
+	return (open(file, O_RDONLY));
 }
 
-// Function to handle pipes
+static int	open_output_file(char *file)
+{
+	return (open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+}
+
+static int	open_append_file(char *file)
+{
+	return (open(file, O_WRONLY | O_CREAT | O_APPEND, 0644));
+}
+
+static int	open_redirection_file(t_redirection *redir)
+{
+	if (redir->type == IN_REDIRECT)
+		return (open_input_file(redir->file));
+	else if (redir->type == OUT_REDIRECT)
+		return (open_output_file(redir->file));
+	else if (redir->type == APPEND)
+		return (open_append_file(redir->file));
+	else if (redir->type == HEREDOC)
+		return (-3);
+	return (-2);
+}
+
+static void	add_redirection_to_list(t_command *cmd, t_redirection *new_redir)
+{
+	t_redirection	*last_redir;
+
+	if (!cmd->redirects)
+		cmd->redirects = new_redir;
+	else
+	{
+		last_redir = cmd->redirects;
+		while (last_redir->next)
+			last_redir = last_redir->next;
+		last_redir->next = new_redir;
+	}
+}
+
+static t_redirection	*create_redirection(t_data *data, t_token *current)
+{
+	t_redirection	*new_redir;
+
+	new_redir = gc_malloc(&data->gc, sizeof(t_redirection));
+	if (!new_redir)
+		return (NULL);
+	ft_bzero(new_redir, sizeof(t_redirection));
+	new_redir->type = current->type;
+	new_redir->file = ft_strdup(current->next->value, data);
+	new_redir->fd = open_redirection_file(new_redir);
+	return (new_redir);
+}
+
+static int	check_redirection_errors(t_token *current)
+{
+	if (!current || !current->next)
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
+	if (!current->next->value)
+	{
+		printf("Error: Missing file name after redirection\n");
+		return (1);
+	}
+	if (current->next->ambiguous)
+	{
+		printf("minishell: %s: ambiguous redirect\n", current->next->value);
+		return (1);
+	}
+	return (0);
+}
+
+int	parse_redirection(t_data *data, t_command *cmd, t_token *current)
+{
+	t_redirection	*new_redir;
+
+	if (!cmd)
+		return (0);
+	if (check_redirection_errors(current))
+		return (1); // Return error flag
+	new_redir = create_redirection(data, current);
+	if (!new_redir)
+		return (0);
+	add_redirection_to_list(cmd, new_redir);
+	return (0); // Success
+}
+
 t_command	*parse_pipe(t_data *data, t_command *current_command)
 {
-    if (current_command)
-        current_command->next = gc_malloc(&data->gc, sizeof(t_command));
-    if (!current_command->next)
-        return (NULL);
-    current_command = current_command->next;
-    ft_bzero(current_command, sizeof(t_command));
-    return (current_command);
+	if (!current_command)
+		return (NULL);
+	current_command->next = gc_malloc(&data->gc, sizeof(t_command));
+	if (!current_command->next)
+		return (NULL);
+	current_command = current_command->next;
+	ft_bzero(current_command, sizeof(t_command));
+	return (current_command);
 }
 
-// Utility function: ft_bzero
 void	ft_bzero(void *s, size_t n)
 {
-    unsigned char	*ptr;
-    size_t			i;
+	unsigned char	*ptr;
+	size_t			i;
 
-    ptr = (unsigned char *)s;
-    i = 0;
-    while (i < n)
-        ptr[i++] = 0;
+	if (!s)
+		return ;
+	ptr = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+		ptr[i++] = 0;
 }

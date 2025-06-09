@@ -41,7 +41,7 @@ int	main(void)
 			{
 				expand(&data);
 				commands = parse_tokens(&data);
-                print_parsed_commands(commands); // Debugging: Print parsed commands
+                print_parsed_commands(commands);
 			}
 		}
 		free(data.prompt);

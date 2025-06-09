@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-static int	is_redirection(t_token *token)
+ int	is_redirection(t_token *token)
 {
 	if (!token)
 		return (0);
@@ -8,14 +8,14 @@ static int	is_redirection(t_token *token)
 		|| token->type == HEREDOC || token->type == APPEND);
 }
 
-static int	is_word_token(t_token *token)
+ int	is_word_token(t_token *token)
 {
 	if (!token)
 		return (0);
 	return (token->type == WORD);
 }
 
-static int	check_pipe_errors(t_token *token)
+ int	check_pipe_errors(t_token *token)
 {
 	if (token->type == PIPE)
 	{
@@ -28,7 +28,7 @@ static int	check_pipe_errors(t_token *token)
 	return (0);
 }
 
-static int	check_redirection_errors(t_token *token)
+ int	check_redirection_errors(t_token *token)
 {
 	if (is_redirection(token))
 	{

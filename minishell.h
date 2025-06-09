@@ -1,14 +1,15 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include <ctype.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 typedef struct s_node
 {
@@ -78,6 +79,25 @@ typedef struct s_quote_ctx
 	char					*result;
 }							t_quote_ctx;
 
+typedef struct s_expand
+{
+	int		i;
+	int		in_single;
+	int		in_double;
+	char	*str;
+	char	*result;
+	char	*expand;
+	char	*temp;
+}	t_expand;
+
+typedef struct s_parse_context
+{
+	t_data		*data;
+	t_command	**current_cmd;
+	t_command	**head;
+	int			*error_flag;
+}	t_parse_context;
+
 /* Core Functions */
 int							init_data(t_data *data);
 
@@ -124,8 +144,7 @@ t_command					*parse_tokens(t_data *data);
 t_command					*parse_tokens(t_data *data);
 t_command					*parse_command(t_data *data, t_command **head,
 								t_command *current_command);
-void						parse_redirection(t_data *data, t_command *cmd,
-								t_token *current);
+int     parse_redirection(t_data *data, t_command *cmd, t_token *current);
 t_command					*parse_pipe(t_data *data,
 								t_command *current_command);
 void						ft_bzero(void *s, size_t n);

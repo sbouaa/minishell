@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aminemsaq <aminemsaq@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:26:14 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/03 15:26:15 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/06/09 19:51:25 by aminemsaq        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	skip_spaces(char *line, int *i)
 
 char	*get_token_type_string(t_token_type type)
 {
-	static char	*type_strings[] = {"PIPE", "IN_REDIRECT", "OUT_REDIRECT",
+	 char	*type_strings[] = {"PIPE", "IN_REDIRECT", "OUT_REDIRECT",
 			"HEREDOC", "APPEND", "WORD"};
 
 	if (type >= 0)

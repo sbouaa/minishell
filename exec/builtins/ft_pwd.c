@@ -6,11 +6,12 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:06:42 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/07 06:35:43 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:46:36 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
+
 
 void	pwd(t_env	*env)
 {

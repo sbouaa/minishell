@@ -6,11 +6,11 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/19 17:28:42 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:46:46 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 t_env	*ft_search_env(char	*key, t_env	*env)
 {
@@ -33,6 +33,7 @@ t_env	*add_env_var(char *key, char *value, t_env **env)
 	ex_node = ft_search_env(key, *env);
 	if (ex_node)
 	{
+		free(ex_node->value);
 		ex_node->value = ft_strdup(value);
 		if (!ex_node->value)
 			return (NULL);

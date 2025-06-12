@@ -6,11 +6,11 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/19 19:33:33 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 16:31:45 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static int	getcwd_fail(char *o_cwd, char *dir, t_env **env)
 {

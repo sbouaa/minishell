@@ -1,39 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 17:46:21 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/03 15:26:11 by amsaq             #+#    #+#             */
+/*   Updated: 2025/06/11 18:38:54 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
-void	ft_exit(char	*nb)
+int	lexer(t_data *data)
 {
-	int	i;
-	int	code;
+	int i;
+	char *line;
+	int had_space;
 
-	ft_putendl_fd("exit", 1);
-	if (!nb || !*nb)
-		exit(0);
+	if (!data || !data->prompt)
+		return (1);
 	i = 0;
-	code = ft_atoi(nb);
-	while (nb[i])
+	line = data->prompt;
+	data->token_list = NULL;
+	while (line[i])
 	{
-		if (!ft_isdigit(nb[i]))
-		{
-			g_malloc(0, FREE);
-			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(nb, 2);
-			(ft_putendl_fd(": numeric argument required", 2), exit(2));
-		}
-		i++;
+		skip_spaces(line, &i);
+		if (!line[i])
+			break ;
+		if (is_token(line[i]))
+			handle_token(data, line, &i);
+		else if (handle_word(data, line, &i))
+			return (1);
 	}
-	g_malloc(0, FREE);
-	exit(code);
+	return (0);
 }

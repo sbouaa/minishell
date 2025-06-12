@@ -6,11 +6,12 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/19 17:41:51 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:46:32 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+
+#include "../../minishell.h"
 
 int	to_env(char *key, char *var, int type, t_env *env)
 {

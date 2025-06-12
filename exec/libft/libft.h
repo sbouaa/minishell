@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:55:27 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/17 00:54:49 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:55:12 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # define MAX_L 9223372036854775807
 # include <stdlib.h>
 # include <unistd.h>
-# include "../minishell.h"
+# include "../../minishell.h"
 
 typedef struct s_list
 {

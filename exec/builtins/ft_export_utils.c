@@ -6,11 +6,12 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:35:41 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/17 00:52:51 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:46:24 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
+
 
 int	is_valid(char *key)
 {

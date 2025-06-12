@@ -6,11 +6,11 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/19 18:14:58 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/13 00:50:56 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 t_env	*def_env(void)
 {
@@ -86,8 +86,9 @@ t_env	*init_env(char **envp)
 	return (env);
 }
 
-void	env(t_env *env)
+void	ft_env(t_env *env)
 {
+	printf("salam");
 	while (env)
 	{
 		if (env->value[0])

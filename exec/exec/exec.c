@@ -6,9 +6,9 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/28 09:26:45 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 23:23:02 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
  //wsh ajemi xi struct tema walo hh

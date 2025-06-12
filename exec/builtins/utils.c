@@ -6,11 +6,12 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:55:25 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/05/19 19:46:29 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/12 17:46:51 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
+
 
 t_env	*ft_lstnew(char *key, char *value)
 {

@@ -22,16 +22,19 @@ void	print_parsed_commands(t_command *cmd)
     }
 }
 
-int	main(void)
+int	main(int ac, char	**av, char	**env)
 {
+	(void)ac;
+	(void)av;
 	t_data data;
 	t_command	*commands;
+	t_dd		*datas;
 	if (init_data(&data) != 0)
 		return (1);
-
+	datas = init_data_exec(datas, env);
 	while (1)
 	{
-		data.prompt = readline("minishell$ ");
+		data.prompt = readline("\033[1;32mminishell > \033[0m");
 		if (!data.prompt)
 			break ;
 		if (data.prompt[0] != '\0')
@@ -41,6 +44,7 @@ int	main(void)
 			{
 				expand(&data);
 				commands = parse_tokens(&data);
+				ft_exec(commands, datas->env);
                 //print_parsed_commands(commands);
 			}
 		}

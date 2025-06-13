@@ -6,12 +6,11 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:12 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 17:46:40 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/13 10:00:37 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
 
 int	env_del(char *name, t_env **env)
 {
@@ -30,6 +29,9 @@ int	env_del(char *name, t_env **env)
 				prev->next = current->next;
 			else
 				*env = current->next;
+			free(current->key);
+			free(current->value);
+			free(current);
 			return (0);
 		}
 		prev = current;
@@ -44,7 +46,7 @@ int	ft_unset(char **args, t_env **env)
 
 	if (!args || !env || !*env)
 		return (1);
-	i = 0;
+	i = 1;
 	while (args[i])
 	{
 		env_del(args[i], env);

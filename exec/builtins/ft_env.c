@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 17:46:14 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/13 09:18:15 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_env	*init_env(char **envp)
 	return (env);
 }
 
-void	env(t_env *env)
+void	ft_env(t_env *env)
 {
 	while (env)
 	{

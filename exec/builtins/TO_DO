@@ -1,2 +1,46 @@
 cd : chmod 000 
 export : sort before print
+
+minishell > export a
+Command:
+  Arg[0]: export
+  Arg[1]: a
+minishell > $a
+minishell : Syntax Error
+Command:
+  Arg[0]: 
+minishell > $USER
+minishell : Syntax Error
+Command:
+  Arg[0]: sbouaa
+minishell > export $a
+Command:
+  Arg[0]: export
+  Arg[1]: 
+minishell > 
+////////////////////////////////////////////
+
+sbouaa@e1r6p5:/home/sbouaa/minishell$ 
+sbouaa@e1r6p5:/home/sbouaa/minishell$ env
+PWD=/home/sbouaa/minishell
+SHLVL=1
+_=/usr/bin/env
+sbouaa@e1r6p5:/home/sbouaa/minishell$ export $PWD
+bash: export: `/home/sbouaa/minishell': not a valid identifier
+sbouaa@e1r6p5:/home/sbouaa/minishell$ env
+PWD=/home/sbouaa/minishell
+SHLVL=1
+_=/usr/bin/env
+sbouaa@e1r6p5:/home/sbouaa/minishell$ export PWD
+sbouaa@e1r6p5:/home/sbouaa/minishell$ export
+declare -x OLDPWD
+declare -x PWD="/home/sbouaa/minishell"
+declare -x SHLVL="1"
+sbouaa@e1r6p5:/home/sbouaa/minishell$ export $PWD
+bash: export: `/home/sbouaa/minishell': not a valid identifier
+sbouaa@e1r6p5:/home/sbouaa/minishell$ export $USER                                        
+declare -x OLDPWD
+declare -x PWD="/home/sbouaa/minishell"
+declare -x SHLVL="1"
+sbouaa@e1r6p5:/home/sbouaa/minishell$ 
+////////////////////////////

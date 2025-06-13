@@ -6,13 +6,13 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:41:44 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 23:29:20 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/13 10:30:41 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_dd	*init_datas(t_dd	*data, char	**envp)
+t_dd	*init_data_exec(t_dd	*data, char	**envp)
 {
 	data = g_malloc(sizeof(t_dd), MALLOC);
 	if (!data)
@@ -25,25 +25,36 @@ t_dd	*init_datas(t_dd	*data, char	**envp)
 	return (data);
 }
 
-int	is_builtins(t_dd	*data)
+int	is_builtins(t_command	*data, t_env	*env)
 {
-	if (ft_strcmp(data->mmd[0], "echo") == 0)
-		return (echo(data->line), data->exit_status);
-	else if (ft_strcmp(data->mmd[0], "env") == 0)
-		return (env(data->env), data->exit_status);
-	else if (ft_strcmp(data->mmd[0], "pwd") == 0)
-		return (pwd(data->env), data->exit_status);
-	else if (ft_strcmp(data->mmd[0], "cd") == 0)
-		return (cd(data->mmd[1], data), data->exit_status);
-	else if (ft_strcmp(data->mmd[0], "exit") == 0)
-		return (ft_exit(data->mmd[1]), data->exit_status);
-	else if (ft_strcmp(data->mmd[0], "unset") == 0)
-		return (ft_unset(data->mmd, &data->env));
-	else if (ft_strcmp(data->mmd[0], "export") == 0)
-		return (ft_export(data->mmd, data), data->exit_status);
+	if (ft_strcmp(data->args[0], "echo") == 0)
+		return (echo(data->args), 0);
+	else if (ft_strcmp(data->args[0], "env") == 0)
+		return (ft_env(env), 0);
+	else if (ft_strcmp(data->args[0], "pwd") == 0)
+		return (pwd(env), 0);
+	else if (ft_strcmp(data->args[0], "cd") == 0)
+		return (cd(data->args[1], env), 0);
+	else if (ft_strcmp(data->args[0], "exit") == 0)
+		return (ft_exit(data->args[1]), 0);
+	else if (ft_strcmp(data->args[0], "unset") == 0)
+		return (ft_unset(data->args, &env), 0);
+	else if (ft_strcmp(data->args[0], "export") == 0)
+		return (ft_export(data->args, env), 0);
 	else
 		return (ft_putstr_fd("minishell : Syntax Error\n", 2), 1);
 }
+
+int	ft_exec(t_command *camds, t_env	*env)
+{
+	while (camds)
+	{
+		is_builtins(camds, env);
+		camds = camds->next;
+	}
+	return (0);
+}
+
 /*
 int	main(int ac, char	**av, char	**env)
 {

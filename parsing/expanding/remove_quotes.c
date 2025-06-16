@@ -18,6 +18,7 @@ char	*quote_append_char(t_data *data, char *res, char c)
 	char	tmp[2];
 	char	*temp;
 
+	data = 0;
 	tmp[0] = c;
 	tmp[1] = '\0';
 	temp = ft_strjoin(res, tmp);

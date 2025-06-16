@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:26:11 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/11 18:38:54 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 21:34:45 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	lexer(t_data *data)
 {
 	int i;
 	char *line;
-	int had_space;
+//	int had_space;
 
 	if (!data || !data->prompt)
 		return (1);

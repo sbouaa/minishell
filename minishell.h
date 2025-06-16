@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/13 11:24:54 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 18:52:18 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 
 typedef struct s_col
@@ -41,14 +43,19 @@ typedef enum e_call
 	MALLOC
 }t_call;
 
-
 t_col	*new_node(void	*ptr);
 t_col	*last_node(t_col **head);
 void	add_back(t_col	**head, t_col *new);
 void	clear_all(t_col **head);
 void	*g_malloc(size_t size, t_call call);
 
-/////////////////////////////////////////
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+
 typedef struct s_node
 {
 	void					*ptr;
@@ -105,6 +112,7 @@ typedef struct s_data
 	int						syntax_error;
 	int						exit_status;
 	t_gc					gc;
+	t_env					*env;
 }							t_data;
 
 typedef struct s_quote_ctx
@@ -136,20 +144,23 @@ typedef struct s_parse_context
 	int			*error_flag;
 }	t_parse_context;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
-
 typedef struct s_dd
 {
 	int				exit_status;
 	t_command		*camds;
 	t_env			*env;
 }					t_dd;
-//
+
+typedef struct s_pipe
+{
+    int     prev_fd;
+    int     fd[2];
+    pid_t   *pids;
+    int     cmd_size;
+    int     i;
+    int     status;
+}   t_pipe;
+
 void				echo(char **args);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_env(t_env *env);
@@ -157,24 +168,16 @@ void				pwd(t_env *env);
 int					cd(char *dir, t_env	*env);
 void				ft_exit(char *nb);
 int					ft_unset(char **args, t_env **env);
-
-//
 t_env				*init_env(char **envp);
 t_env				*def_env(void);
 char				*ft_getenv(char *name, t_env *env);
 t_env				*add_env_var(char *key, char *value, t_env **env);
 t_env				*ft_search_env(char *key, t_env *env);
-
-//
 void				ft_lstadd_back(t_env **lst, t_env *new);
 t_env				*ft_lstnew(char *key, char *value);
 void				ft_clear(t_env **all);
 void				ft_clean(char **p);
-
-//
 int					env_del(char *name, t_env **env);
-
-//
 int					ft_export(char **args, t_env	*env);
 int					export_var(char *var, t_env *env);
 void				pr_error(char *var);
@@ -182,32 +185,37 @@ char				*get_key_and_value(char *var, int type);
 int					get_type(char *var);
 int					is_valid(char *key);
 int					var_in_env(char *key, char *var, int type, t_env *env);
-
-int					ft_exec(t_command *camds, t_env	*env);
+int					ft_begin_exec(t_command *cmds, t_env *env);
 t_dd				*init_data_exec(t_dd	*data, char	**envp);
 int					ft_export_no_args(t_env *env);
 t_env				*copy_env(t_env *env);
 void				ft_sort_env(t_env   *env);
+
+char				**switch_env_arr(t_env *env);
+int                 ft_exec(t_command   *cmds, t_env    **env);
+int                 ft_begin_exec(t_command *cmds, t_env *env);
+char                *ft_find_path(char  *cmd, t_env **env);
+char				*get_path(char *cmd, t_env **env);
+int					ft_cmd_size(t_command   *cmd);
+int					is_builtin(char *cmd);
+int					exec_builtin(t_command *cmd, t_env **env);
+int					wait_for_all_processes(pid_t *pids, int count);
+void				execute_child_process(t_command *cmd, int prev_fd, int *fd, t_env **env);
+int					wait_and_get_status(pid_t pid);
+int					exec_cmd(char *path, char **env, t_command *cmd);
+int					handle_child(t_command  *cmd, t_pipe    *p, t_env   **env);
+int					setup_redirections(t_command *cmd);
+int					init_pipe(t_pipe	*p, t_command	*cmd);
+int					execute_child_cmd(t_command *cmd, t_env **env);
+//
+int					execute_pipe(t_command	*cmd, t_env	**env);
+int					execute_single(t_command *cmd, t_env **env);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /* Core Functions */
 int							init_data(t_data *data);
-
-/* Memory Management */
-/*
-void						*gc_malloc(t_gc *gc, unsigned int size);
-void						gc_add(t_gc *gc, void *ptr);
-void						gc_free_all(t_gc *gc);
-*/
-
-/* String Utils */
-
-//size_t						ft_strlen(const char *str);
-//char						*ft_strdup(const char *s1, t_data *data);
 char						*ft_substr_m(t_data *data, const char *s, int start, int len);
-//char						*ft_strjoin(const char *s1, const char *s2,
-//								t_data *data);
-//int							ft_strcmp(const char *s1, const char *s2);
-//int							ft_isalnum(int c);
-/* Character Checking */
 int							is_token(char c);
 int							is_space(int c);
 int							is_quote(int c);

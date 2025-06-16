@@ -1,38 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_utils_2.c                                :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/13 11:12:56 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 18:03:03 by sbouaa           ###   ########.fr       */
+/*   Created: 2024/11/23 02:38:24 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/16 22:39:11 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-void	ft_sort_env(t_env *env)
+void	ft_putchar(char c, int *length)
 {
-	t_env	*ptr;
-	char	*tmp;
-
-	while (env->next)
-	{
-		ptr = env;
-		while (ptr->next)
-		{
-			if (ft_strcmp(ptr->key, ptr->next->key) > 0)
-			{
-				tmp = ptr->key;
-				ptr->key = ptr->next->key;
-				ptr->next->key = tmp;
-				tmp = ptr->value;
-				ptr->value = ptr->next->value;
-				ptr->next->value = tmp;
-			}
-			ptr = ptr->next;
-		}
-		env = env->next;
-	}
+	write(2, &c, 1);
+	*length += 1;
 }

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/13 11:32:45 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 22:54:16 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ static int	cd_home(char *o_cwd, t_env *env)
 
 	home = ft_getenv("HOME", env);
 	if (!home)
-		return (ft_putendl_fd("minishell: cd: HOME not set", 2), 1);
+		return (ft_printf("minishell: cd: HOME not set\n"), 1);
 	if (chdir(home) == -1)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
+		ft_printf("minishell: cd: ");
 		return (perror(home), 1);
 	}
 	if (!up_pwd_env(o_cwd, NULL, &env))
@@ -83,7 +83,7 @@ int	cd(char *dir, t_env	*env)
 		return (cd_home(cwd, env));
 	if (chdir(dir) == -1)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
+		ft_printf("minishell: cd: ");
 		return (perror(dir), free(cwd), 1);
 	}
 	if (up_pwd_env(cwd, dir, &env) == 1)

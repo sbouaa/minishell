@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/13 09:18:15 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 17:52:33 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_env	*def_env(void)
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
-		if (!add_env_var("PWD", pwd, &env)) 
+		if (!add_env_var("PWD", pwd, &env))
 			return (free(pwd), NULL);
 		free(pwd);
 	}

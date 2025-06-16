@@ -4,10 +4,10 @@ static void	init_command_args(t_data *data, t_command *cmd, char *value)
 {
 	char	**args;
 
+	data = 0;
 	if (!cmd || !value)
 		return ;
 	args = g_malloc(sizeof(char *) * 2, MALLOC);
-	//gc_malloc(&data->gc, sizeof(char *) * 2);
 	if (!args)
 		return ;
 	args[0] = ft_strdup(value);
@@ -150,10 +150,10 @@ static void	link_command_to_list(t_command **head, t_command *new_cmd)
 
 t_command	*parse_command(t_data *data, t_command **head, t_command *current_command)
 {
+	data = 0;
 	if (!current_command)
 	{
 		current_command = g_malloc(sizeof(t_command), MALLOC);
-		//gc_malloc(&data->gc, sizeof(t_command));
 		if (!current_command)
 			return (NULL);
 		ft_bzero(current_command, sizeof(t_command));
@@ -192,11 +192,11 @@ void	add_argument(t_data *data, t_command *cmd, char *value)
 	size_t	arg_count;
 	char	**new_args;
 
+	data = 0;
 	if (!cmd || !value)
 		return ;
 	arg_count = count_arguments(cmd->args);
 	new_args = g_malloc(sizeof(char *) * (arg_count + 2), MALLOC);
-	//gc_malloc(&data->gc, sizeof(char *) * (arg_count + 2));
 	if (!new_args)
 		return ;
 	if (arg_count > 0)
@@ -253,8 +253,8 @@ static t_redirection	*create_redirection(t_data *data, t_token *current)
 {
 	t_redirection	*new_redir;
 
+	data = 0;
 	new_redir = g_malloc(sizeof(t_redirection), MALLOC);
-	//gc_malloc(&data->gc, sizeof(t_redirection));
 	if (!new_redir)
 		return (NULL);
 	ft_bzero(new_redir, sizeof(t_redirection));
@@ -296,10 +296,9 @@ int	parse_redirection(t_data *data, t_command *cmd, t_token *current)
 
 t_command	*parse_pipe(t_data *data, t_command *current_command)
 {
+	data = 0;
 	if (!current_command)
 		return (NULL);
-	current_command->next = g_malloc(sizeof(t_command), MALLOC);
-	//gc_malloc(&data->gc, sizeof(t_command));
 	if (!current_command->next)
 		return (NULL);
 	current_command = current_command->next;

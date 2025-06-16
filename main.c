@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "minishell.h"
 
 void	print_parsed_commands(t_command *cmd)
 {
@@ -31,7 +31,9 @@ int	main(int ac, char	**av, char	**env)
 	t_dd		*datas;
 	if (init_data(&data) != 0)
 		return (1);
+	datas = NULL;
 	datas = init_data_exec(datas, env);
+	data.env = datas->env;
 	while (1)
 	{
 		data.prompt = readline("\033[1;32mminishell > \033[0m");
@@ -44,8 +46,8 @@ int	main(int ac, char	**av, char	**env)
 			{
 				expand(&data);
 				commands = parse_tokens(&data);
-				ft_exec(commands, datas->env);
-                //print_parsed_commands(commands);
+				//print_parsed_commands(commands);
+				ft_begin_exec(commands, datas->env);
 			}
 		}
 		free(data.prompt);

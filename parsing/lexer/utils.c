@@ -6,18 +6,17 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:26:17 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/12 23:37:01 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 21:36:05 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_token	*create_token(t_data *data, t_token_type type, const char *value)
+t_token	*create_token(t_token_type type, const char *value)
 {
 	t_token	*token;
 
 	token = g_malloc(sizeof(t_token), MALLOC);
-	//(t_token *)gc_malloc(&data->gc, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->type = type;
@@ -35,7 +34,7 @@ void	add_node_to_back(t_data *data, t_token_type type, const char *value)
 	t_token	*new_token;
 	t_token	*current;
 
-	new_token = create_token(data, type, value);
+	new_token = create_token(type, value);
 	if (!new_token)
 		return ;
 	if (data->token_list == NULL)

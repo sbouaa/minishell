@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_utils_2.c                                :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/13 11:12:56 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 18:03:03 by sbouaa           ###   ########.fr       */
+/*   Created: 2024/11/23 04:08:49 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/16 22:39:22 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-void	ft_sort_env(t_env *env)
+void	ft_putnbr(int n, int *length)
 {
-	t_env	*ptr;
-	char	*tmp;
-
-	while (env->next)
+	if (n == -2147483648)
+		ft_putstr("-2147483648", length);
+	else
 	{
-		ptr = env;
-		while (ptr->next)
+		if (n < 0)
 		{
-			if (ft_strcmp(ptr->key, ptr->next->key) > 0)
-			{
-				tmp = ptr->key;
-				ptr->key = ptr->next->key;
-				ptr->next->key = tmp;
-				tmp = ptr->value;
-				ptr->value = ptr->next->value;
-				ptr->next->value = tmp;
-			}
-			ptr = ptr->next;
+			ft_putchar('-', length);
+			n *= -1;
 		}
-		env = env->next;
+		if (n >= 10)
+			ft_putnbr((n / 10), length);
+		ft_putchar((n % 10) + '0', length);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 22:55:27 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 17:55:12 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 22:41:11 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define MAX_L 9223372036854775807
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdarg.h>
 # include "../../minishell.h"
 
 typedef struct s_list
@@ -23,6 +24,10 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+int		ft_printf(const char	*format, ...);
+void	ft_putchar(char c, int *length);
+void	ft_putstr(char	*s, int *length);
+void	ft_putnbr(int n, int *length);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);

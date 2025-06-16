@@ -19,6 +19,7 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 	char	*value;
 	int		start;
 
+	in_dbquote = 0;
 	if (!in_single && str[*i] == '$')
 	{
 		(*i)++;
@@ -26,7 +27,7 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 		while (str[*i] && ft_isalnum(str[*i]))
 			(*i)++;
 		var_name = ft_substr_m(data, str, start, *i - start);
-		value = getenv(var_name);
+		value = ft_getenv(var_name, data->env);
 		if (!value)
 		{
 			if (token->prev != NULL && (token->prev->type == IN_REDIRECT
@@ -39,29 +40,6 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 	}
 	return (NULL);
 }
-
-/*char	*ft_strchr(const char *str, int c)
-{
-	int				i;
-	unsigned char	ch;
-
-	if (!str)
-		return (NULL);
-	i = 0;
-	ch = c;
-	if (ch == '\0')
-	{
-		i = ft_strlen(str);
-		return ((char *)str + i++);
-	}
-	while (str[i])
-	{
-		if (str[i] == ch)
-			return ((char *)str + i);
-		i++;
-	}
-	return (NULL);
-}*/
 
 void	ft_check_expand(t_data *data, t_token *token)
 {

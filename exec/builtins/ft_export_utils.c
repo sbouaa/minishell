@@ -6,37 +6,38 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:35:41 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/13 11:00:11 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/16 22:51:02 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_env *copy_env(t_env *env)
+t_env	*copy_env(t_env *env)
 {
-    t_env *new;
-    t_env *last;
-    t_env *curr;
+	t_env	*new;
+	t_env	*last;
+	t_env	*curr;
+	t_env	*node;
 
 	new = NULL;
 	last = NULL;
 	curr = env;
-    while (curr)
-    {
-        t_env *node = g_malloc(sizeof(t_env), MALLOC);
-        if (!node)
-            return NULL;
-        node->key = ft_strdup(curr->key);
-        node->value = ft_strdup(curr->value);
-        node->next = NULL;
-        if (!new)
-            new = node;
-        else
-            last->next = node;
-        last = node;
-        curr = curr->next;
-    }
-    return new;
+	while (curr)
+	{
+		node = g_malloc(sizeof(t_env), MALLOC);
+		if (!node)
+			return (NULL);
+		node->key = ft_strdup(curr->key);
+		node->value = ft_strdup(curr->value);
+		node->next = NULL;
+		if (!new)
+			new = node;
+		else
+			last->next = node;
+		last = node;
+		curr = curr->next;
+	}
+	return (new);
 }
 
 int	is_valid(char *key)
@@ -91,7 +92,5 @@ int	get_type(char *var)
 
 void	pr_error(char *var)
 {
-	ft_putstr_fd("minishell: export: ", 2);
-	ft_putstr_fd(var, 2);
-	ft_putstr_fd(": not a valid identifier\n", 2);
+	ft_printf("minishell: export: %s : not a valid identifier\n", var);
 }

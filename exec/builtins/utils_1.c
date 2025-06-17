@@ -6,13 +6,13 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/14 18:17:05 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/17 16:56:58 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_dd	*init_data_exec(t_dd	*data, char	**envp)
+t_dd	*init_data_exec(t_dd *data, char **envp)
 {
 	data = g_malloc(sizeof(t_dd), MALLOC);
 	if (!data)
@@ -25,7 +25,7 @@ t_dd	*init_data_exec(t_dd	*data, char	**envp)
 	return (data);
 }
 
-t_env	*ft_search_env(char	*key, t_env	*env)
+t_env	*ft_search_env(char *key, t_env *env)
 {
 	while (env)
 	{
@@ -40,16 +40,17 @@ t_env	*add_env_var(char *key, char *value, t_env **env)
 {
 	t_env	*node;
 	t_env	*ex_node;
+	char	*new_value;
 
 	if (!key || !value)
 		return (NULL);
 	ex_node = ft_search_env(key, *env);
 	if (ex_node)
 	{
-		free(ex_node->value);
-		ex_node->value = ft_strdup(value);
-		if (!ex_node->value)
+		new_value = ft_strdup(value);
+		if (!new_value)
 			return (NULL);
+		ex_node->value = new_value;
 		return (ex_node);
 	}
 	key = ft_strdup(key);

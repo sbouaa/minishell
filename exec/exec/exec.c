@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 22:03:29 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/17 17:00:26 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		exit(1);
-	if (execve(path, cmd->args, env_arr) == -1)
-		(perror("execve"), exit(127));
+	execve(path, cmd->args, env_arr);
+	perror("execve");
+	exit(127);
 	return (0);
 }
 

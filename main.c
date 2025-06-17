@@ -29,6 +29,9 @@ int	main(int ac, char	**av, char	**env)
 	t_data data;
 	t_command	*commands;
 	t_dd		*datas;
+
+	if (!isatty(0))
+	return (1);
 	if (init_data(&data) != 0)
 		return (1);
 	datas = NULL;

@@ -226,7 +226,7 @@ static int	open_redirection_file(t_redirection *redir)
 	if (redir->type == IN_REDIRECT)
 		return (open_input_file(redir->file));
 	else if (redir->type == OUT_REDIRECT)
-		return (open_output_file(redir->file));
+		return (open_output_file(redir->file)); 
 	else if (redir->type == APPEND)
 		return (open_append_file(redir->file));
 	else if (redir->type == HEREDOC)

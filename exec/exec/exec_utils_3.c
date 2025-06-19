@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:10:38 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 21:33:52 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/19 18:56:55 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	execute_child_process(t_command *cmd, int prev_fd, int *fd, t_env **env)
 			(perror("dup2"), exit(1));
 		close(fd[1]);
 	}
-	if (setup_redirections(cmd) != 0)
-		exit(1);
+	//if (setup_redirections(cmd) != 0)
+	//	exit(1);
 	execute_child_cmd(cmd, env);
 }
 
@@ -88,7 +88,10 @@ int	exec_cmd(char *path, char **env, t_command *cmd)
 	if (pid == 0)
 	{
 		if (execve(path, cmd->args, env) == -1)
-			(perror("execve"), exit(127));
+		{
+			ft_printf("minishell: %s: command not found\n", cmd->args[0]);
+			exit(127);
+		}
 	}
 	if (pid > 0)
 		return (wait_and_get_status(pid));

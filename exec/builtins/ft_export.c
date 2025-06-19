@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 17:52:58 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/19 16:46:41 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	export_var(char *var, t_env *env)
 
 	key = get_key_and_value(var, 0);
 	if (!key)
-		return (0);
+		return (1);
 	if (is_valid(key))
 		return (pr_error(var), 1);
 	type = get_type(var);

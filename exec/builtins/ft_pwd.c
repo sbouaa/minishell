@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:06:42 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 22:52:24 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/18 21:26:29 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ void	pwd(t_env	*env)
 		if (dir)
 			ft_putendl_fd(dir, 1);
 		else
-			ft_printf("minishell: pwd: \n");
+			ft_printf("minishell: pwd: error retrieving current directory\n");
 	}
 }

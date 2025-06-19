@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 18:52:18 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/19 19:58:18 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
+#define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
 typedef struct s_col
 {
@@ -101,6 +102,7 @@ typedef struct s_command
 	t_redirection			*redirects;
 	int						fd_in;
 	int						fd_out;
+	int						exit_status;
 	struct s_command		*next;
 }							t_command;
 
@@ -208,7 +210,7 @@ int					setup_redirections(t_command *cmd);
 int					init_pipe(t_pipe	*p, t_command	*cmd);
 int					execute_child_cmd(t_command *cmd, t_env **env);
 //
-int					execute_pipe(t_command	*cmd, t_env	**env);
+int					multi_pipes(t_command	*cmd, t_env	**env);
 int					execute_single(t_command *cmd, t_env **env);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

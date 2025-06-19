@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:26 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/19 21:05:18 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,15 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 		exit(exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);
 	if (!path)
-		(printf("cmd not found\n"), exit(127));
+	{
+		ft_printf("minishell: %s: command not found\n", cmd->args[0]);
+		exit(127);
+	}
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		exit(1);
 	execve(path, cmd->args, env_arr);
-	perror("execve");
+	ft_printf("minishell: %s: command not found\n", cmd->args[0]);
 	exit(127);
 	return (0);
 }
@@ -38,7 +41,7 @@ int	execute_single(t_command *cmd, t_env **env)
 	char	*path;
 	char	**env_arr;
 
-	if (!cmd || !cmd->args || !cmd->args[0])
+	if (!cmd || !cmd->args || !*cmd->args[0])
 		return (0);
 	if (setup_redirections(cmd) != 0)
 		return (1);
@@ -46,20 +49,25 @@ int	execute_single(t_command *cmd, t_env **env)
 		return (exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);
 	if (!path)
-		return (printf(" minishell: %s: command not found\n", cmd->args[0]), 127);
+	{
+		ft_printf("minishell: %s: command not found\n", cmd->args[0]);
+		return (127);
+	}
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		return (1);
 	return (exec_cmd(path, env_arr, cmd));
 }
 
-int	execute_pipe(t_command	*cmd, t_env	**env)
+int	multi_pipes(t_command	*cmd, t_env	**env)
 {
 	t_pipe	p;
 
 	init_pipe(&p, cmd);
 	while (cmd)
 	{
+		if (!cmd || !cmd->args || !*cmd->args[0])
+			return (1);
 		if (handle_child(cmd, &p, env))
 			return (1);
 		if (p.prev_fd != -1)
@@ -81,7 +89,7 @@ int	ft_exec(t_command *cmd, t_env **env)
 		return (0);
 	if (!cmd->next)
 		return (execute_single(cmd, env));
-	return (execute_pipe(cmd, env));
+	return (multi_pipes(cmd, env));
 }
 
 int	ft_begin_exec(t_command *cmds, t_env *env)

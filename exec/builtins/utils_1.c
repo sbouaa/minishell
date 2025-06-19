@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/17 16:56:58 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/18 23:43:20 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ t_dd	*init_data_exec(t_dd *data, char **envp)
 	data = g_malloc(sizeof(t_dd), MALLOC);
 	if (!data)
 		return (NULL);
-	data->exit_status = 0;
 	if (!envp[0])
 		data->env = def_env();
 	else

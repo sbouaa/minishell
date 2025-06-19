@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 17:52:33 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/19 19:05:20 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_env	*def_env(void)
 			return (free(pwd), NULL);
 		free(pwd);
 	}
+	add_env_var("PATH", DEF_PATH, &env);
 	export_var("SHLVL=1", env);
 	export_var("_=/usr/bin/env", env);
 	export_var("OLDPWD", env);
@@ -40,7 +41,7 @@ char	*ft_getenv(char *name, t_env *env)
 	i = ft_strlen(name);
 	while (env)
 	{
-		if (ft_strncmp(env->key, name, i) == 0)
+		if (ft_strcmp(env->key, name) == 0)
 			return (env->value);
 		env = env->next;
 	}

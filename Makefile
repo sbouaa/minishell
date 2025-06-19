@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include
+CFLAGS = -Wall -Werror -Wextra -I/usr/local/opt/readline/include #-g -fsanitize=address
 
 #CFLAGS = -I/usr/local/opt/readline/include -g
 
@@ -21,7 +21,6 @@ SRCS =  exec/builtins/ft_echo.c exec/builtins/ft_env.c exec/builtins/ft_unset.c 
 		parsing/lexer/lexer.c parsing/lexer/utils.c main.c \
 		parsing/lexer/utils_2.c parsing/lexer/utils_3.c parsing/lexer/handler_lexer.c parsing/expanding/expand.c \
 		parsing/expanding/remove_quotes.c parsing/syntax_error/syntax_error.c parsing/parse/parsing.c \
-
 
 
 OBJS = $(SRCS:.c=.o)

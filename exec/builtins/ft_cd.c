@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 22:54:16 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/19 21:05:57 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ static int	getcwd_fail(char *o_cwd, char *dir, t_env **env)
 {
 	char	*n_pwd;
 	char	*temp;
+	int		len;
 
 	perror("minishell: cd: error retrieving current directory: "
 		"getcwd: cannot access parent directories");
-	if (o_cwd[ft_strlen(o_cwd) - 1] == '/')
+	len = ft_strlen(o_cwd);
+	if (len > 0 && o_cwd[len - 1] == '/')
 		n_pwd = ft_strjoin(o_cwd, dir);
 	else
 	{
@@ -27,13 +29,12 @@ static int	getcwd_fail(char *o_cwd, char *dir, t_env **env)
 		if (!temp)
 			return (1);
 		n_pwd = ft_strjoin(temp, dir);
-		free(temp);
 	}
 	if (!n_pwd)
 		return (1);
 	add_env_var("OLDPWD", o_cwd, env);
 	add_env_var("PWD", n_pwd, env);
-	return (free(n_pwd), 0);
+	return (0);
 }
 
 static int	up_pwd_env(char *o_cwd, char *dir, t_env **env)
@@ -69,7 +70,7 @@ static int	cd_home(char *o_cwd, t_env *env)
 	return (0);
 }
 
-int	cd(char *dir, t_env	*env)
+int	cd(char *dir, t_env *env)
 {
 	char	*cwd;
 

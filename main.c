@@ -49,12 +49,10 @@ int	main(int ac, char	**av, char	**env)
 			{
 				expand(&data);
 				commands = parse_tokens(&data);
-				//print_parsed_commands(commands);
-				ft_begin_exec(commands, datas->env);
+				// print_parsed_commands(commands);
+				data.exit_status = ft_begin_exec(commands, datas->env);
 			}
 		}
-		free(data.prompt);
 	}
-	//gc_free_all(&data.gc);
 	return (0);
 }

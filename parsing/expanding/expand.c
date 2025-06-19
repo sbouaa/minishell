@@ -23,6 +23,13 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 	if (!in_single && str[*i] == '$')
 	{
 		(*i)++;
+		//////
+		if (str[*i] == '?')
+        {
+            (*i)++;
+            return (ft_itoa(data->exit_status));
+        }
+		//////
 		start = *i;
 		while (str[*i] && ft_isalnum(str[*i]))
 			(*i)++;
@@ -40,7 +47,7 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 	}
 	return (NULL);
 }
-
+/*
 void	ft_check_expand(t_data *data, t_token *token)
 {
 	int		i;
@@ -91,6 +98,63 @@ void	ft_check_expand(t_data *data, t_token *token)
 		i++;
 	}
 	token->value = result;
+}*/
+
+void	ft_check_expand(t_data *data, t_token *token)
+{
+    int		i;
+    int		in_single_quote;
+    int		in_double_quote;
+    char	*str;
+    char	*result;
+    char	*expand;
+    char	*temp;
+
+    i = 0;
+    in_single_quote = 0;
+    in_double_quote = 0;
+    str = token->value;
+    result = ft_strdup("");
+    while (str && str[i])
+    {
+        update_quote_states(str[i], &in_single_quote, &in_double_quote);
+        if (str[i] == '$' && !in_single_quote)
+        {
+            if (str[i + 1] && ft_strchr("\'\"", str[i + 1]) && !in_double_quote)
+            {
+                i++;
+                continue ;
+            }
+            // Accept both alnum and '?' for expansion
+            else if (str[i + 1] && (ft_isalnum(str[i + 1]) || str[i + 1] == '?'))
+            {
+                expand = handle_variable_expansion(data, str, &i,
+                        in_single_quote, in_double_quote, token);
+                if (expand)
+                {
+                    temp = ft_strjoin(result, expand);
+                    //free(result);
+                    //free(expand);
+                    result = temp;
+                    continue ;
+                }
+            }
+            else if (str[i + 1] && !ft_isalnum(str[i + 1]) && str[i + 1] != '?')
+            {
+                temp = ft_strjoin(result, ft_substr_m(data, &str[i], 0, 1));
+                //free(result);
+                result = temp;
+            }
+        }
+        else
+        {
+            temp = ft_strjoin(result, ft_substr_m(data, &str[i], 0, 1));
+            free(result);
+            result = temp;
+        }
+        i++;
+    }
+    token->value = result;
 }
 
 void	expand(t_data *data)

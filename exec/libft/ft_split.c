@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 17:07:33 by sbouaa            #+#    #+#             */
-/*   Updated: 2024/11/18 01:42:15 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 14:23:58 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,6 @@ static char	*ft_add_word(const char *s, char c)
 	return (word);
 }
 
-static char	**ft_free(char **words, size_t index)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < index)
-	{
-		free(words[i]);
-		i++;
-	}
-	free(words);
-	return (NULL);
-}
-
 char	**ft_split(const char *s, char c)
 {
 	char	**p;
@@ -95,7 +81,7 @@ char	**ft_split(const char *s, char c)
 			i++;
 		p[j] = ft_add_word(&s[i], c);
 		if (p[j] == NULL)
-			return (ft_free(p, j));
+			return (NULL);
 		while (s[i] && s[i] != c)
 			i++;
 	}

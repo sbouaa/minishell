@@ -6,13 +6,13 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:06:42 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/18 21:26:29 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 10:38:08 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	pwd(t_env	*env)
+int	pwd(t_env	*env)
 {
 	char	*dir;
 
@@ -28,6 +28,10 @@ void	pwd(t_env	*env)
 		if (dir)
 			ft_putendl_fd(dir, 1);
 		else
+		{
 			ft_printf("minishell: pwd: error retrieving current directory\n");
+			return (1);
+		}
 	}
+	return (0);
 }

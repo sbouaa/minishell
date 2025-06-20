@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 00:53:56 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/19 20:01:19 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 13:07:27 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = ft_strlen(s2);
 	j = ft_strlen(s1);

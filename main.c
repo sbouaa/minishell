@@ -32,6 +32,7 @@ int	main(int ac, char	**av, char	**env)
 
 	if (!isatty(0))
 	return (1);
+	//signal(SIGQUIT, SIG_IGN);
 	if (init_data(&data) != 0)
 		return (1);
 	datas = NULL;
@@ -49,7 +50,7 @@ int	main(int ac, char	**av, char	**env)
 			{
 				expand(&data);
 				commands = parse_tokens(&data);
-				// print_parsed_commands(commands);
+				//print_parsed_commands(commands);
 				data.exit_status = ft_begin_exec(commands, datas->env);
 			}
 		}

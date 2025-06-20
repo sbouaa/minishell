@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/19 21:05:18 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 21:39:13 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		exit(1);
+	//signal(SIGQUIT, SIG_DFL);
 	execve(path, cmd->args, env_arr);
 	ft_printf("minishell: %s: command not found\n", cmd->args[0]);
 	exit(127);
@@ -42,7 +43,7 @@ int	execute_single(t_command *cmd, t_env **env)
 	char	**env_arr;
 
 	if (!cmd || !cmd->args || !*cmd->args[0])
-		return (0);
+		return (ft_printf("minishell: command not found\n"), 127);
 	if (setup_redirections(cmd) != 0)
 		return (1);
 	if (is_builtin(cmd->args[0]))
@@ -67,7 +68,7 @@ int	multi_pipes(t_command	*cmd, t_env	**env)
 	while (cmd)
 	{
 		if (!cmd || !cmd->args || !*cmd->args[0])
-			return (1);
+			return (ft_printf("minishell: command not found\n"), 127);
 		if (handle_child(cmd, &p, env))
 			return (1);
 		if (p.prev_fd != -1)

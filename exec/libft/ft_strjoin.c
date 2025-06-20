@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 02:14:23 by sbouaa            #+#    #+#             */
-/*   Updated: 2024/11/12 22:34:57 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 16:50:34 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ char	*ft_strjoin(char const	*s1, char const	*s2)
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	p = g_malloc((s1_len + s2_len + 1) * sizeof(char), MALLOC);
-	if (p == NULL)
-		return (NULL);
 	ft_memcpy(p, s1, s1_len);
 	i = 0;
 	while (s2[i] != '\0')

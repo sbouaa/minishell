@@ -1,0 +1,126 @@
+➜  minishell git:(minishell) ✗ 
+➜  minishell git:(minishell) ✗ ./minishell 
+minishell > echo -n jjfd
+jjfdminishell > echo -nnnnn jjfd
+jjfdminishell > echo -nnnn -n jjfd
+jjfdminishell > echo $vfefv"hh"
+hh
+minishell > export u="    "
+minishell > echo $u"kk"
+    kk
+minishell > echo $u"kk"$u | cat -e
+    kk    $
+minishell > $vrev | ls
+minishell: command not found
+minishell > $vrev 
+minishell: command not found
+minishell > $u
+minishell:     : command not found
+minishell > $cdwv
+minishell: command not found
+minishell > $cdwv 
+minishell: command not found
+minishell > cd 
+minishell > pwd
+/home/sbouaa
+minishell > cd -
+minishell: cd: -: No such file or directory
+minishell > bash
+sbouaa@e1r6p5:~$ env -i ./minishell/
+env: ‘./minishell/’: Permission denied
+sbouaa@e1r6p5:~$ env -i ./minishell
+env: ‘./minishell’: Permission denied
+sbouaa@e1r6p5:~$ 
+exit
+minishell > bash
+sbouaa@e1r6p5:~$ cd minishell/
+sbouaa@e1r6p5:~/minishell$ env -i ./minishell
+minishell > env
+PWD=/home/sbouaa/minishell
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+SHLVL=1
+_=/usr/bin/env
+minishell > unset PATH
+minishell > cd /bin
+minishell > ls
+minishell: ls: command not found
+-----------------------------------------------------------------------------------
+sbouaa@e1r6p5:/home/sbouaa$ cd minishell/
+sbouaa@e1r6p5:/home/sbouaa/minishell$ minishell
+minishell > sbouaa@e1r6p5:/home/sbouaa/minishell$ ./kjkdc
+bash: ./kjkdc: No such file or directory
+sbouaa@e1r6p5:/home/sbouaa/minishell$ kjkdc  
+bash: kjkdc: No such file or directory
+sbouaa@e1r6p5:/home/sbouaa/minishell$ bash
+bash: bash: No such file or directory
+sbouaa@e1r6p5:/home/sbouaa/minishell$ exit
+sbouaa@e1r6p5:~$ bash
+sbouaa@e1r6p5:~$ env | grep SHLVL
+SHLVL=2
+sbouaa@e1r6p5:~$ exit 55 44
+exit
+bash: exit: too many arguments
+sbouaa@e1r6p5:~$ env | grep SHLVL
+SHLVL=2
+sbouaa@e1r6p5:~$ exit jj 44
+exit
+bash: exit: jj: numeric argument required
+sbouaa@e1r6p5:~$ echo $?
+2
+sbouaa@e1r6p5:~$ bash
+sbouaa@e1r6p5:~$ exit 45454564564564564564564564
+exit
+bash: exit: 45454564564564564564564564: numeric argument required
+sbouaa@e1r6p5:~$ echo $?
+2
+sbouaa@e1r6p5:~$ bash
+sbouaa@e1r6p5:~$ exit 256
+exit
+sbouaa@e1r6p5:~$ echo $?
+0
+sbouaa@e1r6p5:~$ 
+------------------------------------------------------------------------------------
+
+
+cat <<ll
+> vbdw
+> vr
+> $PWD
+> ll
+vbdw
+vr
+/home/sbouaa
+sbouaa@e1r6p5:~$ cat <<ll""
+> $pwd
+> 
+bash: warning: here-document at line 21 delimited by end-of-file (wanted `ll')
+$pwd
+sbouaa@e1r6p5:~$ cat <<ll""
+> $PWD
+> ll
+$PWD
+sbouaa@e1r6p5:~$ cat <<$u
+> $u
+sbouaa@e1r6p5:~$ cat <<$PWD
+> bveb
+> be
+> $PWD
+bveb
+be
+sbouaa@e1r6p5:~$ 
+
+
+^C
+sbouaa@e1r6p5:~$ export u="ls | ls"
+sbouaa@e1r6p5:~$ $u
+ls: cannot access '|': No such file or directory
+ls: cannot access 'ls': No such file or directory
+sbouaa@e1r6p5:~$ export u="echo | ls"
+sbouaa@e1r6p5:~$ $u
+| ls
+sbouaa@e1r6p5:~$ echo "|" "ls"
+| ls
+sbouaa@e1r6p5:~$ 
+
+-------------------------------------------------------------------------
+make a gc for env

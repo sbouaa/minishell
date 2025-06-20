@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/19 19:58:18 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 21:19:32 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <readline/readline.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <signal.h>
 
 #define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
@@ -166,7 +167,7 @@ typedef struct s_pipe
 void				echo(char **args);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_env(t_env *env);
-void				pwd(t_env *env);
+int					pwd(t_env *env);
 int					cd(char *dir, t_env	*env);
 void				ft_exit(char *nb);
 int					ft_unset(char **args, t_env **env);

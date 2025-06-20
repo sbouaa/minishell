@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:03:18 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 18:03:26 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/20 14:27:28 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*g_malloc(size_t size, t_call call)
 			return (clear_all(&head), NULL);
 		tmp = new_node(ptr);
 		if (!tmp)
-			return (clear_all(&head), free(ptr), NULL);
+			return (clear_all(&head), free(ptr), exit(1), NULL);
 		add_back(&head, tmp);
 		return (ptr);
 	}

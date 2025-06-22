@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:10:38 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 21:39:38 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 16:14:22 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,7 @@ int	exec_cmd(char *path, char **env, t_command *cmd)
 	{
 		//signal(SIGQUIT, SIG_DFL);
 		if (execve(path, cmd->args, env) == -1)
-		{
-			ft_printf("minishell: %s: command not found\n", cmd->args[0]);
-			exit(127);
-		}
+			exit(check_file(cmd->args[0]));
 	}
 	if (pid > 0)
 		return (wait_and_get_status(pid));

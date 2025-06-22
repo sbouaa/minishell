@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/19 21:05:57 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 18:40:40 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,9 @@ int	cd(char *dir, t_env *env)
 {
 	char	*cwd;
 
-	if (ft_getenv("PWD", env))
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
 		cwd = ft_strdup(ft_getenv("PWD", env));
-	else
-		cwd = getcwd(NULL, 0);
 	if (!cwd)
 		cwd = ft_strdup("");
 	if (!dir)

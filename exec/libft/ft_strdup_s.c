@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export_utils_2.c                                :+:      :+:    :+:   */
+/*   ft_strdup_s.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/13 11:12:56 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 20:14:56 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/21 16:58:57 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/21 17:40:53 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "libft.h"
 
-void	ft_sort_env(t_env *env)
+char	*ft_strdup_s(const char	*s1)
 {
-	t_env	*ptr;
-	char	*tmp;
+	int		i;
+	char	*p;
 
-	while (env->next)
-	{
-		ptr = env;
-		while (ptr->next)
-		{
-			if (ft_strcmp(ptr->key, ptr->next->key) > 0)
-			{
-				tmp = ptr->key;
-				ptr->key = ptr->next->key;
-				ptr->next->key = tmp;
-				tmp = ptr->value;
-				ptr->value = ptr->next->value;
-				ptr->next->value = tmp;
-			}
-			ptr = ptr->next;
-		}
-		env = env->next;
-	}
+	p = gc_malloc(ft_strlen(s1) + 1, MALLOC);
+	if (!p)
+		return (NULL);
+	i = -1;
+	while (s1[++i])
+		p[i] = s1[i];
+	p[i] = '\0';
+	return (p);
 }

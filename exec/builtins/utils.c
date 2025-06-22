@@ -6,11 +6,22 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 01:55:25 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 14:47:17 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 18:40:53 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+t_env	*ft_lstnew_s(char *key, char *value)
+{
+	t_env	*node;
+
+	node = gc_malloc(sizeof(t_env), MALLOC);
+	node->key = key;
+	node->value = value;
+	node->next = NULL;
+	return (node);
+}
 
 t_env	*ft_lstnew(char *key, char *value)
 {
@@ -37,4 +48,3 @@ void	ft_lstadd_back(t_env **lst, t_env *new)
 		temp = temp->next;
 	temp->next = new;
 }
-

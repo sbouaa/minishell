@@ -58,11 +58,7 @@ void	ft_check_expand(t_data *data, t_token *token)
 
 	i = 0;
 	in_single_quote = 0;
-	in_double_quote = 0;
-	str = token->value;
-	result = ft_strdup("");
-	while (str && str[i])
-	{
+	in_double_quote = 0;make a gc for env
 		update_quote_states(str[i], &in_single_quote, &in_double_quote);
 		if (str[i] == '$' && !in_single_quote)
 		{

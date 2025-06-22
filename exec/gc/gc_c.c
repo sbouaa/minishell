@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   g_collector.c                                      :+:      :+:    :+:   */
+/*   gc_c.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/16 18:03:18 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/21 17:53:03 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/21 17:32:02 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/21 17:43:46 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_col	*new_node(void	*ptr)
+t_col	*new_node_s(void	*ptr)
 {
 	t_col	*new;
 
@@ -24,7 +24,7 @@ t_col	*new_node(void	*ptr)
 	return (new);
 }
 
-t_col	*last_node(t_col **head)
+t_col	*last_node_s(t_col **head)
 {
 	t_col	*tmp;
 
@@ -36,17 +36,17 @@ t_col	*last_node(t_col **head)
 	return (tmp);
 }
 
-void	add_back(t_col	**head, t_col *new)
+void	add_back_s(t_col	**head, t_col *new)
 {
 	if (!head || !new)
 		return ;
 	if (!*head)
 		*head = new;
 	else
-		last_node(head)->next = new;
+		last_node_s(head)->next = new;
 }
 
-void	clear_all(t_col **head)
+void	clear_all_s(t_col **head)
 {
 	t_col	*cur;
 	t_col	*tmp;
@@ -65,7 +65,7 @@ void	clear_all(t_col **head)
 	*head = NULL;
 }
 
-void	*g_malloc(size_t size, t_call call)
+void	*gc_malloc(size_t size, t_call call)
 {
 	static t_col	*head;
 	t_col			*tmp;
@@ -75,14 +75,14 @@ void	*g_malloc(size_t size, t_call call)
 	{
 		ptr = malloc(size);
 		if (!ptr)
-			return (clear_all(&head), NULL);
-		tmp = new_node(ptr);
+			return (clear_all_s(&head), exit(1), NULL);
+		tmp = new_node_s(ptr);
 		if (!tmp)
-			return (clear_all(&head), free(ptr), exit(1), NULL);
-		add_back(&head, tmp);
+			return (clear_all_s(&head), free(ptr), exit(1), NULL);
+		add_back_s(&head, tmp);
 		return (ptr);
 	}
 	else if (call == FREE)
-		clear_all(&head);
+		clear_all_s(&head);
 	return (NULL);
 }

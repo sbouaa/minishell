@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 10:44:23 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 20:11:50 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	exec_builtin(t_command *cmd, t_env **env)
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 		return (cd(cmd->args[1], *env));
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		return (ft_exit(cmd->args[1]), 0);
+		return (ft_exit(cmd->args), 1);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		return (ft_unset(cmd->args, env), 0);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)

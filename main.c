@@ -22,38 +22,40 @@ void	print_parsed_commands(t_command *cmd)
     }
 }
 
-int	main(int ac, char	**av, char	**env)
+int main(int ac, char **av, char **env)
 {
-	(void)ac;
-	(void)av;
-	t_data data;
-	t_command	*commands;
-	t_dd		*datas;
+    (void)ac;
+    (void)av;
+    t_data data;
+    t_command *commands;
+    t_dd *datas;
 
-	if (!isatty(0))
-	return (1);
-	//signal(SIGQUIT, SIG_IGN);
-	if (init_data(&data) != 0)
-		return (1);
-	datas = NULL;
-	datas = init_data_exec(datas, env);
-	data.env = datas->env;
-	while (1)
-	{
-		data.prompt = readline("\033[1;32mminishell > \033[0m");
-		if (!data.prompt)
-			break ;
-		if (data.prompt[0] != '\0')
-		{
-			add_history(data.prompt);
-			if (!lexer(&data) && !check_syntax_errors(&data))
-			{
-				expand(&data);
-				commands = parse_tokens(&data);
-				//print_parsed_commands(commands);
-				data.exit_status = ft_begin_exec(commands, datas->env);
-			}
-		}
-	}
-	return (0);
+    if (!isatty(0))
+        return (1);
+    if (init_data(&data) != 0)
+        return (1);
+    datas = init_data_exec(NULL, env);
+    data.env = datas->env;
+    t_env *current_env = data.env;
+
+    while (1)
+    {
+        data.prompt = readline("\033[1;32mminishell > \033[0m");
+        if (!data.prompt)
+            break;
+        if (data.prompt[0] != '\0')
+        {
+            add_history(data.prompt);
+            if (!lexer(&data) && !check_syntax_errors(&data))
+            {
+                expand(&data);
+                commands = parse_tokens(&data);
+                data.exit_status = ft_begin_exec(commands, current_env);
+                current_env = data.env;
+                //print_parsed_commands(commands);
+                g_malloc(0, FREE);
+            }
+        }
+    }
+    return (0);
 }

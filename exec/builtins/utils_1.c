@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 15:26:34 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/21 17:30:13 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,17 @@ t_env	*add_env_var(char *key, char *value, t_env **env)
 	ex_node = ft_search_env(key, *env);
 	if (ex_node)
 	{
-		new_value = ft_strdup(value);
+		new_value = ft_strdup_s(value);
 		if (!new_value)
 			return (NULL);
 		ex_node->value = new_value;
 		return (ex_node);
 	}
-	key = ft_strdup(key);
-	value = ft_strdup(value);
+	key = ft_strdup_s(key);
+	value = ft_strdup_s(value);
 	if (!key || !value)
 		return (NULL);
-	node = ft_lstnew(key, value);
+	node = ft_lstnew_s(key, value);
 	if (!node)
 		return (NULL);
 	ft_lstadd_back(env, node);

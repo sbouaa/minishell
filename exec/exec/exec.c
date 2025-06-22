@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 21:39:13 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 18:42:07 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,17 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	char	*path;
 	char	**env_arr;
 
+	if (!cmd || !cmd->args)
+		(ft_printf("minishell: command not found\n"), exit(127));
+	if (!*cmd->args[0])
+		exit(0);
 	if (setup_redirections(cmd) != 0)
 		exit(1);
 	if (is_builtin(cmd->args[0]))
 		exit(exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);
 	if (!path)
-	{
-		ft_printf("minishell: %s: command not found\n", cmd->args[0]);
-		exit(127);
-	}
+		exit(check_file(cmd->args[0]));
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		exit(1);
@@ -42,18 +43,17 @@ int	execute_single(t_command *cmd, t_env **env)
 	char	*path;
 	char	**env_arr;
 
-	if (!cmd || !cmd->args || !*cmd->args[0])
+	if (!cmd || !cmd->args)
 		return (ft_printf("minishell: command not found\n"), 127);
+	if (!*cmd->args[0])
+		return (0);
 	if (setup_redirections(cmd) != 0)
 		return (1);
 	if (is_builtin(cmd->args[0]))
 		return (exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);
 	if (!path)
-	{
-		ft_printf("minishell: %s: command not found\n", cmd->args[0]);
-		return (127);
-	}
+		return (check_file(cmd->args[0]));
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		return (1);
@@ -67,8 +67,6 @@ int	multi_pipes(t_command	*cmd, t_env	**env)
 	init_pipe(&p, cmd);
 	while (cmd)
 	{
-		if (!cmd || !cmd->args || !*cmd->args[0])
-			return (ft_printf("minishell: command not found\n"), 127);
 		if (handle_child(cmd, &p, env))
 			return (1);
 		if (p.prev_fd != -1)

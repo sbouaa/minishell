@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 21:19:32 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 18:59:30 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ typedef enum e_call
 	MALLOC
 }t_call;
 
+
+t_col	*new_node_s(void	*ptr);
+t_col	*last_node_s(t_col **head);
+void	add_back_s(t_col	**head, t_col *new);
+void	clear_all_s(t_col **head);
+void	*gc_malloc(size_t size, t_call call);
+///////////////////////////////////////////////////
 t_col	*new_node(void	*ptr);
 t_col	*last_node(t_col **head);
 void	add_back(t_col	**head, t_col *new);
@@ -169,7 +176,7 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_env(t_env *env);
 int					pwd(t_env *env);
 int					cd(char *dir, t_env	*env);
-void				ft_exit(char *nb);
+void				ft_exit(char **args);
 int					ft_unset(char **args, t_env **env);
 t_env				*init_env(char **envp);
 t_env				*def_env(void);
@@ -178,8 +185,7 @@ t_env				*add_env_var(char *key, char *value, t_env **env);
 t_env				*ft_search_env(char *key, t_env *env);
 void				ft_lstadd_back(t_env **lst, t_env *new);
 t_env				*ft_lstnew(char *key, char *value);
-void				ft_clear(t_env **all);
-void				ft_clean(char **p);
+t_env				*ft_lstnew_s(char *key, char *value);
 int					env_del(char *name, t_env **env);
 int					ft_export(char **args, t_env	*env);
 int					export_var(char *var, t_env *env);
@@ -213,6 +219,7 @@ int					execute_child_cmd(t_command *cmd, t_env **env);
 //
 int					multi_pipes(t_command	*cmd, t_env	**env);
 int					execute_single(t_command *cmd, t_env **env);
+int					check_file(char	*name);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

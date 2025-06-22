@@ -6,36 +6,56 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/19 20:06:40 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/22 20:14:44 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_exit(char *nb)
+void	check_code(char **args)
 {
-	int		i;
-	int		code;
-	char	*s;
+	long long	code;
+	char		*s;
 
-	s = nb;
-	ft_putendl_fd("exit", 1);
-	if (!nb || !*nb)
-		(g_malloc(0, FREE), exit(0));
-	i = 0;
-	if (nb[i] == '+' || nb[i] == '-')
-		i++;
-	while (nb[i])
+	s = args[1];
+	code = ft_atoi_s(s);
+	if (code == MAX_L || code == -MAX_L)
 	{
-		if (!ft_isdigit(nb[i]))
+		ft_printf("minishell: exit: %s: numeric argument required\n", s);
+		gc_malloc(0, FREE);
+		exit(2);
+	}
+	if (args[2])
+	{
+		ft_printf("minishell: exit: too many arguments\n");
+		return ;
+	}
+	gc_malloc(0, FREE);
+	exit((unsigned char)code);
+}
+
+void	ft_exit(char **args)
+{
+	char	*s;
+	int		i;
+
+	ft_putendl_fd("exit", 1);
+	s = args[1];
+	if (!s || !*s)
+		(gc_malloc(0, FREE), exit(0));
+	i = 0;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	while (s[i])
+	{
+		if (!ft_isdigit(s[i]))
 		{
 			ft_printf("minishell: exit: %s: numeric argument required\n", s);
-			g_malloc(0, FREE);
+			gc_malloc(0, FREE);
 			exit(2);
 		}
 		i++;
 	}
-	code = ft_atoi(nb);
-	g_malloc(0, FREE);
-	exit(code);
+	check_code(args);
+	return ;
 }

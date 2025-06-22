@@ -1,55 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atoi_s.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/03 02:04:43 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 20:06:55 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/22 20:04:32 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/22 20:05:03 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isspace(char c)
+long long	ft_atoi_s(char	*str)
 {
-	if ((c >= 9 && c <= 13) || c == 32)
-		return (1);
-	return (0);
-}
-
-int	ft_res(int s)
-{
-	if (s == -1)
-		return (0);
-	return (-1);
-}
-
-int	ft_atoi(const char	*str)
-{
-	int					i;
-	unsigned long long	res;
-	int					signe;
+	int		i;
+	long	res;
+	long	store;
+	int		signe;
 
 	i = 0;
 	res = 0;
+	store = 0;
 	signe = 1;
 	while (ft_isspace(str[i]))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			signe *= -1;
+			signe = -1;
 		i++;
 	}
-	while (ft_isdigit(str[i]))
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if ((res > MAX_L / 10)
-			|| ((res == MAX_L / 10) && ((str[i] - 48) > MAX_L % 10)))
-			return (ft_res(signe));
-		res = res * 10 + (str[i] - 48);
-		i++;
+		store = res;
+		res = res * 10 + (str[i++] - '0');
+		if (store != (res / 10))
+			return (MAX_L);
 	}
 	return (res * signe);
 }

@@ -31,7 +31,7 @@ char	*handle_variable_expansion(t_data *data, char *str, int *i,
 		start = *i;
 		while (str[*i] && ft_isalnum(str[*i]))
 			(*i)++;
-		var_name = ft_substr_m(data, str, start, *i - start);
+		var_name = ft_substr(str, start, *i - start);
 		value = ft_getenv(var_name, data->env);
 		if (!value)
 		{
@@ -133,13 +133,13 @@ void	ft_check_expand(t_data *data, t_token *token)
             }
             else if (str[i + 1] && !ft_isalnum(str[i + 1]) && str[i + 1] != '?')
             {
-                temp = ft_strjoin(result, ft_substr_m(data, &str[i], 0, 1));
+                temp = ft_strjoin(result, ft_substr(&str[i], 0, 1));
                 result = temp;
             }
         }
         else
         {
-            temp = ft_strjoin(result, ft_substr_m(data, &str[i], 0, 1));
+            temp = ft_strjoin(result, ft_substr(&str[i], 0, 1));
             result = temp;
         }
         i++;

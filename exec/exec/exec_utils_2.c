@@ -6,54 +6,27 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 20:11:50 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/23 22:36:32 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-/////////////////////////***************************/ this function is from chat \\\\\\\******************** ////////////////////////////
-
-int	setup_redirections(t_command *cmd)
+void	close_all(int	fd, int	flag)
 {
-	t_redirection	*redir;
+	static int	fd_arr[1024];
+	static int	count;
+	int i;
 
-	if (!cmd)
-		return (1);
-	redir = cmd->redirects;
-	while (redir)
+	i = 0;
+	if (flag == 0)
+		fd_arr[count++] = fd;
+	else if (flag == 1)
 	{
-		if (redir->type == IN_REDIRECT)
-		{
-			cmd->fd_in = open(redir->file, O_RDONLY);
-			if (cmd->fd_in < 0)
-				return (perror(redir->file), 1);
-			if (dup2(cmd->fd_in, STDIN_FILENO) < 0)
-				return (perror("dup2"), close(cmd->fd_in), 1);
-			close(cmd->fd_in);
-		}
-		else if (redir->type == OUT_REDIRECT)
-		{
-			cmd->fd_out = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (cmd->fd_out < 0)
-				return (perror(redir->file), 1);
-			if (dup2(cmd->fd_out, STDOUT_FILENO) < 0)
-				return (perror("dup2"), close(cmd->fd_out), 1);
-			close(cmd->fd_out);
-		}
-		else if (redir->type == APPEND)
-		{
-			cmd->fd_out = open(redir->file, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
-			if (cmd->fd_out < 0)
-				return (perror(redir->file), 1);
-			if (dup2(cmd->fd_out, STDOUT_FILENO) < 0)
-				return (perror("dup2"), close(cmd->fd_out), 1);
-			close(cmd->fd_out);
-		}
-		redir = redir->next;
+		while (i <= count)
+			close(fd_arr[i++]);
+		count = 0;			
 	}
-	return (0);
 }
 
 int	is_builtin(char *cmd)

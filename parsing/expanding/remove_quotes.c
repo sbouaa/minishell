@@ -8,7 +8,7 @@ char	*quote_append_substr(t_data *data, char *res,
 	char	*temp;
 
 	len = end - start;
-	sub = ft_substr_m(data, str, start, len);
+	sub = ft_substr(str, start, len);
 	temp = ft_strjoin(res, sub);
 	return (temp);
 }

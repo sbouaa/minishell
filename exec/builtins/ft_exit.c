@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 20:14:44 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/23 22:38:48 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	check_code(char **args)
 	{
 		ft_printf("minishell: exit: %s: numeric argument required\n", s);
 		gc_malloc(0, FREE);
+		close_all(-2, 1);
 		exit(2);
 	}
 	if (args[2])
@@ -31,6 +32,7 @@ void	check_code(char **args)
 		return ;
 	}
 	gc_malloc(0, FREE);
+	close_all(-2, 1);
 	exit((unsigned char)code);
 }
 
@@ -42,7 +44,7 @@ void	ft_exit(char **args)
 	ft_putendl_fd("exit", 1);
 	s = args[1];
 	if (!s || !*s)
-		(gc_malloc(0, FREE), exit(0));
+		(gc_malloc(0, FREE), close_all(-2, 1), exit(0));
 	i = 0;
 	if (s[i] == '+' || s[i] == '-')
 		i++;
@@ -51,7 +53,7 @@ void	ft_exit(char **args)
 		if (!ft_isdigit(s[i]))
 		{
 			ft_printf("minishell: exit: %s: numeric argument required\n", s);
-			gc_malloc(0, FREE);
+			(gc_malloc(0, FREE), close_all(-2, 1));
 			exit(2);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 20:51:22 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 18:42:37 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/23 17:14:38 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,9 @@ char	*get_path(char *cmd, t_env **env)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
-		if (access(cmd, F_OK | X_OK) == 0)
+		if (access(cmd, X_OK | F_OK) == 0)
 			return (ft_strdup(cmd));
+		ft_printf("wsh akah\n");
 		return (NULL);
 	}
 	path = ft_find_path(cmd, env);
@@ -98,9 +99,9 @@ int	check_file(char	*name)
 {
 	int	fd;
 
-	fd = open(name, __O_DIRECTORY);
 	if (ft_strchr(name, '/'))
 	{
+		fd = open(name, __O_DIRECTORY);
 		if (fd != -1)
 		{
 			ft_printf("minishell: %s: Is a directory\n", name);

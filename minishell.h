@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 18:59:30 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/23 23:01:53 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <errno.h>
 
 #define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 
@@ -44,7 +45,6 @@ typedef enum e_call
 	FREE,
 	MALLOC
 }t_call;
-
 
 t_col	*new_node_s(void	*ptr);
 t_col	*last_node_s(t_col **head);
@@ -220,12 +220,12 @@ int					execute_child_cmd(t_command *cmd, t_env **env);
 int					multi_pipes(t_command	*cmd, t_env	**env);
 int					execute_single(t_command *cmd, t_env **env);
 int					check_file(char	*name);
+void				close_all(int	fd, int	flag);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* Core Functions */
 int							init_data(t_data *data);
-char						*ft_substr_m(t_data *data, const char *s, int start, int len);
 int							is_token(char c);
 int							is_space(int c);
 int							is_quote(int c);

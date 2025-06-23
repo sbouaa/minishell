@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:26:08 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/12 23:36:39 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/23 23:02:18 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	handle_word(t_data *data, char *line, int *i)
 	}
 	if (start == *i)
 		return (0);
-	content = ft_substr_m(data, line, start, *i - start);
+	content = ft_substr(line, start, *i - start);
 	add_node_to_back(data, WORD, content);
 	return (0);
 }

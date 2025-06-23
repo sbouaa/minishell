@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 18:42:07 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/23 23:43:24 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		exit(1);
-	//signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	execve(path, cmd->args, env_arr);
 	ft_printf("minishell: %s: command not found\n", cmd->args[0]);
 	exit(127);

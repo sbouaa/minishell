@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 20:51:22 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/23 17:14:38 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/24 20:13:49 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ char	*get_path(char *cmd, t_env **env)
 	{
 		if (access(cmd, X_OK | F_OK) == 0)
 			return (ft_strdup(cmd));
-		ft_printf("wsh akah\n");
 		return (NULL);
 	}
 	path = ft_find_path(cmd, env);
@@ -97,18 +96,22 @@ char	*get_path(char *cmd, t_env **env)
 
 int	check_file(char	*name)
 {
-	int	fd;
+    int	fd;
 
-	if (ft_strchr(name, '/'))
-	{
-		fd = open(name, __O_DIRECTORY);
-		if (fd != -1)
-		{
-			ft_printf("minishell: %s: Is a directory\n", name);
-			return (close(fd), 126);
-		}
-		ft_printf("minishell: %s: No such file or directory\n", name);
-		return (127);
-	}
-	return (ft_printf("minishell: %s: command not found\n", name), 127);
+    if (ft_strchr(name, '/'))
+    {
+        fd = open(name, __O_DIRECTORY);
+        if (fd != -1)
+        {
+            ft_printf("minishell: %s: Is a directory\n", name);
+            return (close(fd), 126);
+        }
+        if (access(name, F_OK) != 0)
+            return (ft_printf("minishell: %s: No such file or directory\n", name), 127);
+        if (access(name, X_OK) != 0)
+            return (ft_printf("minishell: %s: Permission denied\n", name), 126);
+    }
+    else
+        return (ft_printf("minishell: %s: command not found\n", name), 127);
+    return (0);
 }

@@ -30,19 +30,21 @@ int main(int ac, char **av, char **env)
     t_command *commands;
     t_dd *datas;
 
-    if (!isatty(0))
-        return (1);
+    //if (!isatty(0))
+    //    return (1);
     if (init_data(&data) != 0)
         return (1);
     datas = init_data_exec(NULL, env);
     data.env = datas->env;
     t_env *current_env = data.env;
-
     while (1)
     {
         data.prompt = readline("\033[1;32mminishell > \033[0m");
         if (!data.prompt)
+        {
+            free(data.prompt);
             break;
+        }
         if (data.prompt[0] != '\0')
         {
             add_history(data.prompt);
@@ -56,6 +58,7 @@ int main(int ac, char **av, char **env)
                 g_malloc(0, FREE);
             }
         }
+        free(data.prompt);
     }
     return (0);
 }

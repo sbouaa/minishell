@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/22 18:40:40 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/24 22:32:13 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,34 +59,37 @@ static int	cd_home(char *o_cwd, t_env *env)
 
 	home = ft_getenv("HOME", env);
 	if (!home)
-		return (ft_printf("minishell: cd: HOME not set\n"), 1);
+		return (free(o_cwd), ft_printf("minishell: cd: HOME not set\n"), 1);
 	if (chdir(home) == -1)
 	{
 		ft_printf("minishell: cd: ");
-		return (perror(home), 1);
+		return (free(o_cwd), perror(home), 1);
 	}
 	if (!up_pwd_env(o_cwd, NULL, &env))
-		return (1);
+		return (free(o_cwd), 1);
+	free(o_cwd);
 	return (0);
 }
 
-int	cd(char *dir, t_env *env)
+int	cd(char **args, t_env *env)
 {
 	char	*cwd;
 
+	if (args[2])
+		return (ft_printf("minishell: cd: too many arguments\n"), 1);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		cwd = ft_strdup(ft_getenv("PWD", env));
 	if (!cwd)
 		cwd = ft_strdup("");
-	if (!dir)
+	if (!args[1])
 		return (cd_home(cwd, env));
-	if (chdir(dir) == -1)
+	if (chdir(args[1]) == -1)
 	{
 		ft_printf("minishell: cd: ");
-		return (perror(dir), free(cwd), 1);
+		return (perror(args[1]), free(cwd), 1);
 	}
-	if (up_pwd_env(cwd, dir, &env) == 1)
+	if (up_pwd_env(cwd, args[1], &env) == 1)
 		return (free(cwd), 1);
 	free(cwd);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/23 23:43:24 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/24 20:05:06 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	ft_begin_exec(t_command *cmds, t_env *env)
 	in = dup(0);
 	out = dup(1);
 	if (in == -1 || out == -1)
-		return (perror("dup"), 1);
+		return (ft_printf("minishell: "), perror("dup"), 1);
 	exit_status = ft_exec(cmds, &env);
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);

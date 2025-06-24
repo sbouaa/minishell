@@ -176,3 +176,26 @@ $USER
 bgb
 sbouaa@e1r6p5:~$ 
 ----------------------------------------------------------------------------------------------------------------
+$EMPTY echo hi 
+---------------------------------------------------------------------------------
+Test 144: ❌ $ 
+mini exit code = 0
+bash exit code = 127
+mini error = ()
+bash error = ( command not found)
+-----------------------------------------------------------------------
+Test 218: ❌ exit 9223372036854775807 
+mini exit code = 2
+bash exit code = 255
+mini error = ( numeric argument required)
+bash error = ()
+Test 220: ❌ exit -9223372036854775807 
+mini exit code = 2
+bash exit code = 1
+mini error = ( numeric argument required)
+bash error = ()
+Test 221: ❌ exit -9223372036854775808 
+mini exit code = 2
+bash exit code = 0
+mini error = ( numeric argument required)
+bash error = ()

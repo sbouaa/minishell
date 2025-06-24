@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/23 22:36:32 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/24 20:04:54 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	exec_builtin(t_command *cmd, t_env **env)
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return (pwd(*env));
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (cd(cmd->args[1], *env));
+		return (cd(cmd->args, *env));
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return (ft_exit(cmd->args), 1);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
@@ -63,10 +63,10 @@ int	exec_builtin(t_command *cmd, t_env **env)
 int	handle_child(t_command *cmd, t_pipe *p, t_env **env)
 {
 	if (cmd->next && pipe(p->fd) == -1)
-		return (perror("pipe"), 1);
+		return (ft_printf("minishell: "), perror("pipe"), 1);
 	p->pids[p->i] = fork();
 	if (p->pids[p->i] == -1)
-		return (perror("fork"), 1);
+		return (ft_printf("minishell: "), perror("fork"), 1);
 	if (p->pids[p->i] == 0)
 		execute_child_process(cmd, p->prev_fd, p->fd, env);
 	return (0);

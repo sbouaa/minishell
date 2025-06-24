@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/23 23:01:53 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/24 19:30:31 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void				echo(char **args);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_env(t_env *env);
 int					pwd(t_env *env);
-int					cd(char *dir, t_env	*env);
+int					cd(char **args, t_env	*env);
 void				ft_exit(char **args);
 int					ft_unset(char **args, t_env **env);
 t_env				*init_env(char **envp);

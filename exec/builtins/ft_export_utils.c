@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:35:41 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/16 22:51:02 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/24 19:44:56 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ int	is_valid(char *key)
 	int	i;
 
 	i = 0;
-	if (!key || ft_isdigit(key[0]))
+	if (!key || !key[0] || key[0] == ' ')
+		return (1);
+	if (key[0] == '=' || ft_isdigit(key[0]))
 		return (1);
 	while (key[i])
 	{
@@ -92,5 +94,5 @@ int	get_type(char *var)
 
 void	pr_error(char *var)
 {
-	ft_printf("minishell: export: %s : not a valid identifier\n", var);
+	ft_printf("minishell: export: `%s' : not a valid identifier\n", var);
 }

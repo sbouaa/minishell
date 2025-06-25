@@ -60,5 +60,7 @@ int main(int ac, char **av, char **env)
         }
         free(data.prompt);
     }
+    gc_malloc(0, FREE);
+    g_malloc(0, FREE);
     return (0);
 }

@@ -2,7 +2,7 @@
 
 static void	init_command_args(t_data *data, t_command *cmd, char *value)
 {
-	char	**args;
+	char	**args = NULL;
 
 	data = 0;
 	if (!cmd || !value)

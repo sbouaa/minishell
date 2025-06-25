@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/24 20:05:06 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/25 00:22:13 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	ft_begin_exec(t_command *cmds, t_env *env)
 {
 	int	in;
 	int	out;
-	int	exit_status;
+	int	exit_status = 0;
 
 	if (!cmds)
 		return (0);

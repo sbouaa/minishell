@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/24 22:32:13 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/25 00:26:06 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	cd(char **args, t_env *env)
 {
 	char	*cwd;
 
-	if (args[2])
+	if (args[1] && args[2])
 		return (ft_printf("minishell: cd: too many arguments\n"), 1);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)

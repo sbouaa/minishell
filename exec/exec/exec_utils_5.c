@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   exec_utils_5.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 00:48:27 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:38:07 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/25 01:48:50 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/25 16:12:47 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../minishell.h"
 
-char	*ft_strdup(const char	*s1)
+void	shell_do(char *arg, char **env)
 {
-	int		i;
-	char	*p;
+	char	*sh[3];
 
-	if (!s1)
-		return (NULL);
-	p = g_malloc(ft_strlen(s1) + 1, MALLOC);
-	if (!p)
-		return (NULL);
-	i = -1;
-	while (s1[++i])
-		p[i] = s1[i];
-	p[i] = '\0';
-	return (p);
+	sh[0] = "/bin/sh";
+	sh[1] = arg;
+	sh[2] = NULL;
+	execve("/bin/sh", sh, env);
+	exit(check_file(arg));
 }

@@ -206,34 +206,6 @@ void	add_argument(t_data *data, t_command *cmd, char *value)
 	cmd->args = new_args;
 }
 
-static int	open_input_file(char *file)
-{
-	return (open(file, O_RDONLY));
-}
-
-static int	open_output_file(char *file)
-{
-	return (open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644));
-}
-
-static int	open_append_file(char *file)
-{
-	return (open(file, O_WRONLY | O_CREAT | O_APPEND, 0644));
-}
-
-static int	open_redirection_file(t_redirection *redir)
-{
-	if (redir->type == IN_REDIRECT)
-		return (open_input_file(redir->file));
-	else if (redir->type == OUT_REDIRECT)
-		return (open_output_file(redir->file)); 
-	else if (redir->type == APPEND)
-		return (open_append_file(redir->file));
-	else if (redir->type == HEREDOC)
-		return (-3);
-	return (-2);
-}
-
 static void	add_redirection_to_list(t_command *cmd, t_redirection *new_redir)
 {
 	t_redirection	*last_redir;

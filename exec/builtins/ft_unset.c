@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:12 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/20 10:41:32 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:40:32 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	ft_unset(char **args, t_env **env)
 	i = 1;
 	while (args[i])
 	{
-		env_del(args[i], env);
+		if (ft_strcmp(args[i], "_") != 0)
+			env_del(args[i], env);
 		i++;
 	}
 	return (0);

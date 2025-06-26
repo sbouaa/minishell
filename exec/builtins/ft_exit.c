@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/24 22:21:37 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:37:19 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ void	ft_exit(char **args)
 	ft_putendl_fd("exit", 1);
 	s = args[1];
 	if (!s || !*s)
+	{
 		(gc_malloc(0, FREE), g_malloc(0, FREE), close_all(-2, 1), exit(0));
+	}
 	i = 0;
 	if (s[i] == '+' || s[i] == '-')
 		i++;

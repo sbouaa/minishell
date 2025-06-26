@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/25 00:22:13 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 01:44:48 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 		exit(1);
 	signal(SIGQUIT, SIG_DFL);
 	execve(path, cmd->args, env_arr);
-	ft_printf("minishell: %s: command not found\n", cmd->args[0]);
-	exit(127);
+	if (errno == ENOEXEC)
+		shell_do(cmd->args[0], env_arr);
+	exit(check_file(cmd->args[0]));
 	return (0);
 }
 
@@ -91,22 +92,25 @@ int	ft_exec(t_command *cmd, t_env **env)
 	return (multi_pipes(cmd, env));
 }
 
-int	ft_begin_exec(t_command *cmds, t_env *env)
+int	ft_begin_exec(t_command *cmds, t_env **env)
 {
 	int	in;
 	int	out;
-	int	exit_status = 0;
+	int	exit_status;
 
 	if (!cmds)
 		return (0);
+	exit_status = 0;
 	in = dup(0);
 	out = dup(1);
+	close_all(in, 0);
+	close_all(out, 0);
 	if (in == -1 || out == -1)
 		return (ft_printf("minishell: "), perror("dup"), 1);
-	exit_status = ft_exec(cmds, &env);
-	dup2(in, STDIN_FILENO);
-	dup2(out, STDOUT_FILENO);
-	close(in);
-	close(out);
+	exit_status = ft_exec(cmds, env);
+	if (dup2(in, STDIN_FILENO) < 0 || dup2(out, STDOUT_FILENO) < 0)
+		return (perror("minishell: dup2"), 1);
+	close (in);
+	close (out);
 	return (exit_status);
 }

@@ -36,7 +36,7 @@ int main(int ac, char **av, char **env)
         return (1);
     datas = init_data_exec(NULL, env);
     data.env = datas->env;
-    t_env *current_env = data.env;
+    //t_env *current_env = data.env;
     while (1)
     {
         data.prompt = readline("\033[1;32mminishell > \033[0m");
@@ -52,8 +52,8 @@ int main(int ac, char **av, char **env)
             {
                 expand(&data);
                 commands = parse_tokens(&data);
-                data.exit_status = ft_begin_exec(commands, current_env);
-                current_env = data.env;
+                data.exit_status = ft_begin_exec(commands, &data.env);
+                //current_env = data.env;
                 //print_parsed_commands(commands);
                 g_malloc(0, FREE);
             }

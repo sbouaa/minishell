@@ -6,26 +6,31 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/24 20:04:54 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 01:45:24 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	close_all(int	fd, int	flag)
+void	close_all(int fd, int flag)
 {
 	static int	fd_arr[1024];
 	static int	count;
-	int i;
+	int			i;
 
 	i = 0;
 	if (flag == 0)
 		fd_arr[count++] = fd;
 	else if (flag == 1)
 	{
-		while (i <= count)
+		while (i < count)
+		{
+			close(0);
+			close(1);
+			close(2);
 			close(fd_arr[i++]);
-		count = 0;			
+		}
+		count = 0;
 	}
 }
 

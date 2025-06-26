@@ -6,13 +6,13 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:10:38 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/24 17:53:20 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:37:45 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	init_pipe(t_pipe	*p, t_command	*cmd)
+int	init_pipe(t_pipe *p, t_command *cmd)
 {
 	p->cmd_size = ft_cmd_size(cmd);
 	p->pids = g_malloc(sizeof(pid_t) * p->cmd_size, MALLOC);
@@ -88,10 +88,7 @@ int	exec_cmd(char *path, char **env, t_command *cmd)
 		signal(SIGQUIT, SIG_DFL);
 		execve(path, cmd->args, env);
 		if (errno == ENOEXEC)
-		{
-			char *sh[] = {"/bin/sh", cmd->args[0], NULL};
-			execve("/bin/sh", sh, env);
-		}
+			shell_do(cmd->args[0], env);
 		exit(check_file(cmd->args[0]));
 	}
 	if (pid > 0)

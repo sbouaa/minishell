@@ -6,6 +6,7 @@ char	*quote_append_substr(t_data *data, char *res,
 	int		len;
 	char	*sub;
 	char	*temp;
+	data = NULL;
 
 	len = end - start;
 	sub = ft_substr(str, start, len);

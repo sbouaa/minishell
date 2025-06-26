@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:58:57 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/24 18:15:18 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:38:04 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ char	*ft_strdup_s(const char	*s1)
 	char	*p;
 
 	if (!s1)
-		return NULL;
-	p = gc_malloc(ft_strlen(s1) + 1, MALLOC);
-	if (!p)
 		return (NULL);
+	p = gc_malloc(ft_strlen(s1) + 1, MALLOC);
 	i = -1;
 	while (s1[++i])
 		p[i] = s1[i];

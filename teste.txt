@@ -199,3 +199,42 @@ mini exit code = 2
 bash exit code = 0
 mini error = ( numeric argument required)
 bash error = ()
+----------------------------------------------------------------------
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<FiesKa>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+minishell > ls >| cat
+Syntax error: expected filename after redirection
+---
+minishell > export a="ls -la"
+minishell > $a
+minishell: ls -la: command not found
+---
+minishell > export a="ls" c d e f="MESSI"
+Command:
+  Arg[0]: export
+  Arg[1]: a=ls
+  Arg[2]: c
+  Arg[3]: d
+  Arg[4]: e
+  Arg[5]: f=MESSI
+minishell > $a
+minishell: �!s:: command not found
+Command:
+  Arg[0]: �!s:
+---
+minishell >  > a > b > c < messi > 1 >  2 > 3 > messi
+minishell: command not found
+minishell > 
+SHOULD OPEN a b c and when he faild dosn't open the last redirections
+---
+minishell > ls | cat -e | > messi
+minishell: command not found
+---
+minishell > exit | exit
+exit
+SHOULD NOT PRINT exit
+---
+minishell > > 2
+minishell: command not found
+---
+./minishell | ./minishell
+---

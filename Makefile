@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I/usr/local/opt/readline/include #-g3 -fsanitize=address 
+CFLAGS = -Wall -Wextra -Werror -I/usr/local/opt/readline/include #-g3 -fsanitize=leak
 
 #CFLAGS = -I/usr/local/opt/readline/include -g
 

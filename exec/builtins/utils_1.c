@@ -6,22 +6,21 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:08:36 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:37:32 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/27 10:46:31 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_dd	*init_data_exec(t_dd *data, char **envp)
+t_env	*init_data_exec(char **envp)
 {
-	data = gc_malloc(sizeof(t_dd), MALLOC);
-	if (!data)
-		return (NULL);
+	t_env	*env;
+
 	if (!envp[0])
-		data->env = def_env();
+		env = def_env();
 	else
-		data->env = init_env(envp);
-	return (data);
+		env = init_env(envp);
+	return (env);
 }
 
 t_env	*ft_search_env(char *key, t_env *env)

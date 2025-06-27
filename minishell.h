@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:43:42 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/27 10:48:51 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void						echo(char **args);
 void						ft_putstr_fd(char *s, int fd);
 void						ft_env(t_env *env);
 int							pwd(t_env *env);
-int							cd(char **args, t_env *env);
+int							cd(char **args, t_env **env);
 void						ft_exit(char **args);
 int							ft_unset(char **args, t_env **env);
 t_env						*init_env(char **envp);
@@ -192,7 +192,7 @@ int							get_type(char *var);
 int							is_valid(char *key);
 int							var_in_env(char *key, char *var, int type,
 								t_env *env);
-t_dd						*init_data_exec(t_dd *data, char **envp);
+t_env						*init_data_exec(char **envp);
 int							ft_export_no_args(t_env *env);
 t_env						*copy_env(t_env *env);
 void						ft_sort_env(t_env *env);

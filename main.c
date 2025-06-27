@@ -28,15 +28,12 @@ int main(int ac, char **av, char **env)
     (void)av;
     t_data data;
     t_command *commands;
-    t_dd *datas;
 
-    //if (!isatty(0))
-    //    return (1);
+    if (!isatty(0))
+        return (1);
     if (init_data(&data) != 0)
         return (1);
-    datas = init_data_exec(NULL, env);
-    data.env = datas->env;
-    //t_env *current_env = data.env;
+    data.env = init_data_exec(env);
     while (1)
     {
         data.prompt = readline("\033[1;32mminishell > \033[0m");
@@ -53,7 +50,6 @@ int main(int ac, char **av, char **env)
                 expand(&data);
                 commands = parse_tokens(&data);
                 data.exit_status = ft_begin_exec(commands, &data.env);
-                //current_env = data.env;
                 //print_parsed_commands(commands);
                 g_malloc(0, FREE);
             }

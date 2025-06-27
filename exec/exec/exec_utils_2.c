@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 01:45:24 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/27 10:50:29 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,7 @@ void	close_all(int fd, int flag)
 	else if (flag == 1)
 	{
 		while (i < count)
-		{
-			close(0);
-			close(1);
-			close(2);
 			close(fd_arr[i++]);
-		}
 		count = 0;
 	}
 }
@@ -55,7 +50,7 @@ int	exec_builtin(t_command *cmd, t_env **env)
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return (pwd(*env));
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
-		return (cd(cmd->args, *env));
+		return (cd(cmd->args, env));
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return (ft_exit(cmd->args), 1);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)

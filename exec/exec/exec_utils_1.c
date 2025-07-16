@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 20:51:22 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:37:41 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/14 18:13:04 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,14 @@ char	*get_path(char *cmd, t_env **env)
 
 int	check_file(char *name)
 {
-	int	fd;
+	struct stat fs;
 
 	if (ft_strchr(name, '/'))
 	{
-		fd = open(name, __O_DIRECTORY);
-		if (fd != -1)
+		if (stat(name, &fs) == 0 && S_ISDIR(fs.st_mode))
 		{
 			ft_printf("minishell: %s: Is a directory\n", name);
-			return (close(fd), 126);
+			return (126);
 		}
 		if (access(name, F_OK) != 0)
 			return (ft_printf("minishell: %s: No such file or directory\n",

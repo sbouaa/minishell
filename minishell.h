@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/27 10:48:51 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/14 18:13:48 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <string.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+#include <sys/stat.h>
 # include <unistd.h>
 
 # define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

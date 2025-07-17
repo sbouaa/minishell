@@ -1,0 +1,14 @@
+  
+Makefile
+Readme.txt
+amsaq
+exec
+garbage_collector
+init_data.o
+lexer
+main.c
+main.o
+minishell
+minishell.h
+parsing
+teste.txt

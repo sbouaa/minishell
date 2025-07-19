@@ -20,7 +20,7 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	if (!cmd || !cmd->args)
 		(ft_printf("minishell: command not found\n"), exit(127));
 	if (!*cmd->args[0])
-		exit(0);
+		(ft_printf("minishell: command not found\n"), exit(127));
 	if (setup_redirections(cmd) != 0)
 		exit(1);
 	if (is_builtin(cmd->args[0]))
@@ -47,7 +47,7 @@ int	execute_single(t_command *cmd, t_env **env)
 	if (!cmd || !cmd->args)
 		return (ft_printf("minishell: command not found\n"), 127);
 	if (!*cmd->args[0])
-		return (0);
+		return (ft_printf("minishell: command not found\n"), 127);
 	if (setup_redirections(cmd) != 0)
 		return (1);
 	if (is_builtin(cmd->args[0]))

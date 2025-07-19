@@ -5,7 +5,7 @@ static void	init_command_args(t_data *data, t_command *cmd, char *value)
 	char	**args = NULL;
 
 	data = 0;
-	if (!cmd || !value)
+	if (!cmd || value == NULL)
 		return ;
 	args = g_malloc(sizeof(char *) * 2, MALLOC);
 	if (!args)
@@ -25,7 +25,7 @@ static int	handle_word_token(t_data *data, t_command **current_cmd, t_command **
 	if (!*current_cmd)
 	{
 		*current_cmd = parse_command(data, head, *current_cmd);
-		if (*current_cmd && current->value)
+		if (*current_cmd && current->value != NULL)
 			init_command_args(data, *current_cmd, current->value);
 	}
 	else
@@ -193,7 +193,7 @@ void	add_argument(t_data *data, t_command *cmd, char *value)
 	char	**new_args;
 
 	data = 0;
-	if (!cmd || !value)
+	if (!cmd || value == NULL)
 		return ;
 	arg_count = count_arguments(cmd->args);
 	new_args = g_malloc(sizeof(char *) * (arg_count + 2), MALLOC);

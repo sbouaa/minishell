@@ -1,7 +1,10 @@
 {
     "files.associations": {
-        "*.ejs": "html",
-        "garbage.C": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
+        "array": "c",
+        "iterator": "c",
+        "string": "c",
+        "string_view": "c",
+        "vector": "c",
+        "sstream": "c"
+    }
 }

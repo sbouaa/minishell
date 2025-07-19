@@ -1,28 +1,97 @@
 #include "minishell.h"
 
-int	main(void)
+void	print_parsed_commands(t_command *cmd)
 {
-	t_data	data;
+    t_redirection	*redir;
 
-	if (init_data(&data) != 0)
-		return (1);
+    while (cmd)
+    {
+        printf("Command:\n");
+        for (int i = 0; cmd->args && cmd->args[i]; i++)
+            printf("  Arg[%d]: %s\n", i, cmd->args[i]);
+        redir = cmd->redirects;
+        while (redir)
+        {
+            printf("  Redirection:\n");
+            printf("    Type: %d\n", redir->type);
+            printf("    File: %s\n", redir->file);
+            printf("    FD: %d\n", redir->fd);
+            redir = redir->next;
+        }
+        cmd = cmd->next;
+    }
+}
 
-	while (1)
-	{
-		data.prompt = readline("minishell$ ");
-		if (!data.prompt)
-			break ;
-		if (data.prompt[0] != '\0')
-		{
-			add_history(data.prompt);
-			if (lexer(&data) == 0 && check_syntax_errors(&data) == 0)
-			{
-				expand(&data);
-				print_token_list(&data);
-			}
-		}
-		free(data.prompt);
-	}
-	gc_free_all(&data.gc);
-	return (0);
+void	print_tokens(t_token *token)
+{
+    int	i = 0;
+
+    while (token)
+    {
+        printf("Token[%d]:\n", i);
+        printf("  Type      : %d\n", token->type);
+        printf("  Value     : %s\n", token->value);
+        printf("  Ambiguous : %d\n", token->ambiguous);
+        token = token->next;
+        i++;
+    }
+}
+
+void	handle_prompt(t_data *data, t_env *env)
+{
+    data->prompt = readline("minishell > ");
+    if (!data->prompt)
+    {
+        free(data->prompt);
+        return ;
+    }
+    if (data->prompt[0] != '\0')
+    {
+        add_history(data->prompt);
+        lexer(data);
+        if (check_syntax_errors(data))
+        {
+            data->token_list = NULL;
+            return;
+        }
+        data->prompt = expand(data->prompt, env);
+        lexer(data);
+    }
+}
+
+void	execute_commands(t_data *data)
+{
+    t_command *commands;
+
+    commands = parse_tokens(data);
+    data->exit_status = ft_begin_exec(commands, &data->env);
+}
+
+int main(int ac, char **av, char **env)
+{
+    (void)ac;
+    (void)av;
+    t_data data;
+
+    if (!isatty(0))
+        return (1);
+
+    if (init_data(&data) != 0)
+    {
+        fprintf(stderr, "Error: Failed to initialize data.\n");
+        return (1);
+    }
+    data.env = init_data_exec(env);
+    while (1)
+    {
+        handle_prompt(&data, data.env);
+        if (data.prompt && data.prompt[0] != '\0')
+        {
+            data.token_list = quote_remove(&data);
+            execute_commands(&data);
+        }
+    }
+    gc_malloc(0, FREE);
+    g_malloc(0, FREE);
+    return (0);
 }

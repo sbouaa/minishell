@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/14 18:13:48 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/17 21:26:27 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ typedef struct s_redirection
 	struct s_redirection	*next;
 }							t_redirection;
 
-// Command structure
 typedef struct s_command
 {
 	char					**args;
@@ -138,6 +137,7 @@ typedef struct s_expand
 	int						i;
 	int						in_single;
 	int						in_double;
+	int						to_expand;
 	char					*str;
 	char					*result;
 	char					*expand;
@@ -216,14 +216,12 @@ int							handle_child(t_command *cmd, t_pipe *p,
 int							setup_redirections(t_command *cmd);
 int							init_pipe(t_pipe *p, t_command *cmd);
 int							execute_child_cmd(t_command *cmd, t_env **env);
-//
 int							multi_pipes(t_command *cmd, t_env **env);
 int							execute_single(t_command *cmd, t_env **env);
 int							check_file(char *name);
 void						close_all(int fd, int flag);
 void						shell_do(char *arg, char **env);
 
-/* Core Functions */
 int							init_data(t_data *data);
 int							is_token(char c);
 int							is_space(int c);
@@ -231,24 +229,21 @@ int							is_quote(int c);
 int							ft_isalnum(int c);
 int							skip_spaces(char *line, int *i);
 
-/* Token Management */
 void						add_node_to_back(t_data *data, t_token_type type,
 								const char *value);
 void						print_token_list(t_data *data);
 char						*get_token_type_string(t_token_type type);
 
-/* Lexer Functions */
 int							lexer(t_data *data);
 
-/* Handler Lexer Functions */
 void						handle_redirections(t_data *data, char *line,
 								int *i);
 void						handle_token(t_data *data, char *line, int *i);
 int							check_quote_syntax(char *line, int start, int end);
 int							handle_word(t_data *data, char *line, int *i);
-void						expand(t_data *data);
+// void						expand(t_data *data);
 int							check_syntax_errors(t_data *data);
-char						*quote_remove(t_data *data, char *str);
+t_token	*quote_remove(t_data *data);
 t_command					*parse_tokens(t_data *data);
 t_command					*parse_tokens(t_data *data);
 t_command					*parse_command(t_data *data, t_command **head,
@@ -260,4 +255,6 @@ t_command					*parse_pipe(t_data *data,
 void						ft_bzero(void *s, size_t n);
 void						add_argument(t_data *data, t_command *cmd,
 								char *value);
+char	*expand(char *prompt, t_env *env);
+void expand_redirections(t_token *token, t_env *env);
 #endif

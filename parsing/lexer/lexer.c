@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:26:11 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/17 17:54:49 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/17 20:53:14 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ int	lexer(t_data *data)
 {
 	int i;
 	char *line;
-//	int had_space;
-
+	
 	if (!data || !data->prompt)
 		return (1);
 	i = 0;
@@ -33,5 +32,6 @@ int	lexer(t_data *data)
 		else if (handle_word(data, line, &i))
 			return (1);
 	}
+	expand_redirections(data->token_list, data->env);
 	return (0);
 }

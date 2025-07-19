@@ -232,7 +232,6 @@ static t_redirection	*create_redirection(t_data *data, t_token *current)
 	ft_bzero(new_redir, sizeof(t_redirection));
 	new_redir->type = current->type;
 	new_redir->file = ft_strdup(current->next->value);
-//	new_redir->fd = open_redirection_file(new_redir);
 	return (new_redir);
 }
 

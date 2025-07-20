@@ -1,23 +1,49 @@
 NAME = minishell
+
 CC = cc
-CFLAGS = -I/usr/local/opt/readline/include
+
+CFLAGS = -Wall -Wextra -Werror -I/usr/local/opt/readline/include #-g3 -fsanitize=leak
+
+#CFLAGS = -I/usr/local/opt/readline/include -g
+
 LDFLAGS = -L/usr/local/opt/readline/lib -lreadline
 
-SRCS = main.c init_data.c garbage_collector/garbage.c lexer/lexer.c lexer/utils.c \
-       lexer/handler.c lexer/utils_2.c lexer/syntax_error.c \
-       expanding/expand.c expanding/expand_utils.c expanding/expand_quotes.c
+HEADER = minishell.h
+
+HEADER2 = exec/libft/libft.h
+
+LIBFT = exec/libft/libft.a
+
+SRCS =  exec/builtins/ft_echo.c exec/builtins/ft_env.c exec/builtins/ft_unset.c exec/builtins/ft_pwd.c exec/builtins/ft_cd.c \
+		exec/builtins/ft_export.c exec/builtins/ft_exit.c exec/builtins/utils.c exec/builtins/utils_1.c exec/builtins/ft_export_utils.c \
+		exec/gc/g_collector.c exec/gc/gc_c.c exec/builtins/ft_export_utils_2.c \
+		parsing/init_data.c exec/exec/exec.c exec/exec/exec_utils_1.c exec/exec/exec_utils_2.c exec/exec/exec_utils_3.c \
+		exec/exec/exec_utils_4.c exec/exec/exec_utils_5.c \
+		parsing/lexer/lexer.c parsing/lexer/utils.c main.c \
+		parsing/lexer/utils_2.c parsing/lexer/utils_3.c parsing/lexer/handler_lexer.c parsing/expanding/expand.c \
+		parsing/expanding/remove_quotes.c parsing/syntax_error/syntax_error.c parsing/parse/parsing.c \
+
 
 OBJS = $(SRCS:.c=.o)
 
-all: $(NAME)
+all : $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LDFLAGS) -fsanitize=address
+$(NAME) : $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
-clean:
-	rm -rf $(OBJS)
+$(LIBFT) :
+	make all -C exec/libft/
 
-fclean: clean
-	rm -rf $(NAME)
+%.o : %.c $(HEADER) $(HEADER2)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-re: fclean all
+clean :
+	make clean -C exec/libft/
+	$(RM) $(OBJS)
+
+fclean :
+	make fclean -C exec/libft/
+	$(RM) $(NAME)
+	$(RM) $(OBJS)
+
+re : fclean all

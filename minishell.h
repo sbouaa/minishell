@@ -191,6 +191,7 @@ void						pr_error(char *var);
 char						*get_key_and_value(char *var, int type);
 int							get_type(char *var);
 int							is_valid(char *key);
+int							is_valid_export_arg(const char *arg);
 int							var_in_env(char *key, char *var, int type,
 								t_env *env);
 t_env						*init_data_exec(char **envp);

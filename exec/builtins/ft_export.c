@@ -100,15 +100,24 @@ int	ft_export_no_args(t_env *env)
 int	ft_export(char **args, t_env	*env)
 {
 	int	i;
+	int	ret_status;
 
 	i = 1;
-	if (!args[1] || !*args[1])
+	ret_status = 0;
+	if (!args[1])
 		return (ft_export_no_args(env), 0);
 	while (args[i])
 	{
-		if (export_var(args[i], env) != 0)
-			return (1);
+		if (is_valid_export_arg(args[i]))
+			export_var(args[i], env);
+		else
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+            ft_putstr_fd(args[i], 2);
+            ft_putstr_fd("': not a valid identifier\n", 2);
+			ret_status = 1;
+		}
 		i++;
 	}
-	return (0);
+	return (ret_status);
 }

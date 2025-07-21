@@ -46,8 +46,6 @@ int	execute_single(t_command *cmd, t_env **env)
 
 	if (!cmd || !cmd->args)
 		return (ft_printf("minishell: command not found\n"), 127);
-	if (cmd->args[1] && !cmd->args[1][0])
-		return (ft_printf("minishell: command not found\n"), 127);
 	if (setup_redirections(cmd) != 0)
 		return (1);
 	if (is_builtin(cmd->args[0]))

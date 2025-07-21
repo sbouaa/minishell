@@ -32,6 +32,5 @@ int	lexer(t_data *data)
 		else if (handle_word(data, line, &i))
 			return (1);
 	}
-	expand_redirections(data->token_list, data->env);
 	return (0);
 }

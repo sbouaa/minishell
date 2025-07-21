@@ -48,7 +48,11 @@ void	handle_prompt(t_data *data, t_env *env)
     if (data->prompt[0] != '\0')
     {
         add_history(data->prompt);
-        lexer(data);
+        if (lexer(data))
+        {
+            data->token_list = NULL;
+            return;
+        }
         if (check_syntax_errors(data))
         {
             data->token_list = NULL;
@@ -56,6 +60,9 @@ void	handle_prompt(t_data *data, t_env *env)
         }
         data->prompt = expand(data->prompt, env);
         lexer(data);
+        expand_redirections(data->token_list, data->env);
+        print_tokens(data->token_list);
+        
     }
 }
 
@@ -65,6 +72,7 @@ void	execute_commands(t_data *data)
 
     commands = parse_tokens(data);
     data->exit_status = ft_begin_exec(commands, &data->env);
+    print_parsed_commands(commands);
 }
 
 int main(int ac, char **av, char **env)

@@ -96,3 +96,19 @@ void	pr_error(char *var)
 {
 	ft_printf("minishell: export: `%s' : not a valid identifier\n", var);
 }
+
+// New validation function for the raw export argument
+int	is_valid_export_arg(const char *arg)
+{
+    int i = 0;
+
+    if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+        return (0);
+    while (arg[i] && arg[i] != '=')
+    {
+        if (!ft_isalnum(arg[i]) && arg[i] != '_')
+            return (0);
+        i++;
+    }
+    return (1);
+}

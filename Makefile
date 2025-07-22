@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I/usr/local/opt/readline/include #-g3 -fsanitize=leak
+CFLAGS =  -I/usr/local/opt/readline/include #-g3 -fsanitize=leak -Wall -Wextra -Werror
 
 #CFLAGS = -I/usr/local/opt/readline/include -g
 
@@ -20,8 +20,10 @@ SRCS =  exec/builtins/ft_echo.c exec/builtins/ft_env.c exec/builtins/ft_unset.c 
 		parsing/init_data.c exec/exec/exec.c exec/exec/exec_utils_1.c exec/exec/exec_utils_2.c exec/exec/exec_utils_3.c \
 		exec/exec/exec_utils_4.c exec/exec/exec_utils_5.c \
 		parsing/lexer/lexer.c parsing/lexer/utils.c main.c \
-		parsing/lexer/utils_2.c parsing/lexer/utils_3.c parsing/lexer/handler_lexer.c parsing/expanding/expand.c \
-		parsing/expanding/remove_quotes.c parsing/syntax_error/syntax_error.c parsing/parse/parsing.c \
+		parsing/lexer/utils_2.c parsing/lexer/handler_lexer.c parsing/expanding/expand.c \
+		parsing/expanding/remove_quotes.c parsing/expanding/expand_utils.c parsing/syntax_error/syntax_error.c \
+		parsing/parse/parse_tokens.c parsing/parse/token_handlers.c parsing/parse/error_handling.c \
+		parsing/parse/command_management.c parsing/parse/arguments.c parsing/parse/redirection.c parsing/parse/utils.c \
 
 
 OBJS = $(SRCS:.c=.o)

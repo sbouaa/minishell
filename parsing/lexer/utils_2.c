@@ -1,72 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_2.c                                          :+:      :+:    :+:   */
+/*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 15:26:14 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/17 17:52:24 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/03 15:30:22 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 06:36:53 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	is_token(char c)
+int	ft_isalnum(int c)
 {
-	return (c == '|' || c == '<' || c == '>');
-}
-
-int	is_space(int c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
-		|| c == '\r');
-}
-
-int	is_quote(int c)
-{
-	return (c == '\'' || c == '\"');
-}
-
-int	skip_spaces(char *line, int *i)
-{
-	while (line[*i] && is_space(line[*i]))
-		(*i)++;
+	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a'
+			&& c <= 'z') || c == '_')
+		return (1);
 	return (0);
 }
 
-char	*get_token_type_string(t_token_type type)
+t_token	*create_token(t_token_type type, const char *value)
 {
-	 char	*type_strings[] = {"PIPE", "IN_REDIRECT", "OUT_REDIRECT",
-			"HEREDOC", "APPEND", "WORD"};
+	t_token	*token;
 
-	if (type >= 0)
-		return (type_strings[type]);
-	return ("UNKNOWN");
+	token = g_malloc(sizeof(t_token), MALLOC);
+	token->type = type;
+	if (value)
+		token->value = ft_strdup(value);
+	else
+		token->value = NULL;
+	token->next = NULL;
+	token->prev = NULL;
+	return (token);
 }
 
-void	print_token_list(t_data *data)
+void	add_node_to_back(t_data *data, t_token_type type, const char *value)
 {
-	t_token *current;
-	int i;
+	t_token	*new_token;
+	t_token	*current;
 
-	if (!data || !data->token_list)
+	new_token = create_token(type, value);
+	if (!new_token)
+		return ;
+	if (data->token_list == NULL)
 	{
-		printf("No tokens to display\n");
+		data->token_list = new_token;
+		new_token->prev = NULL;
 		return ;
 	}
-
-	i = 0;
 	current = data->token_list;
-	printf("\nToken List:\n");
-	printf("----------------------------------------\n");
-	while (current)
-	{
-		printf("Token %d:\n", i++);
-		printf("  Type: %s\n", get_token_type_string(current->type));
-		printf("  Value: |%s|\n", current->value ? current->value : "NULL");
-		printf("  Ambiguos %d:\n", current->ambiguous);
-		printf("----------------------------------------\n");
+	while (current->next != NULL)
 		current = current->next;
-	}
+	current->next = new_token;
+	new_token->prev = current;
 }

@@ -1,0 +1,4 @@
+>>"" or >> a or > a get treated as command not appending
+cd a with a 000 can't exit from it using cd .. 
+export a= should be added to env as an empty var 
+export a+=ls should be aded to the old value 

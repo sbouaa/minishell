@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/20 00:35:30 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/27 21:34:53 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ static int	cd_exec(char **args, t_env **env, char *cwd, int nf)
 	int	ret;
 
 	nf = 0;
-	if (!*args[1])
-		return (0);
-	if (!args[1] || args[1][0] == '~')
+	if (!args[1])
 		ret = cd_home(cwd, env);
 	else if (chdir(args[1]) == -1)
 	{

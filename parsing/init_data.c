@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_data.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/22 06:39:51 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 06:39:57 by amsaq            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	init_data(t_data *data)
@@ -8,6 +20,7 @@ int	init_data(t_data *data)
 	data->token_list = NULL;
 	data->syntax_error = 0;
 	data->gc.head = NULL;
+	data->exit_status = 0;
 	data->commands = NULL;
 	return (0);
 }

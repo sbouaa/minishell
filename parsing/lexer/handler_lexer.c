@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handler_lexer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 15:26:08 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/23 23:02:18 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/07/22 06:29:37 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 08:18:52 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	handle_redirections(t_data *data, char *line, int *i)
 		(*i)++;
 	}
 }
+
 void	handle_token(t_data *data, char *line, int *i)
 {
 	if (line[*i] == '|')
@@ -75,6 +76,14 @@ int	check_quote_syntax(char *line, int start, int end)
 	return (in_quote);
 }
 
+static int	handle_error_and_cleanup(t_data *data)
+{
+	data->syntax_error = 1;
+	data->exit_status = 258;
+	ft_printf("Syntax error: unclosed quote\n");
+	return (1);
+}
+
 int	handle_word(t_data *data, char *line, int *i)
 {
 	int		start;
@@ -94,10 +103,7 @@ int	handle_word(t_data *data, char *line, int *i)
 		(*i)++;
 	}
 	if (check_quote_syntax(line, start, *i))
-	{
-		data->syntax_error = 1;
-		return (printf("Syntax error: unclosed quote\n"), 1);
-	}
+		return (handle_error_and_cleanup(data));
 	if (start == *i)
 		return (0);
 	content = ft_substr(line, start, *i - start);

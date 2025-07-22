@@ -1,41 +1,5 @@
 #include "minishell.h"
 
-void	print_parsed_commands(t_command *cmd)
-{
-    t_redirection	*redir;
-
-    while (cmd)
-    {
-        printf("Command:\n");
-        for (int i = 0; cmd->args && cmd->args[i]; i++)
-            printf("  Arg[%d]: %s\n", i, cmd->args[i]);
-        redir = cmd->redirects;
-        while (redir)
-        {
-            printf("  Redirection:\n");
-            printf("    Type: %d\n", redir->type);
-            printf("    File: %s\n", redir->file);
-            printf("    FD: %d\n", redir->fd);
-            redir = redir->next;
-        }
-        cmd = cmd->next;
-    }
-}
-
-void	print_tokens(t_token *token)
-{
-    int	i = 0;
-
-    while (token)
-    {
-        printf("Token[%d]:\n", i);
-        printf("  Type      : %d\n", token->type);
-        printf("  Value     : %s\n", token->value);
-        printf("  Ambiguous : %d\n", token->ambiguous);
-        token = token->next;
-        i++;
-    }
-}
 
 void	handle_prompt(t_data *data, t_env *env)
 {
@@ -61,7 +25,6 @@ void	handle_prompt(t_data *data, t_env *env)
         data->prompt = expand(data->prompt, env);
         lexer(data);
         expand_redirections(data->token_list, data->env);
-        print_tokens(data->token_list);
         
     }
 }
@@ -72,7 +35,6 @@ void	execute_commands(t_data *data)
 
     commands = parse_tokens(data);
     data->exit_status = ft_begin_exec(commands, &data->env);
-    print_parsed_commands(commands);
 }
 
 int main(int ac, char **av, char **env)

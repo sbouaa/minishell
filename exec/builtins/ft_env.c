@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/27 14:05:48 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/22 19:36:09 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	ft_env(t_env *env)
 {
 	while (env)
 	{
-		if (env->value[0])
+		if (env->value)
 			printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}

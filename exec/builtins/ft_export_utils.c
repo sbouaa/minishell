@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:35:41 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:37:24 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/22 19:47:56 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ char	*get_key_and_value(char *var, int type)
 {
 	char	*pos;
 
+	if (!var || var[0] == '=')
+		return (NULL);
 	if (type)
 	{
 		pos = ft_strchr(var, '=');
@@ -94,21 +96,7 @@ int	get_type(char *var)
 
 void	pr_error(char *var)
 {
-	ft_printf("minishell: export: `%s' : not a valid identifier\n", var);
-}
-
-// New validation function for the raw export argument
-int	is_valid_export_arg(const char *arg)
-{
-    int i = 0;
-
-    if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
-        return (0);
-    while (arg[i] && arg[i] != '=')
-    {
-        if (!ft_isalnum(arg[i]) && arg[i] != '_')
-            return (0);
-        i++;
-    }
-    return (1);
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(var, 2);
+	ft_putstr_fd("' : not a valid identifier\n", 2);
 }

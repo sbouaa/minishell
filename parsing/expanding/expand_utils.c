@@ -39,6 +39,7 @@ char	*handle_var_expansion(char *str, int *i, t_env *env)
 	char	*var;
 	char	*value;
 	int		start;
+	int		is_cmd;
 
 	if (!str[*i + 1] || (!ft_isalnum(str[*i + 1]) && str[*i + 1] != '_'))
 		return (NULL);
@@ -50,6 +51,9 @@ char	*handle_var_expansion(char *str, int *i, t_env *env)
 	value = ft_getenv(var, env);
 	if (!value)
 		return (ft_strdup(""));
+	is_cmd = (str[0] == '$' && !ft_strchr(str, '='));
+	if (is_cmd)
+		return (ft_strdup(value)); 
 	return (ft_strdup(value));
 }
 
@@ -65,6 +69,8 @@ int	is_redirect(char *s, int i)
 void	process_dollar(t_expand *exp, t_env *env, t_data *data)
 {
 	char	*exit_status;
+	char	*expanded;
+	int		is_cmd;
 
 	if (exp->str[exp->i + 1] == '$')
 	{
@@ -87,7 +93,16 @@ void	process_dollar(t_expand *exp, t_env *env, t_data *data)
 	exp->expand = handle_var_expansion(exp->str, &exp->i, env);
 	if (exp->expand)
 	{
-		exp->result = ft_strjoin(exp->result, exp->expand);
+		is_cmd = (exp->str[0] == '$' && !ft_strchr(exp->str, '='));
+		if (is_cmd)
+		{
+			exp->result = ft_strjoin(exp->result, exp->expand);
+		}
+		else
+		{
+			expanded = ft_strjoin("$", exp->str + exp->i - ft_strlen(exp->expand));
+			exp->result = ft_strjoin(exp->result, expanded);
+		}
 		return ;
 	}
 	process_char(exp);

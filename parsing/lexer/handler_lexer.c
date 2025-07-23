@@ -84,14 +84,31 @@ static int	handle_error_and_cleanup(t_data *data)
 	return (1);
 }
 
+static int	is_export_command(t_data *data)
+{
+	t_token	*last;
+
+	last = data->token_list;
+	if (!last)
+		return (0);
+	while (last->next)
+		last = last->next;
+	return (last && ft_strcmp(last->value, "export") == 0);
+}
+
 int	handle_word(t_data *data, char *line, int *i)
 {
 	int		start;
 	char	current_quote;
 	char	*content;
+	int		is_export;
+	int		has_dollar;
 
 	start = *i;
 	current_quote = '\0';
+	is_export = is_export_command(data);
+	has_dollar = (line[*i] == '$');
+
 	while (line[*i])
 	{
 		if (!current_quote && is_quote(line[*i]))
@@ -99,7 +116,15 @@ int	handle_word(t_data *data, char *line, int *i)
 		else if (current_quote && line[*i] == current_quote)
 			current_quote = '\0';
 		else if (!current_quote && (is_space(line[*i]) || is_token(line[*i])))
-			break ;
+		{
+			if (is_export && has_dollar)
+			{
+				// For export with $var, keep going until space or =
+				if (line[*i] != ' ' && line[*i] != '=')
+					continue;
+			}
+			break;
+		}
 		(*i)++;
 	}
 	if (check_quote_syntax(line, start, *i))

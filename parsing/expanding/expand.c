@@ -66,23 +66,43 @@ void	expand_redirections(t_token *token, t_env *env, t_data *data)
 	}
 }
 
+static int	is_export_var(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	if (!str[i])
+		return (0);
+	i++;
+	return (str[i] == '$');
+}
+
 char	*expand(char *prompt, t_env *env, t_data *data)
 {
 	t_expand	exp;
+	int		is_export;
 
 	exp.i = 0;
 	exp.in_single = 0;
 	exp.in_double = 0;
 	exp.str = (char *)prompt;
 	exp.result = ft_strdup("");
+	is_export = is_export_var(prompt);
+
 	while (exp.str[exp.i])
 	{
 		update_quote_states(exp.str[exp.i], &exp.in_single, &exp.in_double);
-		if (!exp.in_single && !exp.in_double
-			&& is_redirect(exp.str, exp.i))
+		if (!exp.in_single && !exp.in_double && is_redirect(exp.str, exp.i))
 			skip_redirect_part(&exp);
 		else if (exp.str[exp.i] == '$' && !exp.in_single)
-			process_dollar(&exp, env, data);
+		{
+			if (is_export)
+				process_char(&exp);  // Keep the $ for export
+			else
+				process_dollar(&exp, env, data);
+		}
 		else
 			process_char(&exp);
 	}

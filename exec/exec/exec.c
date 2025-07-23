@@ -17,12 +17,12 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	char	*path;
 	char	**env_arr;
 
+	if (setup_redirections(cmd) != 0)
+		exit(1);
 	if (!cmd || !cmd->args)
 		(ft_printf("minishell: command not found\n"), exit(127));
 	if (!*cmd->args[0])
-		(ft_printf("minishell: command not found\n"), exit(127));
-	if (setup_redirections(cmd) != 0)
-		exit(1);
+		(exit(127));
 	if (is_builtin(cmd->args[0]))
 		exit(exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);
@@ -44,10 +44,12 @@ int	execute_single(t_command *cmd, t_env **env)
 	char	*path;
 	char	**env_arr;
 
-	if (!cmd || !cmd->args)
-		return (ft_printf("minishell: command not found\n"), 127);
 	if (setup_redirections(cmd) != 0)
 		return (1);
+	if (!cmd)
+		return (ft_printf("minishell: command not found\n"), 127);
+	if (!cmd->args)
+		return (127);
 	if (is_builtin(cmd->args[0]))
 		return (exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);

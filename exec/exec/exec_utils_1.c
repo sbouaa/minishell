@@ -112,6 +112,6 @@ int	check_file(char *name)
 			return (ft_printf("minishell: %s: Permission denied\n", name), 126);
 	}
 	else
-		return (ft_printf("minishell: %s: command not found\n", name), 127);
+		return (ft_printf("minishell: %s :command not found\n", name), 127);
 	return (0);
 }

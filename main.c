@@ -1,4 +1,6 @@
+#include "exec/libft/libft.h"
 #include "minishell.h"
+#include <signal.h>
 
 void	print_parsed_commands(t_command *cmd)
 {
@@ -43,7 +45,7 @@ int	handle_prompt(t_data *data, t_env *env)
     if (!data->prompt)
     {
         free(data->prompt);
-        return (0);
+        return (33);
     }
     if (data->prompt[0] != '\0')
     {
@@ -62,6 +64,8 @@ int	handle_prompt(t_data *data, t_env *env)
         lexer(data);
         expand_redirections(data->token_list, data->env, data);
     }
+    else
+        return (2);
     return (0);
 }
 
@@ -74,26 +78,55 @@ void	execute_commands(t_data *data)
         data->exit_status = ft_begin_exec(commands, &data->env);
 }
 
+void    set_e_status(int set, int status, t_data *data)
+{
+    static t_data  *ptr;
+
+    if (set)
+        ptr = data;
+    ptr->exit_status = status;
+}
+
+void    signal_handle(int sig)
+{
+    if (sig == SIGQUIT)
+        return ;
+    ft_putstr_fd("\n", 1);
+    rl_replace_line("", 1);
+    rl_on_new_line();
+    rl_redisplay();
+    set_e_status(0, 130, NULL);
+    sig = 1;
+}
+
+
+
 int main(int ac, char **av, char **env)
 {
     (void)ac;
     (void)av;
     t_data data;
+    int status;
 
     if (!isatty(0))
         return (1);
-
+    set_e_status(1, 0, &data);
+    signal(SIGINT, &signal_handle);
+    signal(SIGQUIT , &signal_handle);
     if (init_data(&data) != 0)
         return (1);
     data.env = init_data_exec(env);
     while (1)
     {
-        if (handle_prompt(&data, data.env))
+        status = handle_prompt(&data, data.env);
+        if (status == 1 || status == 2)
             continue;
+        else if (status == 33)
+            break ;
         data.token_list = quote_remove(&data);
         execute_commands(&data);
     }
     gc_malloc(0, FREE);
     g_malloc(0, FREE);
-    return (0);
+    return (data.exit_status);
 }

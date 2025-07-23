@@ -99,7 +99,7 @@ char	*expand(char *prompt, t_env *env, t_data *data)
 		else if (exp.str[exp.i] == '$' && !exp.in_single)
 		{
 			if (is_export)
-				process_char(&exp);  // Keep the $ for export
+				process_char(&exp);
 			else
 				process_dollar(&exp, env, data);
 		}

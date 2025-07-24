@@ -1,0 +1,74 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 08:18:52 by amsaq            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+static void	add_redirection_to_list(t_command *cmd, t_redirection *new_redir)
+{
+	t_redirection	*last_redir;
+
+	if (!cmd->redirects)
+		cmd->redirects = new_redir;
+	else
+	{
+		last_redir = cmd->redirects;
+		while (last_redir->next)
+			last_redir = last_redir->next;
+		last_redir->next = new_redir;
+	}
+}
+
+static t_redirection	*create_redirection(t_data *data, t_token *current)
+{
+	t_redirection	*new_redir;
+
+	data = 0;
+	new_redir = g_malloc(sizeof(t_redirection), MALLOC);
+	if (!new_redir)
+		return (NULL);
+	ft_bzero(new_redir, sizeof(t_redirection));
+	new_redir->type = current->type;
+	new_redir->file = ft_strdup(current->next->value);
+	return (new_redir);
+}
+
+static int	check_redirection_errors(t_token *current, t_data *data)
+{
+	if (!current || !current->next)
+	{
+		ft_printf("minishell: syntax error near unexpected token `newline'\n");
+		data->exit_status = 258;
+		return (1);
+	}
+	if (current->next->ambiguous)
+	{
+		ft_printf("minishell: %s: ambiguous redirect\n", current->next->value);
+		data->exit_status = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	parse_redirection(t_data *data, t_command *cmd, t_token *current)
+{
+	t_redirection	*new_redir;
+
+	if (!cmd)
+		return (0);
+	if (check_redirection_errors(current, data))
+		return (1);
+	new_redir = create_redirection(data, current);
+	if (!new_redir)
+		return (0);
+	add_redirection_to_list(cmd, new_redir);
+	return (0);
+}

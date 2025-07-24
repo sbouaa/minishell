@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_substr_s.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 01:12:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:38:18 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/21 17:00:00 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/26 15:38:16 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr_s(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
 	char	*p;
@@ -25,7 +25,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (ft_strdup(""));
 	if (len > s_len - start)
 		len = s_len - start;
-	p = g_malloc((len + 1) * sizeof(char), MALLOC);
+	p = gc_malloc((len + 1) * sizeof(char), MALLOC);
 	if (p == NULL)
 		return (NULL);
 	i = 0;

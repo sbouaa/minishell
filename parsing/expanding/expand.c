@@ -1,130 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/22 00:00:00 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 06:50:38 by amsaq            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-void	update_quote_states(char c, int *in_single, int *in_double)
+static void	skip_redirect_spaces(t_expand *exp)
 {
-	if (!*in_single && !*in_double && c == '\'')
-		*in_single = 1;
-	else if (!*in_single && !*in_double && c == '"')
-		*in_double = 1;
-	else if (*in_single && c == '\'')
-		*in_single = 0;
-	else if (*in_double && c == '"')
-		*in_double = 0;
+	while (exp->str[exp->i] == ' ' || exp->str[exp->i] == '\t')
+		process_char(exp);
+	while (exp->str[exp->i] && exp->str[exp->i] != ' '
+		&& exp->str[exp->i] != '\t')
+		process_char(exp);
 }
 
-char	*handle_variable_expansion(t_data *data, char *str, int *i,
-		int in_single, int in_dbquote, t_token *token)
+static void	skip_redirect_part(t_expand *exp)
 {
-	char	*var_name;
-	char	*value;
-	int		start;
+	int		r_len;
+	char	*redir;
 
-	if (!in_single && str[*i] == '$')
-	{
-		(*i)++;
-		start = *i;
-		while (str[*i] && ft_isalnum(str[*i]))
-			(*i)++;
-		var_name = ft_substr_m(data, str, start, *i - start);
-		value = getenv(var_name);
-		if (!value)
-		{
-			if (token->prev != NULL && (token->prev->type == IN_REDIRECT
-					|| token->prev->type == OUT_REDIRECT
-					|| token->prev->type == APPEND))
-				token->ambiguous = true;
-			value = "";
-		}
-		return (ft_strdup(value));
-	}
-	return (NULL);
+	exp->to_expand = 0;
+	r_len = is_redirect(exp->str, exp->i);
+	if (r_len == 6)
+		exp->to_expand = 1;
+	redir = ft_substr(exp->str, exp->i, r_len);
+	exp->result = ft_strjoin(exp->result, redir);
+	exp->i += r_len;
+	skip_redirect_spaces(exp);
 }
 
-/*char	*ft_strchr(const char *str, int c)
+static void	expand_file_redirect(t_token *token, t_env *env, t_data *data)
 {
-	int				i;
-	unsigned char	ch;
+	char	*expanded;
 
-	if (!str)
-		return (NULL);
-	i = 0;
-	ch = c;
-	if (ch == '\0')
+	if (token->value && ft_strchr(token->value, '$'))
 	{
-		i = ft_strlen(str);
-		return ((char *)str + i++);
-	}
-	while (str[i])
-	{
-		if (str[i] == ch)
-			return ((char *)str + i);
-		i++;
-	}
-	return (NULL);
-}*/
-
-void	ft_check_expand(t_data *data, t_token *token)
-{
-	int		i;
-	int		in_single_quote;
-	int		in_double_quote;
-	char	*str;
-	char	*result;
-	char	*expand;
-	char	*temp;
-
-	i = 0;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	str = token->value;
-	result = ft_strdup("");
-	while (str && str[i])
-	{
-		update_quote_states(str[i], &in_single_quote, &in_double_quote);
-		if (str[i] == '$' && !in_single_quote)
-		{
-			if (str[i + 1] && ft_strchr("\'\"", str[i + 1]) && !in_double_quote)
-			{
-				i++;
-				continue ;
-			}
-			else if (str[i + 1] && ft_isalnum(str[i + 1]))
-			{
-				expand = handle_variable_expansion(data, str, &i,
-						in_single_quote, in_double_quote, token);
-				if (expand)
-				{
-					temp = ft_strjoin(result, expand);
-					result = temp;
-					continue ;
-				}
-			}
-			else if (str[i + 1] && !ft_isalnum(str[i + 1]))
-			{
-				temp = ft_strjoin(result, ft_substr_m(data, &str[i], 0, 1));
-				result = temp;
-			}
-		}
+		expanded = expand(token->value, env, data);
+		if (!expanded || expanded[0] == '\0' || ft_strchr(expanded, ' '))
+			token->ambiguous = true;
 		else
-		{
-			temp = ft_strjoin(result, ft_substr_m(data, &str[i], 0, 1));
-			result = temp;
-		}
-		i++;
+			token->value = expanded;
 	}
-	token->value = result;
 }
 
-void	expand(t_data *data)
+void	expand_redirections(t_token *token, t_env *env, t_data *data)
 {
-	t_token	*current;
-
-	current = data->token_list;
-	while (current)
+	while (token)
 	{
-		current->ambiguous = false;
-		ft_check_expand(data, current);
-		current->value = quote_remove(data, current->value);
-		current = current->next;
+		if ((token->type == IN_REDIRECT || token->type == OUT_REDIRECT
+				|| token->type == APPEND) && token->next)
+		{
+			token = token->next;
+			expand_file_redirect(token, env, data);
+		}
+		else if (token->type == HEREDOC && token->next)
+			token = token->next;
+		token = token->next;
 	}
+}
+
+char	*expand(char *prompt, t_env *env, t_data *data)
+{
+	t_expand	exp;
+
+	exp.i = 0;
+	exp.in_single = 0;
+	exp.in_double = 0;
+	exp.str = (char *)prompt;
+	exp.result = ft_strdup("");
+	while (exp.str[exp.i])
+	{
+		update_quote_states(exp.str[exp.i], &exp.in_single, &exp.in_double);
+		if (!exp.in_single && !exp.in_double
+			&& is_redirect(exp.str, exp.i))
+			skip_redirect_part(&exp);
+		else if (exp.str[exp.i] == '$' && !exp.in_single)
+			process_dollar(&exp, env, data);
+		else
+			process_char(&exp);
+	}
+	return (exp.result);
 }

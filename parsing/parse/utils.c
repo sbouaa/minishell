@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 00:48:27 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/27 09:39:14 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/07/22 08:09:39 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 08:12:02 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../minishell.h"
 
-char	*ft_strdup(const char	*s1)
+void	ft_bzero(void *s, size_t n)
 {
-	int		i;
-	char	*p;
+	unsigned char	*ptr;
+	size_t			i;
 
-	if (!s1)
-		return (NULL);
-	p = g_malloc(ft_strlen(s1) + 1, MALLOC);
-	i = -1;
-	while (s1[++i])
-		p[i] = s1[i];
-	p[i] = '\0';
-	return (p);
+	if (!s)
+		return ;
+	ptr = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+		ptr[i++] = 0;
 }

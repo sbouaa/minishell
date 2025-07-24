@@ -1,39 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 01:12:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:38:18 by sbouaa           ###   ########.fr       */
+/*   Created: 2024/11/23 04:08:49 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/16 22:39:22 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	ft_putnbr(int n, int *length)
 {
-	size_t	i;
-	char	*p;
-	size_t	s_len;
-
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	if (start >= s_len)
-		return (ft_strdup(""));
-	if (len > s_len - start)
-		len = s_len - start;
-	p = g_malloc((len + 1) * sizeof(char), MALLOC);
-	if (p == NULL)
-		return (NULL);
-	i = 0;
-	while (i < len)
+	if (n == -2147483648)
+		ft_putstr("-2147483648", length);
+	else
 	{
-		p[i] = s[start + i];
-		i++;
+		if (n < 0)
+		{
+			ft_putchar('-', length);
+			n *= -1;
+		}
+		if (n >= 10)
+			ft_putnbr((n / 10), length);
+		ft_putchar((n % 10) + '0', length);
 	}
-	p[len] = '\0';
-	return (p);
 }

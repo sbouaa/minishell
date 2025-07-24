@@ -6,34 +6,62 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 17:46:21 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/26 15:37:19 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
-void	ft_exit(char	*nb)
+void	check_code(char **args)
 {
-	int	i;
-	int	code;
+	long long	code;
+	char		*s;
+
+	s = args[1];
+	code = ft_atoi_s(s);
+	if (code == MAX_L || code == -MAX_L)
+	{
+		ft_printf("minishell: exit: %s: numeric argument required\n", s);
+		gc_malloc(0, FREE);
+		g_malloc(0, FREE);
+		close_all(-2, 1);
+		exit(2);
+	}
+	if (args[2])
+	{
+		ft_printf("minishell: exit: too many arguments\n");
+		return ;
+	}
+	gc_malloc(0, FREE);
+	g_malloc(0, FREE);
+	close_all(-2, 1);
+	exit((unsigned char)code);
+}
+
+void	ft_exit(char **args)
+{
+	char	*s;
+	int		i;
 
 	ft_putendl_fd("exit", 1);
-	if (!nb || !*nb)
-		exit(0);
-	i = 0;
-	code = ft_atoi(nb);
-	while (nb[i])
+	s = args[1];
+	if (!s || !*s)
 	{
-		if (!ft_isdigit(nb[i]))
+		(gc_malloc(0, FREE), g_malloc(0, FREE), close_all(-2, 1), exit(0));
+	}
+	i = 0;
+	if (s[i] == '+' || s[i] == '-')
+		i++;
+	while (s[i])
+	{
+		if (!ft_isdigit(s[i]))
 		{
-			g_malloc(0, FREE);
-			ft_putstr_fd("exit: ", 2);
-			ft_putstr_fd(nb, 2);
-			(ft_putendl_fd(": numeric argument required", 2), exit(2));
+			ft_printf("minishell: exit: %s: numeric argument required\n", s);
+			(gc_malloc(0, FREE), g_malloc(0, FREE), close_all(-2, 1));
+			exit(2);
 		}
 		i++;
 	}
-	g_malloc(0, FREE);
-	exit(code);
+	check_code(args);
+	return ;
 }

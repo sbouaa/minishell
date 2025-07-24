@@ -6,10 +6,9 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/12 17:46:32 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/22 19:48:09 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../minishell.h"
 
@@ -18,20 +17,14 @@ int	to_env(char *key, char *var, int type, t_env *env)
 	char	*value;
 
 	if (type == 3)
-	{
-		add_env_var(key, "", &env);
-		return (0);
-	}
+		return (add_env_var(key, NULL, &env), 0);
 	else
 	{
 		value = get_key_and_value(var, 1);
 		if (!value)
 			return (1);
 		else
-		{
-			add_env_var(key, value, &env);
-			return (1);
-		}
+			return (add_env_var(key, value, &env), 1);
 	}
 	return (0);
 }
@@ -74,7 +67,7 @@ int	export_var(char *var, t_env *env)
 	if (!key)
 		return (1);
 	if (is_valid(key))
-		return (pr_error(var), 1);
+		return (1);
 	type = get_type(var);
 	ex_env = ft_search_env(key, env);
 	if (ex_env)
@@ -86,32 +79,42 @@ int	export_var(char *var, t_env *env)
 
 int	ft_export_no_args(t_env *env)
 {
-	while (env)
+	t_env	*copy;
+
+	copy = copy_env(env);
+	ft_sort_env(copy);
+	while (copy)
 	{
-		if (ft_strcmp(env->key, "_") != 0)
+		if (ft_strcmp(copy->key, "_") != 0)
 		{
-			if (!env->value[0])
-				printf("declare -x %s\n", env->key);
+			if (!copy->value)
+				(ft_putstr_fd("declare -x ", 1), ft_putendl_fd(copy->key, 1));
 			else
-				printf("declare -x %s=\"%s\"\n", env->key, env->value);
+			{
+				(ft_putstr_fd("declare -x ", 1), ft_putstr_fd(copy->key, 1));
+				(ft_putstr_fd("=\"", 1), ft_putstr_fd(copy->value, 1));
+				ft_putendl_fd("\"", 1);
+			}
 		}
-		env = env->next;
+		copy = copy->next;
 	}
 	return (0);
 }
 
-int	ft_export(char **args, t_dd *data)
+int	ft_export(char **args, t_env	*env)
 {
 	int	i;
+	int	ret_status;
 
 	i = 1;
+	ret_status = 0;
 	if (!args[1])
-		return (ft_export_no_args(data->env), 0);
+		return (ft_export_no_args(env), 0);
 	while (args[i])
 	{
-		if (export_var(args[i], data->env) != 0)
-			return (1);
+		if (export_var(args[i], env) != 0)
+			pr_error(args[i]);
 		i++;
 	}
-	return (0);
+	return (ret_status);
 }

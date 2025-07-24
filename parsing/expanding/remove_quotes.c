@@ -1,30 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   remove_quotes.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/22 08:07:39 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 08:07:40 by amsaq            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
-char	*quote_append_substr(t_data *data, char *res,
-		char *str, int start, int end)
+static char	*quote_append_substr(t_data *data, char *res,
+		t_quote_ctx *ctx, char *str)
 {
 	int		len;
 	char	*sub;
 	char	*temp;
 
-	len = end - start;
-	sub = ft_substr_m(data, str, start, len);
+	data = NULL;
+	len = ctx->i - ctx->start;
+	sub = ft_substr(str, ctx->start, len);
 	temp = ft_strjoin(res, sub);
 	return (temp);
 }
 
-char	*quote_append_char(t_data *data, char *res, char c)
+static char	*quote_append_char(t_data *data, char *res, char c)
 {
 	char	tmp[2];
 	char	*temp;
 
+	data = NULL;
 	tmp[0] = c;
 	tmp[1] = '\0';
 	temp = ft_strjoin(res, tmp);
 	return (temp);
 }
 
-void	quote_handle(t_data *data, char *str, t_quote_ctx *ctx)
+static void	quote_handle(t_data *data, char *str, t_quote_ctx *ctx)
 {
 	if (!ctx->in_single && !ctx->in_double)
 	{
@@ -33,8 +47,7 @@ void	quote_handle(t_data *data, char *str, t_quote_ctx *ctx)
 	}
 	else
 	{
-		ctx->result = quote_append_substr(data, ctx->result,
-				str, ctx->start, ctx->i);
+		ctx->result = quote_append_substr(data, ctx->result, ctx, str);
 		ctx->was_quoted = 0;
 	}
 	if (str[ctx->i] == '\'' && !ctx->in_double)
@@ -43,7 +56,7 @@ void	quote_handle(t_data *data, char *str, t_quote_ctx *ctx)
 		ctx->in_double = !ctx->in_double;
 }
 
-char	*quote_remove(t_data *data, char *str)
+static char	*quote_remove_single(t_data *data, char *str)
 {
 	t_quote_ctx	ctx;
 
@@ -63,7 +76,20 @@ char	*quote_remove(t_data *data, char *str)
 		ctx.i++;
 	}
 	if (ctx.in_single || ctx.in_double)
-		ctx.result = quote_append_substr(data, ctx.result,
-				str, ctx.start, ctx.i);
+		ctx.result = quote_append_substr(data, ctx.result, &ctx, str);
 	return (ctx.result);
+}
+
+t_token	*quote_remove(t_data *data)
+{
+	t_token	*current;
+
+	current = data->token_list;
+	while (current)
+	{
+		if (current->value)
+			current->value = quote_remove_single(data, current->value);
+		current = current->next;
+	}
+	return (data->token_list);
 }

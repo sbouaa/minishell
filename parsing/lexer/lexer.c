@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 15:26:11 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/11 18:38:54 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/07/22 06:32:23 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 06:33:04 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 int	lexer(t_data *data)
 {
-	int i;
-	char *line;
-	int had_space;
+	int		i;
+	char	*line;
 
 	if (!data || !data->prompt)
 		return (1);

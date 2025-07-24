@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_atoi_s.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 01:12:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:38:18 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/22 20:04:32 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/24 21:54:33 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+long long	ft_atoi_s(char	*str)
 {
-	size_t	i;
-	char	*p;
-	size_t	s_len;
+	int		i;
+	long	res;
+	long	store;
+	int		signe;
 
-	if (!s)
-		return (NULL);
-	s_len = ft_strlen(s);
-	if (start >= s_len)
-		return (ft_strdup(""));
-	if (len > s_len - start)
-		len = s_len - start;
-	p = g_malloc((len + 1) * sizeof(char), MALLOC);
-	if (p == NULL)
-		return (NULL);
 	i = 0;
-	while (i < len)
+	res = 0;
+	store = 0;
+	signe = 1;
+	while (ft_isspace(str[i]))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		p[i] = s[start + i];
+		if (str[i] == '-')
+			signe = -1;
 		i++;
 	}
-	p[len] = '\0';
-	return (p);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		store = res;
+		res = res * 10 + (str[i++] - '0');
+		if (store != (res / 10))
+			return (MAX_L);
+	}
+	return (res * signe);
 }

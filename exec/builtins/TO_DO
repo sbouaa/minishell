@@ -1,2 +1,0 @@
-cd : chmod 000 
-export : sort before print

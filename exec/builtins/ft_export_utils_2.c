@@ -1,28 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_export_utils_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 00:48:27 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/27 09:39:14 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/13 11:12:56 by sbouaa            #+#    #+#             */
+/*   Updated: 2025/06/27 21:34:34 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../minishell.h"
 
-char	*ft_strdup(const char	*s1)
+void	ft_sort_env(t_env *env)
 {
-	int		i;
-	char	*p;
+	t_env	*ptr;
+	char	*tmp;
 
-	if (!s1)
-		return (NULL);
-	p = g_malloc(ft_strlen(s1) + 1, MALLOC);
-	i = -1;
-	while (s1[++i])
-		p[i] = s1[i];
-	p[i] = '\0';
-	return (p);
+	while (env->next)
+	{
+		ptr = env;
+		while (ptr->next)
+		{
+			if (ft_strcmp(ptr->key, ptr->next->key) > 0)
+			{
+				tmp = ptr->key;
+				ptr->key = ptr->next->key;
+				ptr->next->key = tmp;
+				tmp = ptr->value;
+				ptr->value = ptr->next->value;
+				ptr->next->value = tmp;
+			}
+			ptr = ptr->next;
+		}
+		env = env->next;
+	}
 }

@@ -59,7 +59,11 @@ int	handle_prompt(t_data *data, t_env *env)
             return (1);
         }
         data->prompt = expand(data->prompt, env, data);
-        lexer(data);
+        if (lexer(data))
+        {
+            data->token_list = NULL;
+            return (1);
+        }
         expand_redirections(data->token_list, data->env, data);
     }
     else

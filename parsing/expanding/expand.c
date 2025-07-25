@@ -42,9 +42,13 @@ static void	expand_file_redirect(t_token *token, t_env *env, t_data *data)
 	{
 		expanded = expand(token->value, env, data);
 		if (!expanded || expanded[0] == '\0' || ft_strchr(expanded, ' '))
+		{
 			token->ambiguous = true;
+		}
 		else
+		{
 			token->value = expanded;
+		}
 	}
 }
 

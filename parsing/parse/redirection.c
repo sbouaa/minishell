@@ -31,13 +31,20 @@ static t_redirection	*create_redirection(t_data *data, t_token *current)
 {
 	t_redirection	*new_redir;
 
-	data = 0;
 	new_redir = g_malloc(sizeof(t_redirection), MALLOC);
 	if (!new_redir)
 		return (NULL);
 	ft_bzero(new_redir, sizeof(t_redirection));
 	new_redir->type = current->type;
 	new_redir->file = ft_strdup(current->next->value);
+	if (new_redir->type == HEREDOC)
+	{
+		if (handle_heredoc(data, new_redir) != 0)
+		{
+			data->exit_status = 1;
+			return (NULL);
+		}
+	}
 	return (new_redir);
 }
 
@@ -68,7 +75,7 @@ int	parse_redirection(t_data *data, t_command *cmd, t_token *current)
 		return (1);
 	new_redir = create_redirection(data, current);
 	if (!new_redir)
-		return (0);
+		return (1);
 	add_redirection_to_list(cmd, new_redir);
 	return (0);
 }

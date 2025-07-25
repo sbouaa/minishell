@@ -261,6 +261,7 @@ t_command					*parse_pipe(t_data *data,
 								t_command *current_command);
 void						add_argument(t_data *data, t_command *cmd,
 								char *value);
+int							handle_heredoc(t_data *data, t_redirection *redir);
 
 /* Token handling functions */
 int							handle_word_token(t_parse_context *ctx,

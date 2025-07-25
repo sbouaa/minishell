@@ -24,6 +24,7 @@ SRCS =  exec/builtins/ft_echo.c exec/builtins/ft_env.c exec/builtins/ft_unset.c 
 		parsing/expanding/remove_quotes.c parsing/expanding/expand_utils.c parsing/syntax_error/syntax_error.c \
 		parsing/parse/parse_tokens.c parsing/parse/token_handlers.c parsing/parse/error_handling.c \
 		parsing/parse/command_management.c parsing/parse/arguments.c parsing/parse/redirection.c parsing/parse/utils.c \
+		parsing/parse/heredoc.c \
 
 
 OBJS = $(SRCS:.c=.o)

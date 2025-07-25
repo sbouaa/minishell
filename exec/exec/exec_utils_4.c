@@ -59,20 +59,30 @@ static int	red(t_redirection *redir)
 		return (out_red(redir->file));
 	else if (redir->type == APPEND)
 		return (app_red(redir->file));
+	else if (redir->type == HEREDOC)
+		return (in_red(redir->file));
 	return (0);
 }
 
 int	setup_redirections(t_command *cmd)
 {
 	t_redirection	*redir;
+	int				ret;
 
 	if (!cmd)
 		return (1);
 	redir = cmd->redirects;
 	while (redir)
 	{
-		if (red(redir))
+		ret = red(redir);
+		if (ret)
+		{
+			if (redir->type == HEREDOC)
+				unlink(redir->file);
 			return (1);
+		}
+		if (redir->type == HEREDOC)
+			unlink(redir->file);
 		redir = redir->next;
 	}
 	return (0);

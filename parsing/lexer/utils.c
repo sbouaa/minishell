@@ -1,51 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 15:26:17 by amsaq             #+#    #+#             */
-/*   Updated: 2025/06/26 15:38:40 by sbouaa           ###   ########.fr       */
+/*   Created: 2025/06/03 15:26:14 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/22 06:35:05 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_token	*create_token(t_token_type type, const char *value)
+int	is_token(char c)
 {
-	t_token	*token;
-
-	token = g_malloc(sizeof(t_token), MALLOC);
-	token->type = type;
-	if (value)
-		token->value = ft_strdup(value);
-	else
-		token->value = NULL;
-	token->next = NULL;
-	token->prev = NULL;
-	return (token);
+	return (c == '|' || c == '<' || c == '>');
 }
 
-void	add_node_to_back(t_data *data, t_token_type type, const char *value)
+int	is_space(int c)
 {
-	t_token	*new_token;
-	t_token	*current;
-
-	new_token = create_token(type, value);
-	if (!new_token)
-		return ;
-	if (data->token_list == NULL)
-	{
-		data->token_list = new_token;
-		new_token->prev = NULL;
-		return ;
-	}
-	current = data->token_list;
-	while (current->next != NULL)
-		current = current->next;
-	current->next = new_token;
-	new_token->prev = current;
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r');
 }
 
+int	is_quote(int c)
+{
+	return (c == '\'' || c == '\"');
+}
 
+int	skip_spaces(char *line, int *i)
+{
+	while (line[*i] && is_space(line[*i]))
+		(*i)++;
+	return (0);
+}
+
+char	*get_token_type_string(t_token_type type)
+{
+	char	*type_strings[6];
+
+	type_strings[0] = "PIPE";
+	type_strings[1] = "IN_REDIRECT";
+	type_strings[2] = "OUT_REDIRECT";
+	type_strings[3] = "HEREDOC";
+	type_strings[4] = "APPEND";
+	type_strings[5] = "WORD";
+	if (type >= 0 && type < 6)
+		return (type_strings[type]);
+	return ("UNKNOWN");
+}

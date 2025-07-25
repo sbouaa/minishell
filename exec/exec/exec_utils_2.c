@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/18 01:24:51 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/06/27 10:50:29 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,7 @@ int	handle_child(t_command *cmd, t_pipe *p, t_env **env)
 		return (ft_printf("minishell: "), perror("pipe"), 1);
 	p->pids[p->i] = fork();
 	if (p->pids[p->i] == -1)
-	{
-		while (waitpid(-1, NULL, 0) > 0)
-		;
 		return (ft_printf("minishell: "), perror("fork"), 1);
-	}
 	if (p->pids[p->i] == 0)
 		execute_child_process(cmd, p->prev_fd, p->fd, env);
 	return (0);

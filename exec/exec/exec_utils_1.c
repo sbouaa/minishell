@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 20:51:22 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/19 23:21:49 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/14 18:13:04 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	check_file(char *name)
 	{
 		if (stat(name, &fs) == 0 && S_ISDIR(fs.st_mode))
 		{
-			ft_printf("minishell: %s: is a directory\n", name);
+			ft_printf("minishell: %s: Is a directory\n", name);
 			return (126);
 		}
 		if (access(name, F_OK) != 0)
@@ -112,6 +112,6 @@ int	check_file(char *name)
 			return (ft_printf("minishell: %s: Permission denied\n", name), 126);
 	}
 	else
-		return (ft_printf("minishell: %s: command not found\n", name), 127);
+		return (ft_printf("minishell: %s :command not found\n", name), 127);
 	return (0);
 }

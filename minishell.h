@@ -79,6 +79,7 @@ typedef struct s_token
 	struct s_token			*next;
 	struct s_token			*prev;
 	bool					ambiguous;
+	bool					quoted;
 }							t_token;
 
 typedef struct s_redirection
@@ -108,6 +109,7 @@ typedef struct s_data
 	int						exit_status;
 	t_gc					gc;
 	t_env					*env;
+	int						heredoc_fd;
 }							t_data;
 
 typedef struct s_quote_ctx
@@ -156,6 +158,12 @@ typedef struct s_pipe
 	int						i;
 	int						status;
 }							t_pipe;
+
+typedef struct s_word_info
+{
+	int		is_export;
+	int		has_dollar;
+}	t_word_info;
 
 /* Garbage collector functions */
 t_col						*new_node_s(void *ptr);
@@ -236,7 +244,7 @@ int							ft_isalnum(int c);
 int							skip_spaces(char *line, int *i);
 
 /* Token functions */
-void						add_node_to_back(t_data *data, t_token_type type,
+t_token						*add_node_to_back(t_data *data, t_token_type type,
 								const char *value);
 void						print_token_list(t_data *data);
 char						*get_token_type_string(t_token_type type);

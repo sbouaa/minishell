@@ -32,26 +32,29 @@ t_token	*create_token(t_token_type type, const char *value)
 		token->value = NULL;
 	token->next = NULL;
 	token->prev = NULL;
+	token->ambiguous = false;
+	token->quoted = false;
 	return (token);
 }
 
-void	add_node_to_back(t_data *data, t_token_type type, const char *value)
+t_token	*add_node_to_back(t_data *data, t_token_type type, const char *value)
 {
 	t_token	*new_token;
 	t_token	*current;
 
 	new_token = create_token(type, value);
 	if (!new_token)
-		return ;
+		return (NULL);
 	if (data->token_list == NULL)
 	{
 		data->token_list = new_token;
 		new_token->prev = NULL;
-		return ;
+		return (new_token);
 	}
 	current = data->token_list;
 	while (current->next != NULL)
 		current = current->next;
 	current->next = new_token;
 	new_token->prev = current;
+	return (new_token);
 }

@@ -1,6 +1,4 @@
-#include "exec/libft/libft.h"
 #include "minishell.h"
-#include <signal.h>
 
 void	print_parsed_commands(t_command *cmd)
 {

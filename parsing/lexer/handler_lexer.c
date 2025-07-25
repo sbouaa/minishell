@@ -12,6 +12,53 @@
 
 #include "../../minishell.h"
 
+static int	process_word_char(char *line, int *i, char *current_quote,
+	t_word_info *info)
+{
+	if (!*current_quote && is_quote(line[*i]))
+		*current_quote = line[*i];
+	else if (*current_quote && line[*i] == *current_quote)
+		*current_quote = '\0';
+	else if (!*current_quote && (is_space(line[*i]) || is_token(line[*i])))
+	{
+		if (info->is_export && info->has_dollar)
+		{
+			if (line[*i] != ' ' && line[*i] != '=')
+				return (0);
+		}
+		return (1);
+	}
+	return (0);
+}
+
+static int	handle_heredoc_word(t_data *data, char *line, int *i)
+{
+	int		start;
+	char	current_quote;
+	char	*content;
+	t_token	*token;
+
+	while (line[*i] && (line[*i] == ' ' || line[*i] == '\t'))
+		(*i)++;
+	start = *i;
+	current_quote = '\0';
+	while (line[*i])
+	{
+		if (!current_quote && (line[*i] == '\'' || line[*i] == '\"'))
+			current_quote = line[*i];
+		else if (current_quote && line[*i] == current_quote)
+			current_quote = '\0';
+		else if (!current_quote && (is_space(line[*i]) || is_token(line[*i])))
+			break ;
+		(*i)++;
+	}
+	content = ft_substr(line, start, *i - start);
+	token = add_node_to_back(data, WORD, content);
+	if (token)
+		token->quoted = (ft_strchr(content, '\'') || ft_strchr(content, '\"'));
+	return (0);
+}
+
 void	handle_redirections(t_data *data, char *line, int *i)
 {
 	if (line[*i] == '>' && line[*i + 1] == '>')
@@ -23,6 +70,7 @@ void	handle_redirections(t_data *data, char *line, int *i)
 	{
 		add_node_to_back(data, HEREDOC, "<<");
 		*i += 2;
+		handle_heredoc_word(data, line, i);
 	}
 	else if (line[*i] == '>')
 	{
@@ -98,40 +146,24 @@ static int	is_export_command(t_data *data)
 
 int	handle_word(t_data *data, char *line, int *i)
 {
-	int		start;
-	char	current_quote;
-	char	*content;
-	int		is_export;
-	int		has_dollar;
+	int			start;
+	char		current_quote;
+	t_word_info	info;
 
 	start = *i;
 	current_quote = '\0';
-	is_export = is_export_command(data);
-	has_dollar = (line[*i] == '$');
-
+	info.is_export = is_export_command(data);
+	info.has_dollar = (line[*i] == '$');
 	while (line[*i])
 	{
-		if (!current_quote && is_quote(line[*i]))
-			current_quote = line[*i];
-		else if (current_quote && line[*i] == current_quote)
-			current_quote = '\0';
-		else if (!current_quote && (is_space(line[*i]) || is_token(line[*i])))
-		{
-			if (is_export && has_dollar)
-			{
-				// For export with $var, keep going until space or =
-				if (line[*i] != ' ' && line[*i] != '=')
-					continue;
-			}
-			break;
-		}
+		if (process_word_char(line, i, &current_quote, &info))
+			break ;
 		(*i)++;
 	}
 	if (check_quote_syntax(line, start, *i))
 		return (handle_error_and_cleanup(data));
 	if (start == *i)
 		return (0);
-	content = ft_substr(line, start, *i - start);
-	add_node_to_back(data, WORD, content);
+	add_node_to_back(data, WORD, ft_substr(line, start, *i - start));
 	return (0);
 }

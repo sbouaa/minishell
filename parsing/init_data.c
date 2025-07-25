@@ -22,5 +22,6 @@ int	init_data(t_data *data)
 	data->gc.head = NULL;
 	data->exit_status = 0;
 	data->commands = NULL;
+	data->heredoc_fd = -1;
 	return (0);
 }

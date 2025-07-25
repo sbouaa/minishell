@@ -28,8 +28,6 @@ static void	skip_redirect_part(t_expand *exp)
 
 	exp->to_expand = 0;
 	r_len = is_redirect(exp->str, exp->i);
-	if (r_len == 6)
-		exp->to_expand = 1;
 	redir = ft_substr(exp->str, exp->i, r_len);
 	exp->result = ft_strjoin(exp->result, redir);
 	exp->i += r_len;

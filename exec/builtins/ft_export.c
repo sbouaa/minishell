@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/22 19:48:09 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/25 16:39:36 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,17 +104,20 @@ int	ft_export_no_args(t_env *env)
 int	ft_export(char **args, t_env	*env)
 {
 	int	i;
-	int	ret_status;
+	int stat;
 
 	i = 1;
-	ret_status = 0;
+	stat = 0;
 	if (!args[1])
 		return (ft_export_no_args(env), 0);
 	while (args[i])
 	{
 		if (export_var(args[i], env) != 0)
+		{
+			stat = 1;
 			pr_error(args[i]);
+		}
 		i++;
 	}
-	return (ret_status);
+	return (stat);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/22 07:04:53 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/25 17:38:36 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,6 @@ void						pr_error(char *var);
 char						*get_key_and_value(char *var, int type);
 int							get_type(char *var);
 int							is_valid(char *key);
-int							is_valid_export_arg(const char *arg);
 int							var_in_env(char *key, char *var, int type,
 								t_env *env);
 t_env						*init_data_exec(char **envp);

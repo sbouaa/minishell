@@ -14,7 +14,6 @@
 
 static char	*expand_var_value(char *value, t_env *env)
 {
-	char	*expanded;
 	t_env	*var;
 
 	if (!value || value[0] != '$')

@@ -15,11 +15,9 @@
 static void	remove_current_command(t_command **head, t_command **current_cmd)
 {
 	t_command	*prev;
-	t_command	*to_remove;
 
 	if (!*current_cmd)
 		return ;
-	to_remove = *current_cmd;
 	if (*head == *current_cmd)
 	{
 		*head = (*current_cmd)->next;

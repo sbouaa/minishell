@@ -34,11 +34,9 @@ t_env	*def_env(void)
 
 char	*ft_getenv(char *name, t_env *env)
 {
-	int	i;
 
 	if (!name || !env)
 		return (NULL);
-	i = ft_strlen(name);
 	while (env)
 	{
 		if (ft_strcmp(env->key, name) == 0)

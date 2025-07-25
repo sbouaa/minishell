@@ -52,7 +52,10 @@ static int	process_heredoc_line(char *line, char *delimiter,
 	}
 	if (ft_strcmp(line, delimiter) == 0)
 		return (1);
-	content = is_quoted ? ft_strdup(line) : expand(line, data->env, data);
+	if (is_quoted)
+		content = ft_strdup(line);
+	else
+		content = expand(line, data->env, data);
 	ft_putendl_fd(content, data->heredoc_fd);
 	return (0);
 }
@@ -74,9 +77,9 @@ static int	write_heredoc_content(int fd, char *delimiter,
 
 int	handle_heredoc(t_data *data, t_redirection *redir)
 {
-	char	*filename;
-	int		fd;
-	t_token	*delimiter_token;
+	char		*filename;
+	int			fd;
+	t_token		*delimiter_token;
 
 	filename = create_heredoc_filename();
 	if (!filename)
@@ -87,7 +90,8 @@ int	handle_heredoc(t_data *data, t_redirection *redir)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (-1);
-	if (write_heredoc_content(fd, redir->file, data, delimiter_token->quoted) != 0)
+	if (write_heredoc_content(fd, redir->file, data,
+			delimiter_token->quoted) != 0)
 	{
 		close(fd);
 		unlink(filename);
@@ -96,4 +100,4 @@ int	handle_heredoc(t_data *data, t_redirection *redir)
 	close(fd);
 	redir->file = filename;
 	return (0);
-} 
+}

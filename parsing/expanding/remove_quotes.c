@@ -19,7 +19,7 @@ static char	*quote_append_substr(t_data *data, char *res,
 	char	*sub;
 	char	*temp;
 
-	data = NULL;
+	(void)data;
 	len = ctx->i - ctx->start;
 	sub = ft_substr(str, ctx->start, len);
 	temp = ft_strjoin(res, sub);
@@ -31,7 +31,7 @@ static char	*quote_append_char(t_data *data, char *res, char c)
 	char	tmp[2];
 	char	*temp;
 
-	data = NULL;
+	(void)data;
 	tmp[0] = c;
 	tmp[1] = '\0';
 	temp = ft_strjoin(res, tmp);

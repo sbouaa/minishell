@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:00:00 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/22 06:51:07 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/26 10:11:10 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,5 @@ char	*expand(char *prompt, t_env *env, t_data *data)
 	exp.result = ft_strdup("");
 	is_export = is_export_var(prompt);
 	expand_loop(&exp, env, data, is_export);
-	return (free(data->prompt), exp.result);
+	return (exp.result);
 }

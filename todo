@@ -1,0 +1,61 @@
+  miniiiij git:(final) ✗ env -i PATH= ./minishell
+minishell > ls
+minishell: ls :command not found
+minishell > export 
+declare -x PATH=""
+minishell > unset PATH    
+minishell > export
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==79905==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000010 (pc 0x000104d5bb89 bp 0x7ffeeaea99f0 sp 0x7ffeeaea9910 T0)
+==79905==The signal is caused by a READ memory access.
+==79905==Hint: address points to the zero page.
+    #0 0x104d5bb89 in ft_sort_env+0x49 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x100005b89)
+    #1 0x104d59661 in ft_export_no_args+0x21 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x100003661)
+    #2 0x104d598da in ft_export+0x6a (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x1000038da)
+    #3 0x104d5e4dd in exec_builtin+0x60d (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x1000084dd)
+    #4 0x104d5c9b6 in execute_single+0x136 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x1000069b6)
+    #5 0x104d5d1a7 in ft_exec+0x77 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x1000071a7)
+    #6 0x104d5d280 in ft_begin_exec+0xb0 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x100007280)
+    #7 0x104d61859 in execute_commands+0x39 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x10000b859)
+    #8 0x104d61cc5 in main+0x2e5 (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x10000bcc5)
+    #9 0x7fff6935acc8 in start+0x0 (/usr/lib/system/libdyld.dylib:x86_64+0x1acc8)
+
+==79905==Register values:
+rax = 0x0000000000000010  rbx = 0x00007ffeeaea9d40  rcx = 0x0000100000000002  rdx = 0x0000100000000000  
+rdi = 0x0000000000000000  rsi = 0x0000000000000000  rbp = 0x00007ffeeaea99f0  rsp = 0x00007ffeeaea9910  
+ r8 = 0x0000100000000000   r9 = 0x0000000000000000  r10 = 0x00007fff6949f41e  r11 = 0x0000000000000246  
+r12 = 0x0000000000000000  r13 = 0x0000000000000000  r14 = 0x0000000000000000  r15 = 0x0000000000000000  
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/mnt/homes/amsaq/miniiiij/./minishell:x86_64+0x100005b89) in ft_sort_env+0x49
+==79905==ABORTING
+[1]    79905 abort      env -i PATH= ./minishell
+--
+minishell > mkdir foo
+minishell > cd foo/
+--
+echo $? wrong exit status
+--
+minishell > touch a b
+minishell > rm -rf a
+minishell > chmod 000 b
+minishell > ls > a > b > c
+minishell: b: Permission denied
+minishell > 
+----
+minishell > echo $USER > a
+minishell > cat a
+amsaq
+minishell > cat < a < b
+minishell: b: Permission denied
+minishell > 
+
+----
+
+d
+d
+d 
+d is command not found with exit status 127
+export -- | echo $? exit status should b 0 not previous 
+
+-------

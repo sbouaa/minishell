@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/17 15:24:26 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/26 23:12:00 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 
 	if (setup_redirections(cmd) != 0)
 		exit(1);
-	if (!cmd || !cmd->args)
+	if (!cmd)
 		(ft_printf("minishell: command not found\n"), exit(127));
-	if (!*cmd->args[0])
+	if (!cmd->args[0])
 		(exit(127));
 	if (is_builtin(cmd->args[0]))
 		exit(exec_builtin(cmd, env));
@@ -31,7 +31,6 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 	env_arr = switch_env_arr(*env);
 	if (!env_arr)
 		exit(1);
-	signal(SIGQUIT, SIG_DFL);
 	execve(path, cmd->args, env_arr);
 	if (errno == ENOEXEC)
 		shell_do(cmd->args[0], env_arr);
@@ -47,9 +46,9 @@ int	execute_single(t_command *cmd, t_env **env)
 	if (setup_redirections(cmd) != 0)
 		return (1);
 	if (!cmd)
-		return (ft_printf("minishell: command not found\n"), 127);
+		return (ft_putstr_fd("minishell: command not found\n", 2), 127);
 	if (!cmd->args)
-		return (127);
+		return (0);
 	if (is_builtin(cmd->args[0]))
 		return (exec_builtin(cmd, env));
 	path = get_path(cmd->args[0], env);
@@ -103,10 +102,8 @@ int	ft_begin_exec(t_command *cmds, t_env **env)
 	exit_status = 0;
 	in = dup(0);
 	out = dup(1);
-	close_all(in, 0);
-	close_all(out, 0);
 	if (in == -1 || out == -1)
-		return (ft_printf("minishell: "), perror("dup"), 1);
+		return (ft_putstr_fd("minishell: ", 2), perror("dup"), 1);
 	exit_status = ft_exec(cmds, env);
 	if (dup2(in, STDIN_FILENO) < 0 || dup2(out, STDOUT_FILENO) < 0)
 		return (perror("minishell: dup2"), 1);

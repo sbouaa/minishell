@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 20:51:22 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/14 18:13:04 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/26 23:12:12 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*get_path(char *cmd, t_env **env)
 
 int	check_file(char *name)
 {
-	struct stat fs;
+	struct stat	fs;
 
 	if (ft_strchr(name, '/'))
 	{
@@ -112,6 +112,6 @@ int	check_file(char *name)
 			return (ft_printf("minishell: %s: Permission denied\n", name), 126);
 	}
 	else
-		return (ft_printf("minishell: %s :command not found\n", name), 127);
+		return (ft_printf("minishell: %s: command not found\n", name), 127);
 	return (0);
 }

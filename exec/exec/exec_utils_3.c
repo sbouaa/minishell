@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:10:38 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:37:45 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/26 23:36:44 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	wait_for_all_processes(pid_t *pids, int count)
 
 	i = 0;
 	last_status = 0;
+	status = 0;
 	while (i < count)
 	{
 		waitpid(pids[i], &status, 0);

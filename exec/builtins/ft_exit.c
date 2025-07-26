@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:37:19 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/25 16:41:11 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	check_code(char **args)
 		gc_malloc(0, FREE);
 		g_malloc(0, FREE);
 		close_all(-2, 1);
-		exit(2);
+		exit(255);
 	}
 	if (args[2])
 	{
@@ -58,7 +58,7 @@ void	ft_exit(char **args)
 		{
 			ft_printf("minishell: exit: %s: numeric argument required\n", s);
 			(gc_malloc(0, FREE), g_malloc(0, FREE), close_all(-2, 1));
-			exit(2);
+			exit(255);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 17:42:37 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/27 10:50:29 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/25 17:09:18 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	exec_builtin(t_command *cmd, t_env **env)
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return (ft_exit(cmd->args), 1);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-		return (ft_unset(cmd->args, env), 0);
+		return (ft_unset(cmd->args, env));
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		return (ft_export(cmd->args, *env));
 	return (1);
@@ -63,10 +63,14 @@ int	exec_builtin(t_command *cmd, t_env **env)
 int	handle_child(t_command *cmd, t_pipe *p, t_env **env)
 {
 	if (cmd->next && pipe(p->fd) == -1)
-		return (ft_printf("minishell: "), perror("pipe"), 1);
+		return (ft_putstr_fd("minishell: ", 2), perror("pipe"), 1);
 	p->pids[p->i] = fork();
 	if (p->pids[p->i] == -1)
-		return (ft_printf("minishell: "), perror("fork"), 1);
+	{
+		while (waitpid(-1, NULL, 0) > 0)
+			;
+		return (ft_putstr_fd("minishell: ", 2), perror("fork"), 1);
+	}
 	if (p->pids[p->i] == 0)
 		execute_child_process(cmd, p->prev_fd, p->fd, env);
 	return (0);

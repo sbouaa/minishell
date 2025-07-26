@@ -108,8 +108,8 @@ int main(int ac, char **av, char **env)
     t_data data;
     int status;
 
-    //if (!isatty(0))
-     //   return (1);
+    if (!isatty(0))
+        return (1);
     set_e_status(1, 0, &data);
     signal(SIGINT, &signal_handle);
     signal(SIGQUIT , &signal_handle);

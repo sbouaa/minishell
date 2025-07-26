@@ -97,7 +97,7 @@ int	handle_prompt(t_data *data, t_env *env)
 	if (lexer(data))
 		return (handle_lexer_error(data));
 	if (check_syntax_errors(data))
-		return (handle_lexer_error(data));
+	 	return (handle_lexer_error(data));
 	if (process_expansion(data, env))
 		return (1);
 	expand_redirections(data->token_list, data->env, data);
@@ -158,36 +158,9 @@ int	main(int ac, char **av, char **env)
 			break ;
 		data.token_list = quote_remove(&data);
 		execute_commands(&data);
+		close_all(-2,1);
+		g_malloc(0, FREE);
 	}
 	gc_malloc(0, FREE);
-	g_malloc(0, FREE);
 	return (data.exit_status);
 }
-
-
-
-
-// ***********************//
-
-// env -i PATH= ./minishell
-// minishell > env
-// PATH=
-// minishell > ls
-// minishell: ls :command not found
-// minishell > ls
-// minishell: ls :command not found
-// minishell > << haha   
-// > js
-// > s
-// > sd
-// > s
-// > a
-// > haha
-// minishell > 
-// minishell > cd 
-// minishell: cd: HOME not set
-// minishell > ^C 
-// minishell > ^C
-// minishell > ^C
-// minishell > ^C
-// minishell > 

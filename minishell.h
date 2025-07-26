@@ -32,6 +32,12 @@
 
 # define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                 STRUCTURES                                  */
+/*                                                                            */
+/* ************************************************************************** */
+
 typedef struct s_col
 {
 	void					*ptr;
@@ -142,13 +148,6 @@ typedef struct s_parse_context
 	int						*error_flag;
 }							t_parse_context;
 
-typedef struct s_dd
-{
-	int						exit_status;
-	t_command				*camds;
-	t_env					*env;
-}							t_dd;
-
 typedef struct s_pipe
 {
 	int						prev_fd;
@@ -161,23 +160,33 @@ typedef struct s_pipe
 
 typedef struct s_word_info
 {
-	int		is_export;
-	int		has_dollar;
-}	t_word_info;
+	int						is_export;
+	int						has_dollar;
+}							t_word_info;
 
-/* Garbage collector functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              GARBAGE COLLECTOR                              */
+/*                                                                            */
+/* ************************************************************************** */
+
 t_col						*new_node_s(void *ptr);
 t_col						*last_node_s(t_col **head);
-void						add_back_s(t_col **head, t_col *new);
+void						add_back_s(t_col **head, t_col *node);
 void						clear_all_s(t_col **head);
 void						*gc_malloc(size_t size, t_call call);
 t_col						*new_node(void *ptr);
 t_col						*last_node(t_col **head);
-void						add_back(t_col **head, t_col *new);
+void						add_back(t_col **head, t_col *node);
 void						clear_all(t_col **head);
 void						*g_malloc(size_t size, t_call call);
 
-/* Built-in commands */
+/* ************************************************************************** */
+/*                                                                            */
+/*                               BUILT-IN COMMANDS                             */
+/*                                                                            */
+/* ************************************************************************** */
+
 void						echo(char **args);
 void						ft_putstr_fd(char *s, int fd);
 void						ft_env(t_env *env);
@@ -188,13 +197,18 @@ int							ft_unset(char **args, t_env **env);
 int							ft_export(char **args, t_env *env);
 int							ft_export_no_args(t_env *env);
 
-/* Environment functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              ENVIRONMENT FUNCTIONS                           */
+/*                                                                            */
+/* ************************************************************************** */
+
 t_env						*init_env(char **envp);
 t_env						*def_env(void);
 char						*ft_getenv(char *name, t_env *env);
 t_env						*add_env_var(char *key, char *value, t_env **env);
 t_env						*ft_search_env(char *key, t_env *env);
-void						ft_lstadd_back(t_env **lst, t_env *new);
+void						ft_lstadd_back(t_env **lst, t_env *node);
 t_env						*ft_lstnew(char *key, char *value);
 t_env						*ft_lstnew_s(char *key, char *value);
 int							env_del(char *name, t_env **env);
@@ -210,7 +224,12 @@ t_env						*init_data_exec(char **envp);
 t_env						*copy_env(t_env *env);
 void						ft_sort_env(t_env *env);
 
-/* Execution functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              EXECUTION FUNCTIONS                            */
+/*                                                                            */
+/* ************************************************************************** */
+
 char						**switch_env_arr(t_env *env);
 int							ft_exec(t_command *cmds, t_env **env);
 int							ft_begin_exec(t_command *cmds, t_env **env);
@@ -235,31 +254,48 @@ int							check_file(char *name);
 void						close_all(int fd, int flag);
 void						shell_do(char *arg, char **env);
 
-/* Lexer utility functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              LEXER FUNCTIONS                                */
+/*                                                                            */
+/* ************************************************************************** */
+
 int							init_data(t_data *data);
 int							is_token(char c);
 int							is_space(int c);
 int							is_quote(int c);
 int							ft_isalnum(int c);
 int							skip_spaces(char *line, int *i);
-
-/* Token functions */
-t_token						*add_node_to_back(t_data *data, t_token_type type,
-								const char *value);
-void						print_token_list(t_data *data);
-char						*get_token_type_string(t_token_type type);
-
-/* Lexer functions */
 int							lexer(t_data *data);
 void						handle_redirections(t_data *data, char *line,
 								int *i);
 void						handle_token(t_data *data, char *line, int *i);
 int							check_quote_syntax(char *line, int start, int end);
 int							handle_word(t_data *data, char *line, int *i);
-int							check_syntax_errors(t_data *data);
+int							handle_heredoc_word(t_data *data, char *line, int *i);
+int							process_word_char(char *line, int *i,
+								char *current_quote, t_word_info *info);
+int							handle_error_and_cleanup(t_data *data);
+int							is_export_command(t_data *data);
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                              TOKEN FUNCTIONS                                */
+/*                                                                            */
+/* ************************************************************************** */
+
+t_token						*add_node_to_back(t_data *data, t_token_type type,
+								const char *value);
+void						print_token_list(t_data *data);
+char						*get_token_type_string(t_token_type type);
 t_token						*quote_remove(t_data *data);
 
-/* Parsing functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              PARSING FUNCTIONS                              */
+/*                                                                            */
+/* ************************************************************************** */
+
 t_command					*parse_tokens(t_data *data);
 t_command					*parse_command(t_data *data, t_command **head,
 								t_command *current_command);
@@ -271,7 +307,12 @@ void						add_argument(t_data *data, t_command *cmd,
 								char *value);
 int							handle_heredoc(t_data *data, t_redirection *redir);
 
-/* Token handling functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              TOKEN HANDLING                                 */
+/*                                                                            */
+/* ************************************************************************** */
+
 int							handle_word_token(t_parse_context *ctx,
 								t_token *current);
 int							handle_redirection_token(t_parse_context *ctx,
@@ -280,25 +321,60 @@ int							is_redirection_token(int type);
 t_token						*handle_redirection_parsing(t_parse_context *ctx,
 								t_token *current);
 
-/* Error handling functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              ERROR HANDLING                                 */
+/*                                                                            */
+/* ************************************************************************** */
+
 t_token						*handle_error_and_skip_to_pipe(t_command **head,
 								t_command **current_cmd, t_token *current);
 
-/* Expansion functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              EXPANSION FUNCTIONS                            */
+/*                                                                            */
+/* ************************************************************************** */
+
 char						*expand(char *prompt, t_env *env, t_data *data);
-void						expand_redirections(t_token *token, t_env *env, t_data *data);
+void						expand_redirections(t_token *token, t_env *env,
+								t_data *data);
 void						update_quote_states(char c, int *in_s, int *in_d);
 void						process_char(t_expand *exp);
 char						*handle_var_expansion(char *str, int *i,
 								t_env *env);
 int							is_redirect(char *s, int i);
-void						process_dollar(t_expand *exp, t_env *env, t_data *data);
+void						process_dollar(t_expand *exp, t_env *env,
+								t_data *data);
+int							is_export_var(char *str);
+void						handle_special_dollar(t_expand *exp);
+void						handle_quote_dollar(t_expand *exp);
+void						expand_loop(t_expand *exp, t_env *env, t_data *data,
+								int is_export);
+void						handle_exit_status(t_expand *exp, t_data *data);
+void						skip_redirect_part(t_expand *exp);
+void						skip_redirect_spaces(t_expand *exp);
 
-/* Utility functions */
+/* ************************************************************************** */
+/*                                                                            */
+/*                              SYNTAX ERROR FUNCTIONS                         */
+/*                                                                            */
+/* ************************************************************************** */
+
+int							check_syntax_errors(t_data *data);
+int							check_pipe_errors(t_token *token);
+int							check_redirection_errors(t_token *token);
+int							is_redirection(t_token *token);
+int							is_word_token(t_token *token);
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                              UTILITY FUNCTIONS                              */
+/*                                                                            */
+/* ************************************************************************** */
+
 void						ft_bzero(void *s, size_t n);
-/* quote_utils.c */
+void						execute_commands(t_data *data);
+void						rl_replace_line(const char *text, int clear_undo);
 
-t_token	*quote_remove(t_data *data);
-void	execute_commands(t_data *data);
-void	rl_replace_line(const char *text, int clear_undo);
 #endif

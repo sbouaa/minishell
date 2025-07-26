@@ -16,7 +16,7 @@ static void	init_command_args(t_data *data, t_command *cmd, char *value)
 {
 	char	**args;
 
-	data = 0;
+	(void)data;
 	if (!cmd || value == NULL)
 		return ;
 	args = g_malloc(sizeof(char *) * 2, MALLOC);

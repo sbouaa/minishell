@@ -42,7 +42,7 @@ void	add_argument(t_data *data, t_command *cmd, char *value)
 	size_t	arg_count;
 	char	**new_args;
 
-	data = 0;
+	(void)data;
 	if (!cmd || value == NULL)
 		return ;
 	arg_count = count_arguments(cmd->args);

@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/22 08:18:52 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/26 23:37:56 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static t_redirection	*create_redirection(t_data *data, t_token *current)
 	return (new_redir);
 }
 
-static int	check_redirection_errors(t_token *current, t_data *data)
+static int	check_redirection_syntax(t_token *current, t_data *data)
 {
 	if (!current || !current->next)
 	{
@@ -71,7 +71,7 @@ int	parse_redirection(t_data *data, t_command *cmd, t_token *current)
 
 	if (!cmd)
 		return (0);
-	if (check_redirection_errors(current, data))
+	if (check_redirection_syntax(current, data))
 		return (1);
 	new_redir = create_redirection(data, current);
 	if (!new_redir)

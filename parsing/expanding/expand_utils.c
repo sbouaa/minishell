@@ -6,33 +6,11 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:00:00 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/22 06:51:07 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/26 10:11:10 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void	update_quote_states(char c, int *in_s, int *in_d)
-{
-	if (!*in_s && !*in_d && c == '\'')
-		*in_s = 1;
-	else if (!*in_s && !*in_d && c == '"')
-		*in_d = 1;
-	else if (*in_s && c == '\'')
-		*in_s = 0;
-	else if (*in_d && c == '"')
-		*in_d = 0;
-}
-
-void	process_char(t_expand *exp)
-{
-	char	tmp[2];
-
-	tmp[0] = exp->str[exp->i];
-	tmp[1] = '\0';
-	exp->result = ft_strjoin(exp->result, tmp);
-	exp->i++;
-}
 
 char	*handle_var_expansion(char *str, int *i, t_env *env)
 {
@@ -53,19 +31,8 @@ char	*handle_var_expansion(char *str, int *i, t_env *env)
 	return (ft_strdup(value));
 }
 
-int	is_redirect(char *s, int i)
-{
-	if ((s[i] == '>' || s[i] == '<') && s[i + 1] == s[i])
-		return (2);
-	if (s[i] == '>' || s[i] == '<')
-		return (1);
-	return (0);
-}
-
 void	process_dollar(t_expand *exp, t_env *env, t_data *data)
 {
-	char	*exit_status;
-
 	if (exp->str[exp->i + 1] == '$')
 	{
 		exp->i += 2;
@@ -73,9 +40,7 @@ void	process_dollar(t_expand *exp, t_env *env, t_data *data)
 	}
 	if (exp->str[exp->i + 1] == '?')
 	{
-		exit_status = ft_itoa(data->exit_status);
-		exp->result = ft_strjoin(exp->result, exit_status);
-		exp->i += 2;
+		handle_exit_status(exp, data);
 		return ;
 	}
 	if (exp->str[exp->i + 1] && (exp->str[exp->i + 1] == '\''
@@ -91,4 +56,47 @@ void	process_dollar(t_expand *exp, t_env *env, t_data *data)
 		return ;
 	}
 	process_char(exp);
+}
+
+void	handle_exit_status(t_expand *exp, t_data *data)
+{
+	char	*exit_status;
+
+	exit_status = ft_itoa(data->exit_status);
+	exp->result = ft_strjoin(exp->result, exit_status);
+	exp->i += 2;
+}
+
+void	expand_loop(t_expand *exp, t_env *env, t_data *data, int is_export)
+{
+	while (exp->str[exp->i])
+	{
+		update_quote_states(exp->str[exp->i], &exp->in_single, &exp->in_double);
+		if (!exp->in_single && !exp->in_double && is_redirect(exp->str, exp->i))
+			skip_redirect_part(exp);
+		else if (exp->str[exp->i] == '$' && !exp->in_single)
+		{
+			if (is_export)
+				process_char(exp);
+			else
+				process_dollar(exp, env, data);
+		}
+		else
+			process_char(exp);
+	}
+}
+
+char	*expand(char *prompt, t_env *env, t_data *data)
+{
+	t_expand	exp;
+	int			is_export;
+
+	exp.i = 0;
+	exp.in_single = 0;
+	exp.in_double = 0;
+	exp.str = (char *)prompt;
+	exp.result = ft_strdup("");
+	is_export = is_export_var(prompt);
+	expand_loop(&exp, env, data, is_export);
+	return (exp.result);
 }

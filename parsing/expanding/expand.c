@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-static void	skip_redirect_spaces(t_expand *exp)
+void	skip_redirect_spaces(t_expand *exp)
 {
 	while (exp->str[exp->i] == ' ' || exp->str[exp->i] == '\t')
 		process_char(exp);
@@ -21,7 +21,7 @@ static void	skip_redirect_spaces(t_expand *exp)
 		process_char(exp);
 }
 
-static void	skip_redirect_part(t_expand *exp)
+void	skip_redirect_part(t_expand *exp)
 {
 	int		r_len;
 	char	*redir;
@@ -42,9 +42,13 @@ static void	expand_file_redirect(t_token *token, t_env *env, t_data *data)
 	{
 		expanded = expand(token->value, env, data);
 		if (!expanded || expanded[0] == '\0' || ft_strchr(expanded, ' '))
+		{
 			token->ambiguous = true;
+		}
 		else
+		{
 			token->value = expanded;
+		}
 	}
 }
 
@@ -58,51 +62,18 @@ void	expand_redirections(t_token *token, t_env *env, t_data *data)
 			token = token->next;
 			expand_file_redirect(token, env, data);
 		}
-		else if (token->type == HEREDOC && token->next)
-			token = token->next;
 		token = token->next;
 	}
 }
 
-static int	is_export_var(char *str)
+void	update_quote_states(char c, int *in_s, int *in_d)
 {
-	int	i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	if (!str[i])
-		return (0);
-	i++;
-	return (str[i] == '$');
-}
-
-char	*expand(char *prompt, t_env *env, t_data *data)
-{
-	t_expand	exp;
-	int		is_export;
-
-	exp.i = 0;
-	exp.in_single = 0;
-	exp.in_double = 0;
-	exp.str = (char *)prompt;
-	exp.result = ft_strdup("");
-	is_export = is_export_var(prompt);
-
-	while (exp.str[exp.i])
-	{
-		update_quote_states(exp.str[exp.i], &exp.in_single, &exp.in_double);
-		if (!exp.in_single && !exp.in_double && is_redirect(exp.str, exp.i))
-			skip_redirect_part(&exp);
-		else if (exp.str[exp.i] == '$' && !exp.in_single)
-		{
-			if (is_export)
-				process_char(&exp);
-			else
-				process_dollar(&exp, env, data);
-		}
-		else
-			process_char(&exp);
-	}
-	return (exp.result);
+	if (!*in_s && !*in_d && c == '\'')
+		*in_s = 1;
+	else if (!*in_s && !*in_d && c == '"')
+		*in_d = 1;
+	else if (*in_s && c == '\'')
+		*in_s = 0;
+	else if (*in_d && c == '"')
+		*in_d = 0;
 }

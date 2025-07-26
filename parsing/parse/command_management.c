@@ -30,7 +30,7 @@ static void	link_command_to_list(t_command **head, t_command *new_cmd)
 t_command	*parse_command(t_data *data, t_command **head,
 	t_command *current_command)
 {
-	data = 0;
+	(void)data;
 	if (!current_command)
 	{
 		current_command = g_malloc(sizeof(t_command), MALLOC);
@@ -44,7 +44,7 @@ t_command	*parse_command(t_data *data, t_command **head,
 
 t_command	*parse_pipe(t_data *data, t_command *current_command)
 {
-	data = 0;
+	(void)data;
 	if (!current_command)
 		return (NULL);
 	if (!current_command->next)

@@ -98,5 +98,5 @@ char	*expand(char *prompt, t_env *env, t_data *data)
 	exp.result = ft_strdup("");
 	is_export = is_export_var(prompt);
 	expand_loop(&exp, env, data, is_export);
-	return (exp.result);
+	return (free(data->prompt), exp.result);
 }

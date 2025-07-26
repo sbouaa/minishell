@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void static	ft_check_conversions(const char	*format, va_list args, int *length)
+static void	ft_check_conversions(const char	*format, va_list args, int *length)
 {
 	if (*format == '%')
 		ft_putchar(*format, length);

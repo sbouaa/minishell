@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/27 07:45:32 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 13:48:32 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include <unistd.h>
 
 # define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+extern volatile sig_atomic_t g_signal;
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -377,4 +379,7 @@ void						ft_bzero(void *s, size_t n);
 void						execute_commands(t_data *data);
 void						rl_replace_line(const char *text, int clear_undo);
 void						handle_export_dollar(t_expand *exp, t_env *env, t_data *data);
+
+void	setup_interactive_signals(void);
+void	sigint_handler(int sig);
 #endif

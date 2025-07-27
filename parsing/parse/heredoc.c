@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/27 07:26:38 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 14:09:55 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	process_heredoc_line(char *line, char *delimiter,
 
 	if (!line)
 	{
-		ft_printf("minishell: warning: here-document at EOF\n");
+		ft_printf("minishell: warning: here-document at EOF (wanted `%s`)\n", delimiter);
 		return (1);
 	}
 	if (ft_strcmp(line, delimiter) == 0)
@@ -57,14 +57,41 @@ static int	process_heredoc_line(char *line, char *delimiter,
 	else
 		content = expand(line, data->env, data);
 	ft_putendl_fd(content, data->heredoc_fd);
+	free(content);
 	return (0);
 }
 
-static int	write_heredoc_content(int fd, char *delimiter,
+static void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	exit(130);
+}
+
+static void	setup_heredoc_signals_child(void)
+{
+	signal(SIGINT, sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+static void	setup_heredoc_signals_parent(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+static void	restore_interactive_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+static void	write_heredoc_content(int fd, char *delimiter,
 	t_data *data, bool is_quoted)
 {
 	char	*line;
 
+	setup_heredoc_signals_child();
 	data->heredoc_fd = fd;
 	while (1)
 	{
@@ -76,13 +103,16 @@ static int	write_heredoc_content(int fd, char *delimiter,
 		}
 		free(line);
 	}
-	return (0);
+	close(fd);
+	exit(0);
 }
 
 int	handle_heredoc(t_data *data, t_redirection *redir)
 {
 	char		*filename;
 	int			fd;
+	pid_t		pid;
+	int			status;
 	t_token		*delimiter_token;
 
 	filename = create_heredoc_filename();
@@ -94,14 +124,29 @@ int	handle_heredoc(t_data *data, t_redirection *redir)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (-1);
-	if (write_heredoc_content(fd, redir->file, data,
-			delimiter_token->quoted) != 0)
+	pid = fork();
+	if (pid == -1)
 	{
 		close(fd);
 		unlink(filename);
 		return (-1);
 	}
-	close(fd);
+	if (pid == 0)
+		write_heredoc_content(fd, redir->file, data, delimiter_token->quoted);
+	else
+	{
+		setup_heredoc_signals_parent();
+		waitpid(pid, &status, 0);
+		restore_interactive_signals();
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		{
+			g_signal = 1;
+			close(fd);
+			unlink(filename);
+			return (-1);
+		}
+	}
 	redir->file = filename;
+	close(fd);
 	return (0);
 }

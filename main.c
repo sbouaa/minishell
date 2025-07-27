@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+volatile sig_atomic_t g_signal = 0;
+
 static void	free_prompt(t_data *data)
 {
 	if (data->prompt)
@@ -89,7 +91,10 @@ int	handle_prompt(t_data *data, t_env *env)
 
 	line = readline("minishell > ");
 	if (!line)
+	{
+		write(1, "exit\n", 5);
 		return (33);
+	}
 	if (line[0] == '\0')
 		return (handle_empty_line(line));
 	data->prompt = line;
@@ -111,28 +116,41 @@ void	execute_commands(t_data *data)
 	commands = parse_tokens(data);
 	if (commands)
 		data->exit_status = ft_begin_exec(commands, &data->env);
-	// print_parsed_commands(commands);
+	 print_parsed_commands(commands);
 }
 
-void	set_e_status(int set, int status, t_data *data)
+void	sigint_handler(int sig)
 {
-	static t_data	*ptr;
-
-	if (set)
-		ptr = data;
-	ptr->exit_status = status;
-}
-
-void	signal_handle(int sig)
-{
-	if (sig == SIGQUIT)
-		return ;
-	ft_putstr_fd("\n", 1);
-	rl_replace_line("", 1);
-	rl_on_new_line();
-	rl_redisplay();
-	set_e_status(0, 130, NULL);
 	(void)sig;
+	g_signal = 1;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void	setup_interactive_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	exit(130);
+}
+
+void	setup_heredoc_signals_child(void)
+{
+	signal(SIGINT, sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	setup_heredoc_signals_parent(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 int	main(int ac, char **av, char **env)
@@ -144,14 +162,12 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	if (!isatty(0))
 		return (1);
-	set_e_status(1, 0, &data);
-	signal(SIGINT, &signal_handle);
-	signal(SIGQUIT, &signal_handle);
 	if (init_data(&data) != 0)
 		return (1);
 	data.env = init_data_exec(env);
 	while (1)
 	{
+		setup_interactive_signals();
 		status = handle_prompt(&data, data.env);
 		if (status == 1 || status == 2)
 			continue ;

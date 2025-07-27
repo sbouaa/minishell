@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/27 05:53:56 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 10:33:40 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static char	*expand_var_value(char *value, t_env *env)
 {
-	t_env	*var;
+	char	*expanded;
 
-	if (!value || value[0] != '$')
-		return (ft_strdup(value));
-	var = ft_search_env(value + 1, env);
-	if (!var || !var->value)
+	if (!value)
 		return (ft_strdup(""));
-	return (ft_strdup(var->value));
+	expanded = expand(value, env, NULL);
+	if (!expanded)
+		return (ft_strdup(""));
+	return (expanded);
 }
 
 int	to_env(char *key, char *var, int type, t_env *env)

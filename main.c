@@ -111,6 +111,7 @@ void	execute_commands(t_data *data)
 	commands = parse_tokens(data);
 	if (commands)
 		data->exit_status = ft_begin_exec(commands, &data->env);
+	// print_parsed_commands(commands);
 }
 
 void	set_e_status(int set, int status, t_data *data)
@@ -159,7 +160,9 @@ int	main(int ac, char **av, char **env)
 		data.token_list = quote_remove(&data);
 		execute_commands(&data);
 		close_all(-2,1);
+		g_malloc(0, FREE);
 	}
+	close_all(-2,1);
 	g_malloc(0, FREE);
 	gc_malloc(0, FREE);
 	return (data.exit_status);

@@ -159,8 +159,8 @@ int	main(int ac, char **av, char **env)
 		data.token_list = quote_remove(&data);
 		execute_commands(&data);
 		close_all(-2,1);
-		g_malloc(0, FREE);
 	}
+	g_malloc(0, FREE);
 	gc_malloc(0, FREE);
 	return (data.exit_status);
 }

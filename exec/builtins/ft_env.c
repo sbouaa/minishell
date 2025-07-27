@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/22 19:36:09 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/27 07:52:26 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@ t_env	*def_env(void)
 
 char	*ft_getenv(char *name, t_env *env)
 {
-	int	i;
-
 	if (!name || !env)
 		return (NULL);
-	i = ft_strlen(name);
 	while (env)
 	{
 		if (ft_strcmp(env->key, name) == 0)

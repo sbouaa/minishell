@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/26 09:47:18 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 07:26:38 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ static int	write_heredoc_content(int fd, char *delimiter,
 	}
 	return (0);
 }
-
 
 int	handle_heredoc(t_data *data, t_redirection *redir)
 {

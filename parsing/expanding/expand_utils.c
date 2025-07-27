@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:00:00 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/27 05:49:29 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 07:27:34 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,30 @@ void	handle_exit_status(t_expand *exp, t_data *data)
 	exp->i += 2;
 }
 
+static int	check_dollar_in_export_name(t_expand *exp)
+{
+	int	has_dollar_in_name;
+	int	j;
+
+	has_dollar_in_name = 0;
+	j = 7;
+	while (exp->str[j] && exp->str[j] != '=')
+	{
+		if (exp->str[j] == '$')
+			has_dollar_in_name = 1;
+		j++;
+	}
+	return (has_dollar_in_name);
+}
+
+static void	handle_export_dollar(t_expand *exp, t_env *env, t_data *data)
+{
+	if (check_dollar_in_export_name(exp))
+		process_dollar(exp, env, data);
+	else
+		process_char(exp);
+}
+
 void	expand_loop(t_expand *exp, t_env *env, t_data *data, int is_export)
 {
 	while (exp->str[exp->i])
@@ -76,7 +100,10 @@ void	expand_loop(t_expand *exp, t_env *env, t_data *data, int is_export)
 			skip_redirect_part(exp);
 		else if (exp->str[exp->i] == '$' && !exp->in_single)
 		{
-			process_dollar(exp, env, data);
+			if (is_export)
+				handle_export_dollar(exp, env, data);
+			else
+				process_dollar(exp, env, data);
 		}
 		else
 			process_char(exp);

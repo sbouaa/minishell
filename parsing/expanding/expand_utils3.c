@@ -1,0 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils3.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/27 07:46:22 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/27 07:46:35 by amsaq            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../minishell.h"
+
+int	is_export_var(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	if (!str[i])
+		return (0);
+	i++;
+	return (str[i] == '$');
+}
+
+void	expand_loop(t_expand *exp, t_env *env, t_data *data, int is_export)
+{
+	while (exp->str[exp->i])
+	{
+		update_quote_states(exp->str[exp->i], &exp->in_single, &exp->in_double);
+		if (!exp->in_single && !exp->in_double && is_redirect(exp->str, exp->i))
+			skip_redirect_part(exp);
+		else if (exp->str[exp->i] == '$' && !exp->in_single)
+		{
+			if (is_export)
+				handle_export_dollar(exp, env, data);
+			else
+				process_dollar(exp, env, data);
+		}
+		else
+			process_char(exp);
+	}
+}
+
+char	*expand(char *prompt, t_env *env, t_data *data)
+{
+	t_expand	exp;
+	int			is_export;
+
+	exp.i = 0;
+	exp.in_single = 0;
+	exp.in_double = 0;
+	exp.str = (char *)prompt;
+	exp.result = ft_strdup("");
+	is_export = is_export_var(prompt);
+	expand_loop(&exp, env, data, is_export);
+	return (exp.result);
+}

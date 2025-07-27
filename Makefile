@@ -19,7 +19,7 @@ SRCS =  exec/builtins/ft_echo.c exec/builtins/ft_env.c exec/builtins/ft_unset.c 
 		exec/exec/exec_utils_4.c exec/exec/exec_utils_5.c \
 		parsing/lexer/lexer.c parsing/lexer/utils.c main.c \
 		parsing/lexer/utils_2.c parsing/lexer/handler_lexer.c parsing/lexer/handler_lexer_utils.c parsing/expanding/expand.c \
-		parsing/expanding/remove_quotes.c parsing/expanding/expand_utils.c parsing/expanding/expand_utils2.c parsing/syntax_error/syntax_error.c parsing/syntax_error/syntax_error_utils.c \
+		parsing/expanding/remove_quotes.c parsing/expanding/expand_utils.c parsing/expanding/expand_utils2.c parsing/expanding/expand_utils3.c parsing/syntax_error/syntax_error.c parsing/syntax_error/syntax_error_utils.c \
 		parsing/parse/parse_tokens.c parsing/parse/token_handlers.c parsing/parse/error_handling.c \
 		parsing/parse/command_management.c parsing/parse/arguments.c parsing/parse/redirection.c parsing/parse/utils.c \
 		parsing/parse/heredoc.c \

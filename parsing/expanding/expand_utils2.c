@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_main.c                                      :+:      :+:    :+:   */
+/*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:00:00 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/22 06:50:38 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 07:45:56 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,6 @@ void	init_expand(t_expand *exp, char *prompt)
 	exp->to_expand = 1;
 }
 
-int	is_export_var(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	if (!str[i])
-		return (0);
-	i++;
-	return (str[i] == '$');
-}
 void	process_char(t_expand *exp)
 {
 	char	tmp[2];

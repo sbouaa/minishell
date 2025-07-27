@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/22 07:04:53 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 07:45:32 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,5 +376,5 @@ int							is_word_token(t_token *token);
 void						ft_bzero(void *s, size_t n);
 void						execute_commands(t_data *data);
 void						rl_replace_line(const char *text, int clear_undo);
-
+void						handle_export_dollar(t_expand *exp, t_env *env, t_data *data);
 #endif

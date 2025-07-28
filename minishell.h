@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/28 08:45:12 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/28 08:33:52 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,6 +368,8 @@ int							check_pipe_errors(t_token *token);
 int							check_redirection_errors(t_token *token);
 int							is_redirection(t_token *token);
 int							is_word_token(t_token *token);
+int							is_valid_heredoc_delimiter(char *delimiter);
+int							check_heredoc_errors(t_token *token);
 
 /* ************************************************************************** */
 /*                                                                            */

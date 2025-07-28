@@ -1,0 +1,9 @@
+Makefile
+exec
+main.c
+main.o
+minishell
+minishell.h
+mohcine_notes
+parsing
+rgkrg

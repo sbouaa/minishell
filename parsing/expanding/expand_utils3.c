@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 07:46:22 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/27 07:46:35 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/28 08:12:34 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 
 int	is_export_var(char *str)
 {
-	int		i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	if (!str[i])
-		return (0);
-	i++;
-	return (str[i] == '$');
+	if (!ft_strncmp(str, "export ", 7))
+	{
+		str += 7;
+		while (*str && *str != '=')
+			str++;
+		if (!*str)
+			return (0);
+		str++;
+		return (*str == '$');
+	}
+	return (0);
 }
 
 void	expand_loop(t_expand *exp, t_env *env, t_data *data, int is_export)

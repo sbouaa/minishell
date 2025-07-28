@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/27 14:09:55 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/28 08:42:56 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	write_heredoc_content(int fd, char *delimiter,
 	while (1)
 	{
 		line = readline("> ");
-		if (process_heredoc_line(line, delimiter, data, is_quoted))
+		if (process_heredoc_line(line, delimiter, data, is_quoted) || !line)
 		{
 			free(line);
 			break ;

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-volatile sig_atomic_t g_signal = 0;
+int g_signal = 0;
 
 static void	free_prompt(t_data *data)
 {
@@ -116,7 +116,6 @@ void	execute_commands(t_data *data)
 	commands = parse_tokens(data);
 	if (commands)
 		data->exit_status = ft_begin_exec(commands, &data->env);
-	 print_parsed_commands(commands);
 }
 
 void	sigint_handler(int sig)

@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/27 10:33:40 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/28 18:16:29 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	*expand_var_value(char *value, t_env *env)
 
 	if (!value)
 		return (ft_strdup(""));
-	expanded = expand(value, env, NULL);
+	expanded = expand(value, env, NULL, 0);
 	if (!expanded)
 		return (ft_strdup(""));
 	return (expanded);

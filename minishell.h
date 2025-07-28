@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 23:21:46 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/28 08:33:52 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/28 18:40:20 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <unistd.h>
+# include <termios.h>
 
 # define DEF_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -338,7 +339,7 @@ t_token						*handle_error_and_skip_to_pipe(t_command **head,
 /*                                                                            */
 /* ************************************************************************** */
 
-char						*expand(char *prompt, t_env *env, t_data *data);
+char						*expand(char *prompt, t_env *env, t_data *data, int flag_herdoc);
 void						expand_redirections(t_token *token, t_env *env,
 								t_data *data);
 void						update_quote_states(char c, int *in_s, int *in_d);
@@ -352,7 +353,7 @@ int							is_export_var(char *str);
 void						handle_special_dollar(t_expand *exp);
 void						handle_quote_dollar(t_expand *exp);
 void						expand_loop(t_expand *exp, t_env *env, t_data *data,
-								int is_export);
+								int is_export, int flag_herdoc);
 void						handle_exit_status(t_expand *exp, t_data *data);
 void						skip_redirect_part(t_expand *exp);
 void						skip_redirect_spaces(t_expand *exp);
@@ -373,15 +374,49 @@ int							check_heredoc_errors(t_token *token);
 
 /* ************************************************************************** */
 /*                                                                            */
-/*                              UTILITY FUNCTIONS                              */
+/*                              MAIN AND UTILITY FUNCTIONS                     */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* main.c functions */
+int							handle_prompt(t_data *data, t_env *env);
+void						execute_commands(t_data *data);
+void						sigint_handler(int sig);
+
+/* utils.c functions */
+void						free_prompt(t_data *data);
+int							handle_empty_line(char *line);
+int							handle_lexer_error(t_data *data);
+int							dont_display(int set, int value);
+void						setup_interactive_signals(void);
+
+/* debug_utils.c functions */
+void						print_parsed_commands(t_command *cmd);
+void						print_tokens(t_token *token);
+void						set_es_signal(int set, t_data *data);
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                              SIGNAL AND HEREDOC FUNCTIONS                   */
+/*                                                                            */
+/* ************************************************************************** */
+
+void						sigint_heredoc(int sig);
+void						setup_heredoc_signals_child(void);
+void						setup_heredoc_signals_parent(void);
+void						restore_interactive_signals(void);
+char						*create_heredoc_filename(void);
+t_token						*find_delimiter_token(t_data *data, char *delimiter);
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                              ADDITIONAL UTILITY FUNCTIONS                   */
 /*                                                                            */
 /* ************************************************************************** */
 
 void						ft_bzero(void *s, size_t n);
-void						execute_commands(t_data *data);
 void						rl_replace_line(const char *text, int clear_undo);
-void						handle_export_dollar(t_expand *exp, t_env *env, t_data *data);
+void						handle_export_dollar(t_expand *exp, t_env *env,
+								t_data *data);
 
-void	setup_interactive_signals(void);
-void	sigint_handler(int sig);
 #endif

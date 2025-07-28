@@ -5,49 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 08:42:56 by amsaq            ###   ########.fr       */
+/*   Created: 2025/07/28 16:09:28 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/28 19:07:22 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static char	*create_heredoc_filename(void)
-{
-	static int	heredoc_count = 0;
-	char		*number;
-	char		*filename;
-
-	number = ft_itoa(heredoc_count++);
-	if (!number)
-		return (NULL);
-	filename = ft_strjoin("/tmp/.heredoc_", number);
-	return (filename);
-}
-
-static t_token	*find_delimiter_token(t_data *data, char *delimiter)
-{
-	t_token	*token;
-
-	token = data->token_list;
-	while (token)
-	{
-		if (token->type == HEREDOC && token->next
-			&& ft_strcmp(token->next->value, delimiter) == 0)
-			return (token->next);
-		token = token->next;
-	}
-	return (NULL);
-}
-
 static int	process_heredoc_line(char *line, char *delimiter,
-	t_data *data, bool is_quoted)
+				t_data *data, bool is_quoted)
 {
 	char	*content;
 
 	if (!line)
 	{
-		ft_printf("minishell: warning: here-document at EOF (wanted `%s`)\n", delimiter);
+		ft_printf("minishell: warning: here-document at EOF (wanted `%s`)\n",
+			delimiter);
 		return (1);
 	}
 	if (ft_strcmp(line, delimiter) == 0)
@@ -55,39 +28,14 @@ static int	process_heredoc_line(char *line, char *delimiter,
 	if (is_quoted)
 		content = ft_strdup(line);
 	else
-		content = expand(line, data->env, data);
+		content = expand(line, data->env, data , 1);
 	ft_putendl_fd(content, data->heredoc_fd);
 	free(content);
 	return (0);
 }
 
-static void	sigint_heredoc(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	exit(130);
-}
-
-static void	setup_heredoc_signals_child(void)
-{
-	signal(SIGINT, sigint_heredoc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-static void	setup_heredoc_signals_parent(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-static void	restore_interactive_signals(void)
-{
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 static void	write_heredoc_content(int fd, char *delimiter,
-	t_data *data, bool is_quoted)
+				t_data *data, bool is_quoted)
 {
 	char	*line;
 
@@ -107,6 +55,33 @@ static void	write_heredoc_content(int fd, char *delimiter,
 	exit(0);
 }
 
+static int	handle_heredoc_parent(pid_t pid, int *status,
+	char *filename, int fd)
+{
+	setup_heredoc_signals_parent();
+	waitpid(pid, status, 0);
+	restore_interactive_signals();
+	if (WIFSIGNALED(*status) && WTERMSIG(*status) == SIGINT)
+	{
+		close(fd);
+		unlink(filename);
+		write(1, "\n", 1);
+		return (-1);
+	}
+	return (0);
+}
+
+static int	setup_heredoc_file(char **filename, int *fd)
+{
+	*filename = create_heredoc_filename();
+	if (!*filename)
+		return (-1);
+	*fd = open(*filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (*fd == -1)
+		return (-1);
+	return (0);
+}
+
 int	handle_heredoc(t_data *data, t_redirection *redir)
 {
 	char		*filename;
@@ -115,38 +90,21 @@ int	handle_heredoc(t_data *data, t_redirection *redir)
 	int			status;
 	t_token		*delimiter_token;
 
-	filename = create_heredoc_filename();
-	if (!filename)
+	if (setup_heredoc_file(&filename, &fd) == -1)
 		return (-1);
 	delimiter_token = find_delimiter_token(data, redir->file);
 	if (!delimiter_token)
-		return (-1);
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
 		return (-1);
 	pid = fork();
 	if (pid == -1)
 	{
 		close(fd);
-		unlink(filename);
-		return (-1);
+		return (unlink(filename), -1);
 	}
 	if (pid == 0)
 		write_heredoc_content(fd, redir->file, data, delimiter_token->quoted);
-	else
-	{
-		setup_heredoc_signals_parent();
-		waitpid(pid, &status, 0);
-		restore_interactive_signals();
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		{
-			g_signal = 1;
-			close(fd);
-			unlink(filename);
-			return (-1);
-		}
-	}
+	else if (handle_heredoc_parent(pid, &status, filename, fd) == -1)
+		return (data->exit_status = 130, -1);
 	redir->file = filename;
-	close(fd);
-	return (0);
+	return (close(fd), 0);
 }

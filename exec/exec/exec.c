@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
+/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 09:26:15 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/26 23:12:00 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/28 18:41:29 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	execute_child_cmd(t_command *cmd, t_env **env)
 		exit(1);
 	if (!cmd)
 		(ft_printf("minishell: command not found\n"), exit(127));
+	if (!cmd->args)
+		exit(0);
 	if (!cmd->args[0])
 		(exit(127));
 	if (is_builtin(cmd->args[0]))
@@ -96,9 +98,12 @@ int	ft_begin_exec(t_command *cmds, t_env **env)
 	int	in;
 	int	out;
 	int	exit_status;
-
+	struct termios	original_terminal;
+	
+	tcgetattr(STDIN_FILENO, &original_terminal);
 	if (!cmds)
 		return (0);
+	dont_display(1, 1);
 	exit_status = 0;
 	in = dup(0);
 	out = dup(1);
@@ -109,5 +114,6 @@ int	ft_begin_exec(t_command *cmds, t_env **env)
 		return (perror("minishell: dup2"), 1);
 	close (in);
 	close (out);
+	tcsetattr(STDIN_FILENO, TCSANOW, &original_terminal);
 	return (exit_status);
 }

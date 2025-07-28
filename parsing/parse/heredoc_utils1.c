@@ -1,27 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_data.c                                        :+:      :+:    :+:   */
+/*   heredoc_utils1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/22 06:39:51 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 15:21:07 by amsaq            ###   ########.fr       */
+/*   Created: 2025/07/28 16:09:22 by amsaq             #+#    #+#             */
+/*   Updated: 2025/07/28 16:10:50 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-int	init_data(t_data *data)
+void	sigint_heredoc(int sig)
 {
-	if (!data)
-		return (1);
-	data->prompt = NULL;
-	data->token_list = NULL;
-	data->syntax_error = 0;
-	data->gc.head = NULL;
-	data->exit_status = 0;
-	data->commands = NULL;
-	data->heredoc_fd = -1;
-	return (0);
+	(void)sig;
+	write(1, "\n", 1);
+	exit(130);
+}
+
+void	setup_heredoc_signals_child(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	setup_heredoc_signals_parent(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	restore_interactive_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

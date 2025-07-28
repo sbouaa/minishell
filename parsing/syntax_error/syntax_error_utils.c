@@ -6,11 +6,40 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:39 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 09:04:19 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/28 10:20:48 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+int	check_pipe_errors(t_token *token)
+{
+	if (token->type == PIPE)
+	{
+		if (!token->next || token->next->type == PIPE)
+		{
+			ft_printf("Syntax error: unexpected token `|'\n");
+			return (258);
+		}
+	}
+	return (0);
+}
+
+int	check_redirection_errors(t_token *token)
+{
+	if (is_redirection(token))
+	{
+		if (!token->next || !is_word_token(token->next))
+		{
+			if (token->type == HEREDOC)
+				ft_printf("Syntax error: expected delimiter after `<<'\n");
+			else
+				ft_printf("Syntax error: expected filename after rdr\n");
+			return (258);
+		}
+	}
+	return (0);
+}
 
 int	is_redirection(t_token *token)
 {

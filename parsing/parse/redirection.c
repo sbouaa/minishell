@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:25 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 17:55:03 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:52:09 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ static int	check_redirection_syntax(t_token *current, t_data *data)
 {
 	if (!current || !current->next)
 	{
-		ft_printf("minishell: syntax error near unexpected token `newline'\n");
+		ft_putstr_fd("minishell: syntax error `newline'\n", 2);
 		data->exit_status = 258;
 		return (1);
 	}
 	if (current->next->ambiguous)
 	{
-		ft_printf("minishell: %s: ambiguous redirect\n", current->next->value);
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
 		data->exit_status = 1;
 		return (1);
 	}

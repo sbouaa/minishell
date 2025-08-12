@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:00:00 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 18:15:54 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:51:22 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	expand_file_redirect(t_token *token, t_env *env, t_data *data)
 
 	if (token->value && ft_strchr(token->value, '$'))
 	{
-		expanded = expand(token->value, env, data, 0);
+		expanded = expand(token->value, env, data);
 		if (!expanded || expanded[0] == '\0' || ft_strchr(expanded, ' '))
 			token->ambiguous = true;
 		else

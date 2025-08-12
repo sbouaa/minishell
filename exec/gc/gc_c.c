@@ -6,13 +6,13 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 17:32:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/06/26 15:37:06 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/27 14:37:57 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_col	*new_node_s(void	*ptr)
+t_col	*new_node_env(void	*ptr)
 {
 	t_col	*new;
 
@@ -24,7 +24,7 @@ t_col	*new_node_s(void	*ptr)
 	return (new);
 }
 
-t_col	*last_node_s(t_col **head)
+t_col	*last_node_env(t_col **head)
 {
 	t_col	*tmp;
 
@@ -36,17 +36,17 @@ t_col	*last_node_s(t_col **head)
 	return (tmp);
 }
 
-void	add_back_s(t_col	**head, t_col *new)
+void	add_back_env(t_col	**head, t_col *new)
 {
 	if (!head || !new)
 		return ;
 	if (!*head)
 		*head = new;
 	else
-		last_node_s(head)->next = new;
+		last_node_env(head)->next = new;
 }
 
-void	clear_all_s(t_col **head)
+void	clear_all_env(t_col **head)
 {
 	t_col	*cur;
 	t_col	*tmp;
@@ -75,14 +75,14 @@ void	*gc_malloc(size_t size, t_call call)
 	{
 		ptr = malloc(size);
 		if (!ptr)
-			return (clear_all_s(&head), exit(1), NULL);
-		tmp = new_node_s(ptr);
+			return (clear_all_env(&head), exit(1), NULL);
+		tmp = new_node_env(ptr);
 		if (!tmp)
-			return (clear_all_s(&head), free(ptr), exit(1), NULL);
-		add_back_s(&head, tmp);
+			return (clear_all_env(&head), free(ptr), exit(1), NULL);
+		add_back_env(&head, tmp);
 		return (ptr);
 	}
 	else if (call == FREE)
-		clear_all_s(&head);
+		clear_all_env(&head);
 	return (NULL);
 }

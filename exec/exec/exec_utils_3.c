@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils_3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 18:10:38 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/28 15:46:47 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 19:33:35 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ int	exec_cmd(char *path, char **env, t_command *cmd)
 	pid_t	pid;
 
 	dont_display(1, 1);
-	// change it
-	if (strstr(path, "minishell"))
+	if (ft_strnstr(path, "minishell"))
 		signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
@@ -92,8 +91,6 @@ int	exec_cmd(char *path, char **env, t_command *cmd)
 	{
 		signal(SIGQUIT, SIG_DFL);
 		execve(path, cmd->args, env);
-		if (errno == ENOEXEC)
-			shell_do(cmd->args[0], env);
 		exit(check_file(cmd->args[0]));
 	}
 	if (pid > 0)

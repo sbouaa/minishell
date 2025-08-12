@@ -6,7 +6,7 @@
 /*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:05:02 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/25 16:41:11 by sbouaa           ###   ########.fr       */
+/*   Updated: 2025/07/27 06:47:24 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	check_code(char **args)
 	code = ft_atoi_s(s);
 	if (code == MAX_L || code == -MAX_L)
 	{
-		ft_printf("minishell: exit: %s: numeric argument required\n", s);
+		(ft_putstr_fd("minishell: exit: ", 2), ft_putstr_fd(s, 2));
+		ft_putstr_fd(": numeric argument required\n", 2);
 		gc_malloc(0, FREE);
 		g_malloc(0, FREE);
 		close_all(-2, 1);
@@ -29,7 +30,7 @@ void	check_code(char **args)
 	}
 	if (args[2])
 	{
-		ft_printf("minishell: exit: too many arguments\n");
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return ;
 	}
 	gc_malloc(0, FREE);
@@ -43,12 +44,11 @@ void	ft_exit(char **args)
 	char	*s;
 	int		i;
 
-	ft_putendl_fd("exit", 1);
+	if (isatty(0))
+		ft_putendl_fd("exit", 1);
 	s = args[1];
 	if (!s || !*s)
-	{
 		(gc_malloc(0, FREE), g_malloc(0, FREE), close_all(-2, 1), exit(0));
-	}
 	i = 0;
 	if (s[i] == '+' || s[i] == '-')
 		i++;
@@ -56,7 +56,8 @@ void	ft_exit(char **args)
 	{
 		if (!ft_isdigit(s[i]))
 		{
-			ft_printf("minishell: exit: %s: numeric argument required\n", s);
+			(ft_putstr_fd("minishell: exit: ", 2), ft_putstr_fd(s, 2));
+			ft_putstr_fd(": numeric argument required\n", 2);
 			(gc_malloc(0, FREE), g_malloc(0, FREE), close_all(-2, 1));
 			exit(255);
 		}

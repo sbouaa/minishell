@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 08:09:20 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/22 08:18:52 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:52:12 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	handle_word_token(t_parse_context *ctx, t_token *current)
 {
 	if (current->ambiguous)
 	{
-		ft_printf("minishell: : ambiguous redirect\n");
+		ft_putstr_fd("minishell: : ambiguous redirect\n", 2);
 		ctx->data->exit_status = 1;
 		return (1);
 	}

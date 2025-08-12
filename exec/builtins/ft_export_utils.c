@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:35:41 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/28 17:40:03 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/27 11:13:07 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,16 @@ char	*get_key_and_value(char *var, int type)
 		pos = ft_strchr(var, '=');
 		if (!pos)
 			return (NULL);
-		return (ft_strdup(pos + 1));
+		return (ft_strdup_env(pos + 1));
 	}
 	else
 	{
 		pos = ft_strchr(var, '=');
 		if (!pos)
-			return (ft_strdup(var));
+			return (ft_strdup_env(var));
 		if (pos && *(pos - 1) == '+')
 			pos--;
-		return (ft_substr(var, 0, pos - var));
+		return (ft_substr_env(var, 0, pos - var));
 	}
 }
 

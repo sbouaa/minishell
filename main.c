@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 18:01:11 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 18:16:23 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:51:00 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	process_expansion(t_data *data, t_env *env)
 	char	*old_prompt;
 
 	old_prompt = data->prompt;
-	data->prompt = expand(data->prompt, env, data, 0);
+	data->prompt = expand(data->prompt, env, data);
 	free(old_prompt);
 	if (lexer(data))
 		return (handle_lexer_error(data));
@@ -97,7 +97,6 @@ int	main(int ac, char **av, char **env)
 		execute_commands(&data);
 		close_all(-2, 1);
 	}
-	close_all(-2, 1);
-	g_malloc(0, FREE);
+	(close_all(-2, 1), g_malloc(0, FREE));
 	return (gc_malloc(0, FREE), data.exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:09:28 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/28 19:07:22 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:52:03 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ static int	process_heredoc_line(char *line, char *delimiter,
 
 	if (!line)
 	{
-		ft_printf("minishell: warning: here-document at EOF (wanted `%s`)\n",
-			delimiter);
+		ft_putstr_fd("minishell: warning: here-document at EOF \n", 2);
 		return (1);
 	}
 	if (ft_strcmp(line, delimiter) == 0)
@@ -28,7 +27,7 @@ static int	process_heredoc_line(char *line, char *delimiter,
 	if (is_quoted)
 		content = ft_strdup(line);
 	else
-		content = expand(line, data->env, data , 1);
+		content = expand(line, data->env, data);
 	ft_putendl_fd(content, data->heredoc_fd);
 	free(content);
 	return (0);
@@ -90,6 +89,7 @@ int	handle_heredoc(t_data *data, t_redirection *redir)
 	int			status;
 	t_token		*delimiter_token;
 
+	data->flag_herdoc = 1;
 	if (setup_heredoc_file(&filename, &fd) == -1)
 		return (-1);
 	delimiter_token = find_delimiter_token(data, redir->file);
@@ -105,6 +105,7 @@ int	handle_heredoc(t_data *data, t_redirection *redir)
 		write_heredoc_content(fd, redir->file, data, delimiter_token->quoted);
 	else if (handle_heredoc_parent(pid, &status, filename, fd) == -1)
 		return (data->exit_status = 130, -1);
+	data->flag_herdoc = 0;
 	redir->file = filename;
 	return (close(fd), 0);
 }

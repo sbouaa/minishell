@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 19:09:14 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/27 07:52:26 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:20:43 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@ t_env	*def_env(void)
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
-		if (!add_env_var("PWD", pwd, &env))
-			return (free(pwd), NULL);
+		add_env_var("PWD", pwd, &env);
 		free(pwd);
 	}
 	add_env_var("PATH", DEF_PATH, &env);
 	export_var("SHLVL=1", env);
 	export_var("_=/usr/bin/env", env);
-	export_var("OLDPWD", env);
+	export_var("OLDPWD= ", env);
 	return (env);
 }
 
@@ -55,13 +54,9 @@ static t_env	*env_node(char *envp)
 	del = ft_strchr(envp, '=');
 	if (!del)
 		return (NULL);
-	key = ft_substr_s(envp, 0, del - envp);
-	value = ft_strdup_s(del + 1);
-	if (!key || !value)
-		return (NULL);
-	node = ft_lstnew_s(key, value);
-	if (!node)
-		return (NULL);
+	key = ft_substr_env(envp, 0, del - envp);
+	value = ft_strdup_env(del + 1);
+	node = ft_lstnew_env(key, value);
 	return (node);
 }
 

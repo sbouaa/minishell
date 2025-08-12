@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sbouaa <sbouaa@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 02:58:06 by sbouaa            #+#    #+#             */
-/*   Updated: 2025/07/28 18:16:29 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:20:58 by sbouaa           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-static char	*expand_var_value(char *value, t_env *env)
-{
-	char	*expanded;
-
-	if (!value)
-		return (ft_strdup(""));
-	expanded = expand(value, env, NULL, 0);
-	if (!expanded)
-		return (ft_strdup(""));
-	return (expanded);
-}
 
 int	to_env(char *key, char *var, int type, t_env *env)
 {
@@ -65,11 +53,8 @@ int	var_in_env(char *key, char *var, int type, t_env *env)
 	if (type == 2)
 	{
 		expanded = expand_var_value(value, env);
-		n_value = ft_strjoin(ex_var->value, expanded);
-		if (!n_value)
-			return (1);
+		n_value = ft_strjoin_env(ex_var->value, expanded);
 		ex_var->value = n_value;
-		return (0);
 	}
 	return (0);
 }
@@ -98,8 +83,11 @@ int	ft_export_no_args(t_env *env)
 {
 	t_env	*copy;
 
-	copy = copy_env(env);
-	ft_sort_env(copy);
+	if (!env)
+		return (1);
+	copy = ft_sort_env(env);
+	if (!copy)
+		return (1);
 	while (copy)
 	{
 		if (ft_strcmp(copy->key, "_") != 0)
@@ -121,17 +109,27 @@ int	ft_export_no_args(t_env *env)
 int	ft_export(char **args, t_env	*env)
 {
 	int	i;
-	int	ret_status;
+	int	stat;
 
 	i = 1;
-	ret_status = 0;
+	stat = 0;
 	if (!args[1])
 		return (ft_export_no_args(env), 0);
+	i = 1;
+	if (args[1] && ft_strcmp(args[1], "--") == 0)
+	{
+		if (!args[2])
+			return (ft_export_no_args(env), 0);
+		i++;
+	}
 	while (args[i])
 	{
 		if (export_var(args[i], env) != 0)
+		{
+			stat = 1;
 			pr_error(args[i]);
+		}
 		i++;
 	}
-	return (ret_status);
+	return (stat);
 }

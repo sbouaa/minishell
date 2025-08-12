@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handler_lexer.c                                    :+:      :+:    :+:   */
+/*   handler_lexer_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amsaq <amsaq@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 06:29:37 by amsaq             #+#    #+#             */
-/*   Updated: 2025/07/22 08:18:52 by amsaq            ###   ########.fr       */
+/*   Updated: 2025/07/29 20:51:32 by amsaq            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ int	handle_error_and_cleanup(t_data *data)
 {
 	data->syntax_error = 1;
 	data->exit_status = 258;
-	ft_printf("Syntax error: unclosed quote\n");
+	ft_putstr_fd("Syntax error: unclosed quote\n", 2);
 	return (1);
 }
